@@ -1,4 +1,22 @@
 {
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-tarracore-prod-81255-authRole",
+      "UnauthRoleArn": "arn:aws:iam::473543677937:role/amplify-tarracore-prod-81255-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::473543677937:role/amplify-tarracore-prod-81255-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-tarracore-prod-81255-deployment",
+      "UnauthRoleName": "amplify-tarracore-prod-81255-unauthRole",
+      "StackName": "amplify-tarracore-prod-81255",
+      "StackId": "arn:aws:cloudformation:eu-west-1:473543677937:stack/amplify-tarracore-prod-81255/b3b4bb60-a8c2-11eb-8bd8-0a9b227c60a7",
+      "AmplifyAppId": "d9vke4kpnez58"
+    },
+    "categories": {
+      "auth": {
+        "cognito704b3e59": {}
+      }
+    }
+  },
   "devk": {
     "awscloudformation": {
       "AuthRoleName": "amplify-my-aws-project-devk-74938-authRole",

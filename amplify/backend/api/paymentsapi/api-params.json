@@ -1,0 +1,40 @@
+{
+  "paths": [
+    {
+      "name": "/paymentinit",
+      "lambdaFunction": "tarracorepayments",
+      "privacy": {
+        "private": true,
+        "auth": [
+          "/GET",
+          "/PUT",
+          "/PATCH"
+        ]
+      },
+      "policyResourceName": "/paymentinit"
+    }
+  ],
+  "resourceName": "paymentsapi",
+  "apiName": "paymentsapi",
+  "functionArns": [
+    {
+      "lambdaFunction": "tarracorepayments"
+    }
+  ],
+  "privacy": {
+    "auth": 1,
+    "unauth": 0,
+    "authRoleName": "amplify-my-aws-project-devk-74938-authRole",
+    "unAuthRoleName": "amplify-my-aws-project-devk-74938-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "tarracorepayments",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}

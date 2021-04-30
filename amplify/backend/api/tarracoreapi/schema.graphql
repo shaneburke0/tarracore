@@ -1,0 +1,18 @@
+type Product @model {
+  id: ID!
+  categories: [String]!
+  price: Float!
+  name: String!
+  image: String!
+  description: String!
+  currentInventory: Int!
+  maxInventory: Int!
+  brand: String
+  intro: String
+  sold: Boolean
+  endDate: String
+  question: String
+  options: [String]
+  answer: String
+  gallery: [String]
+}

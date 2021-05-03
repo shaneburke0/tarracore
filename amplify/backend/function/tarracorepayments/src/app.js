@@ -44,6 +44,7 @@ const getProductQuery = gql`
     getProduct(id: $id) {
       id
       price
+      currentInventory
     }
   }
 `;
@@ -70,19 +71,27 @@ const getProductInfo = async (id) => {
 
 const calculateOrderAmount = async (items) => {
   let amount = 0;
+  let productInfo;
 
   if (!items || !items.length) {
     throw "No items! " + JSON.stringify(items);
   } else if (items && items.length > 1) throw "Too many items in cart";
 
   try {
-    const productInfo = await getProductInfo(items[0].id);
+    productInfo = await getProductInfo(items[0].id);
 
     amount = productInfo.price * items[0].quantity;
   } catch (ex) {
-    console.log("*** EXCEPTION ***");
+    console.log("*** EXCEPTION [Getting Product Info] ***");
     console.log(JSON.stringify(ex));
     throw "Error calculating price. Please try again.";
+  }
+
+  if (productInfo && productInfo.currentInventory < items[0].quantity) {
+    console.log("*** EXCEPTION [Stock too low] ***");
+    console.log(`Current stock: ${productInfo.currentInventory}`);
+    console.log(`Requested stock: ${items[0].quantity}`);
+    throw `Stock levels too low. Only ${productInfo.currentInventory} available.`;
   }
 
   console.log("*** Amount Response ***");

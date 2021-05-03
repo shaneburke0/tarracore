@@ -37,7 +37,7 @@
       "function": {
         "tarracorepayments": {
           "deploymentBucketName": "amplify-my-aws-project-devk-74938-deployment",
-          "s3Key": "amplify-builds/tarracorepayments-6a63525a3251396e7637-build.zip"
+          "s3Key": "amplify-builds/tarracorepayments-4e643841616270763730-build.zip"
         }
       }
     }

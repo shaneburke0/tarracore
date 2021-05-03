@@ -108,7 +108,15 @@ const Checkout = ({ context, history }) => {
 
     // Create PaymentIntent as soon as the page loads
     API.post("paymentsapi", "/paymentinit", params).then((data) => {
-      setClientSecret(data.clientSecret);
+      if (data && data.clientSecret) {
+        setClientSecret(data.clientSecret);
+      } else if (data && data.error) {
+        setError(data.error);
+      } else {
+        setError(
+          "There has been an issue connecting to payment provder. Please try again later."
+        );
+      }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -378,7 +386,9 @@ const Checkout = ({ context, history }) => {
                       <div className="flex flex-1 justify-end">
                         <button
                           type="submit"
-                          disabled={processing || disabled || succeeded}
+                          disabled={
+                            processing || disabled || succeeded || error
+                          }
                           onClick={handleSubmit}
                           className="bg-secondary hover:bg-black text-white font-bold py-2 px-4 mt-4 rounded focus:outline-none focus:shadow-outline w-full md:w-60"
                         >

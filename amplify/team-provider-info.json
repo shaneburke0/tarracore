@@ -31,7 +31,8 @@
     },
     "categories": {
       "auth": {
-        "cognito704b3e59": {}
+        "cognito704b3e59": {},
+        "userPoolGroups": {}
       },
       "function": {
         "tarracorepayments": {

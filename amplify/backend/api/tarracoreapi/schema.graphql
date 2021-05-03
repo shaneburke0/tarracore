@@ -1,4 +1,4 @@
-type Product @model {
+type Product @model @auth(rules: [{allow: private}]) {
   id: ID!
   categories: [String]!
   price: Float!
@@ -16,3 +16,4 @@ type Product @model {
   answer: String
   gallery: [String]
 }
+ 

@@ -1,21 +1,110 @@
-import React from 'react'
-import { Link } from 'gatsby'
+import React from "react"
+import _ from "lodash"
+import { Link, graphql } from "gatsby"
+import SEO from "../components/seo"
+import {
+  Center,
+  Showcase,
+  HowToPlaySection,
+  AboutUsSection,
+  NewsletterSection,
+} from "../components"
+import NavActions from "../components/NavActions"
+import { slugify } from "../../utils/helpers"
 
-import Layout from '../components/layout'
+const Home = ({ data: gqlData }) => {
+  const { inventoryInfo } = gqlData
 
-import Amplify from 'aws-amplify'
-import config from '../aws-exports'
-Amplify.configure(config)
+  const liveCompetitions = _.filter(inventoryInfo.data, d => {
+    return d.categories.includes("Competitions")
+  })
 
-const IndexPage = () => (
-  <Layout>
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site with multi-user authentication powered by <a href="https://amplify.aws">AWS Amplify</a></p>
-    <p>Create a new account: <Link to="/app/signup">Sign Up</Link></p>
-    <Link to="/app/login">Sign In</Link><br />
-    <Link to="/app/home">Home</Link><br />
-    <Link to="/app/profile">Your profile</Link>
-  </Layout>
-)
+  return (
+    <>
+      <NavActions />
+      <SEO title="Home" />
+      <div
+        style={{
+          color: "red",
+          fontSize: "30px",
+          paddingTop: "50px",
+          textAlign: "center",
+        }}
+      >
+        WEBSITE IS NOT LIVE! Currently in TEST mode.
+      </div>
+      <div className="flex justify-center main-content">
+        <div className="w-fw">
+          {Array.isArray(liveCompetitions) &&
+            liveCompetitions.map(comp => (
+              <div className="w-full" key={slugify(comp.name)}>
+                <div
+                  className="lg:h-hero
+        p-6 pb-10 smpb-6
+        flex lg:flex-row flex-col"
+                >
+                  <div className="pt-4 pl-2 sm:pt-12 sm:pl-12 flex ">
+                    <Link to={slugify(comp.name)}>
+                      <Showcase imageSrc={comp.image} />
+                    </Link>
+                  </div>
+                  <div className="flex flex-1 justify-center items-center relative">
+                    <Center
+                      price={comp.price}
+                      title={comp.name}
+                      link={slugify(comp.name)}
+                      date={comp.endDate}
+                      tickets={comp.maxInventory}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
 
-export default IndexPage
+      <HowToPlaySection />
+      <div className="mobile:px-10 px-4 pb-10 flex justify-center pt-8">
+        <div className="w-fw">
+          <div className="flex lg:flex-row flex-col">
+            <div className="flex-1 pb-8 lg:pb-4 mx-4">
+              <AboutUsSection />
+            </div>
+            <div className="flex-1 pb-8 lg:pb-4 mx-4">
+              <NewsletterSection />
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+export const pageQuery = graphql`
+  query {
+    navInfo {
+      data
+    }
+    categoryInfo {
+      data {
+        name
+        image
+        itemCount
+      }
+    }
+    inventoryInfo {
+      data {
+        image
+        name
+        categories
+        description
+        id
+        price
+        endDate
+        maxInventory
+      }
+    }
+  }
+`
+
+export default Home

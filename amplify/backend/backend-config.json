@@ -36,16 +36,12 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authcognito704b3e59"
+              "userPoolId": "authcognito704b3e59_userpool_704b3e59"
             }
           },
           "additionalAuthenticationProviders": [
             {
-              "authenticationType": "API_KEY",
-              "apiKeyConfig": {
-                "description": "gatsby",
-                "apiKeyExpirationDays": "100"
-              }
+              "authenticationType": "AWS_IAM"
             }
           ]
         }

@@ -20,8 +20,6 @@ export const onCreateProduct = /* GraphQL */ `
       options
       answer
       gallery
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -44,8 +42,6 @@ export const onUpdateProduct = /* GraphQL */ `
       options
       answer
       gallery
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -68,8 +64,6 @@ export const onDeleteProduct = /* GraphQL */ `
       options
       answer
       gallery
-      createdAt
-      updatedAt
     }
   }
 `;

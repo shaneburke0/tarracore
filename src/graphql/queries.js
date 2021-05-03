@@ -56,3 +56,86 @@ export const listProducts = /* GraphQL */ `
     }
   }
 `;
+export const getOrder = /* GraphQL */ `
+  query GetOrder($id: ID!) {
+    getOrder(id: $id) {
+      id
+      product {
+        id
+        categories
+        price
+        name
+        image
+        description
+        currentInventory
+        maxInventory
+        brand
+        intro
+        sold
+        endDate
+        question
+        options
+        answer
+        gallery
+        createdAt
+        updatedAt
+      }
+      userId
+      quantity
+      paymentRef
+      tickets
+      answer
+      email
+      address
+      orderDate
+      isAnswerCorrect
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listOrders = /* GraphQL */ `
+  query ListOrders(
+    $filter: ModelOrderFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listOrders(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        product {
+          id
+          categories
+          price
+          name
+          image
+          description
+          currentInventory
+          maxInventory
+          brand
+          intro
+          sold
+          endDate
+          question
+          options
+          answer
+          gallery
+          createdAt
+          updatedAt
+        }
+        userId
+        quantity
+        paymentRef
+        tickets
+        answer
+        email
+        address
+        orderDate
+        isAnswerCorrect
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

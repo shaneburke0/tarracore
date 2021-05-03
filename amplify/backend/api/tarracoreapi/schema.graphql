@@ -16,3 +16,17 @@ type Product @model @aws_api_key @aws_cognito_user_pools {
   answer: String
   gallery: [String]
 }
+
+type Order @model @aws_api_key @aws_cognito_user_pools {
+  id: ID!
+  product: Product! @connection(keyName: "ProductOrder")
+  userId: String!
+  quantity: Int!
+  paymentRef: String
+  tickets: [String]
+  answer: String!
+  email: String!
+  address: String!
+  orderDate: String!
+  isAnswerCorrect: Boolean
+}

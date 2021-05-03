@@ -23,6 +23,8 @@ export const createProduct = /* GraphQL */ `
       options
       answer
       gallery
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -48,6 +50,8 @@ export const updateProduct = /* GraphQL */ `
       options
       answer
       gallery
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -73,6 +77,8 @@ export const deleteProduct = /* GraphQL */ `
       options
       answer
       gallery
+      createdAt
+      updatedAt
     }
   }
 `;

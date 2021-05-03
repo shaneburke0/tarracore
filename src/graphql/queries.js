@@ -20,6 +20,8 @@ export const getProduct = /* GraphQL */ `
       options
       answer
       gallery
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -47,6 +49,8 @@ export const listProducts = /* GraphQL */ `
         options
         answer
         gallery
+        createdAt
+        updatedAt
       }
       nextToken
     }

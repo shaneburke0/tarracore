@@ -1,42 +1,32 @@
-import React from "react"
-import _ from "lodash"
-import { Link, graphql } from "gatsby"
-import SEO from "../components/seo"
+import React from "react";
+import _ from "lodash";
+import { Link, graphql } from "gatsby";
+import SEO from "../components/seo";
 import {
   Center,
   Showcase,
   HowToPlaySection,
   AboutUsSection,
   NewsletterSection,
-} from "../components"
-import NavActions from "../components/NavActions"
-import { slugify } from "../../utils/helpers"
+} from "../components";
+import NavActions from "../components/NavActions";
+import { slugify } from "../../utils/helpers";
 
 const Home = ({ data: gqlData }) => {
-  const { inventoryInfo } = gqlData
+  const { inventoryInfo } = gqlData;
 
-  const liveCompetitions = _.filter(inventoryInfo.data, d => {
-    return d.categories.includes("Competitions")
-  })
+  const liveCompetitions = _.filter(inventoryInfo.data, (d) => {
+    return d.categories.includes("Competitions");
+  });
 
   return (
     <>
       <NavActions />
       <SEO title="Home" />
-      <div
-        style={{
-          color: "red",
-          fontSize: "30px",
-          paddingTop: "50px",
-          textAlign: "center",
-        }}
-      >
-        WEBSITE IS NOT LIVE! Currently in TEST mode.
-      </div>
       <div className="flex justify-center main-content">
         <div className="w-fw">
           {Array.isArray(liveCompetitions) &&
-            liveCompetitions.map(comp => (
+            liveCompetitions.map((comp) => (
               <div className="w-full" key={slugify(comp.name)}>
                 <div
                   className="lg:h-hero
@@ -77,8 +67,8 @@ const Home = ({ data: gqlData }) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
 export const pageQuery = graphql`
   query {
@@ -105,6 +95,6 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`;
 
-export default Home
+export default Home;

@@ -1,9 +1,9 @@
-import React from "react"
-import { Link } from "gatsby"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faFacebookF, faInstagram } from "@fortawesome/free-brands-svg-icons"
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons"
-import ireMap from "../images/ire-map.png"
+import React from "react";
+import { Link } from "gatsby";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFacebookF, faInstagram } from "@fortawesome/free-brands-svg-icons";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import ireMap from "../images/ire-map.png";
 
 const Footer = () => {
   return (
@@ -29,15 +29,15 @@ const Footer = () => {
               <Link to="/privacy-policy" className="py-1 lg:py-0">
                 Privacy Policy
               </Link>
-              <Link to="/terms-of-use" className="py-1 lg:py-0">
+              {/* <Link to="/terms-of-use" className="py-1 lg:py-0">
                 Terms of Use
-              </Link>
+              </Link> */}
               <Link to="/competitions" className="py-1 lg:py-0">
                 Competitions
               </Link>
-              <Link to="/contact-us" className="py-1 lg:py-0">
+              {/* <Link to="/contact-us" className="py-1 lg:py-0">
                 Contact
-              </Link>
+              </Link> */}
             </div>
           </div>
 
@@ -86,7 +86,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

@@ -48,7 +48,7 @@ async function fetchInventory() {
     url: config.aws_appsync_graphqlEndpoint,
     method: "post",
     headers: {
-      "x-api-key": "da2-yqo6tckoavc65c757lous7xiwa", // config.aws_appsync_apiKey,
+      "x-api-key": "da2-mgfdzk6odvdb7hm5laltb7ai6q", // config.aws_appsync_apiKey,
     },
     data: {
       query: print(listProductsQuery),
@@ -58,10 +58,6 @@ async function fetchInventory() {
   console.log("GET PRODUCTS", gqlData.data.data.listProducts);
 
   let inventory = gqlData.data.data.listProducts.items;
-
-  const models = await DataStore.query(Product);
-  console.log("***** DATA STORE ****");
-  console.log(models);
 
   if (!fs.existsSync(`${__dirname}/public/downloads`)) {
     fs.mkdirSync(`${__dirname}/public/downloads`);

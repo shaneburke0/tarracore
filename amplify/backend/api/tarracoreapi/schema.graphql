@@ -1,4 +1,4 @@
-type Product @model @auth(rules: [{ allow: private }]) {
+type Product @model @aws_api_key @aws_cognito_user_pools {
   id: ID!
   categories: [String]!
   price: Float!

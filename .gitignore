@@ -1,5 +1,6 @@
 node_modules/**
 build/**
+.cache/**
 
 #amplify
 amplify/\#current-cloud-backend

@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from "react"
-import SEO from "../components/seo"
-import Popup from "reactjs-popup"
-import ImageGallery from "react-image-gallery"
-import { navigate } from "gatsby"
-import { SiteContext, ContextProviderComponent } from "../context/mainContext"
-import CompetitionDetails from "../components/CompetitionDetails"
-import Button from "../components/Button"
-import QuantityPicker from "../components/QuantityPicker"
-import CountdownTimer from "../components/CountdownTimer/CountdownTimer"
-import ProgressBar from "../components/ProgressBar/ProgressBar"
-import Question from "../components/Question/Question"
-import LoginModal from "../components/LoginModal/LoginModal"
-import { numberFormat } from "../../utils/helpers"
-import { /*useAuthDispatch,*/ useAuthState } from "../context/authContext"
-import "react-image-gallery/styles/css/image-gallery.css"
+import React, { useEffect, useState } from "react";
+import SEO from "../components/seo";
+import Popup from "reactjs-popup";
+import ImageGallery from "react-image-gallery";
+import { navigate } from "gatsby";
+import { SiteContext, ContextProviderComponent } from "../context/mainContext";
+import CompetitionDetails from "../components/CompetitionDetails";
+import Button from "../components/Button";
+import QuantityPicker from "../components/QuantityPicker";
+import CountdownTimer from "../components/CountdownTimer/CountdownTimer";
+import ProgressBar from "../components/ProgressBar/ProgressBar";
+import Question from "../components/Question/Question";
+import LoginModal from "../components/LoginModal/LoginModal";
+import { numberFormat } from "../../utils/helpers";
+import { /*useAuthDispatch,*/ useAuthState } from "../context/authContext";
+import "react-image-gallery/styles/css/image-gallery.css";
 
-import config from "../aws-exports"
-import axios from "axios"
-import tag from "graphql-tag"
-const graphql = require("graphql")
-const { print } = graphql
+import config from "../aws-exports";
+import axios from "axios";
+import tag from "graphql-tag";
+const graphql = require("graphql");
+const { print } = graphql;
 
-const ItemView = props => {
-  const item = props.pageContext.content
+const ItemView = (props) => {
+  const item = props.pageContext.content;
   const {
     price,
     image,
@@ -36,79 +36,79 @@ const ItemView = props => {
     gallery,
     id,
     sold,
-  } = item
+  } = item;
 
-  const { userToken } = useAuthState()
-  const [numberOfitems, updateNumberOfItems] = useState(1)
-  const [showSelectAnswerError, setShowSelectAnswerError] = useState(false)
-  const [selectedAnswer, setSelectedAnswer] = useState(null)
-  const [images, setImages] = useState([])
+  const { userToken } = useAuthState();
+  const [numberOfitems, updateNumberOfItems] = useState(1);
+  const [showSelectAnswerError, setShowSelectAnswerError] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [images, setImages] = useState([]);
   const [currentInventoryState, setCurrentInventoryState] = useState(
     currentInventory
-  )
-  const [drawDate, setDrawDate] = useState(endDate)
-  const [canBuyTickets, setCanBuyTickets] = useState(!sold)
-  const [loginModalTriggered, setLoginModalTriggered] = useState(false)
-  const [isLoginModalOpen, setLoginModalOpen] = useState(false)
+  );
+  const [drawDate, setDrawDate] = useState(endDate);
+  const [canBuyTickets, setCanBuyTickets] = useState(!sold);
+  const [loginModalTriggered, setLoginModalTriggered] = useState(false);
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
 
-  const seo = props.pageContext.seo
+  const seo = props.pageContext.seo;
 
   const {
     context: { addToCart },
-  } = props
+  } = props;
 
   function addItemToCart(item) {
     if (!selectedAnswer) {
-      setShowSelectAnswerError(true)
-      return
+      setShowSelectAnswerError(true);
+      return;
     }
 
     if (!userToken) {
-      setLoginModalTriggered(true)
-      setLoginModalOpen(true)
-      return
+      setLoginModalTriggered(true);
+      setLoginModalOpen(true);
+      return;
     }
 
-    item["quantity"] = numberOfitems
-    item["answer"] = selectedAnswer
-    addToCart(item)
-    navigate("/cart")
+    item["quantity"] = numberOfitems;
+    item["answer"] = selectedAnswer;
+    addToCart(item);
+    navigate("/cart");
   }
 
   useEffect(() => {
-    if (userToken) setLoginModalOpen(false)
+    if (userToken) setLoginModalOpen(false);
 
-    if (userToken && loginModalTriggered) addItemToCart(item)
+    if (userToken && loginModalTriggered) addItemToCart(item);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userToken])
+  }, [userToken]);
 
   function increment() {
-    if (numberOfitems === currentInventoryState) return
-    updateNumberOfItems(numberOfitems + 1)
+    if (numberOfitems === currentInventoryState) return;
+    updateNumberOfItems(numberOfitems + 1);
   }
 
   function decrement() {
-    if (numberOfitems === 1) return
-    updateNumberOfItems(numberOfitems - 1)
+    if (numberOfitems === 1) return;
+    updateNumberOfItems(numberOfitems - 1);
   }
 
-  const handleQuestionChange = value => {
-    setShowSelectAnswerError(false)
-    setSelectedAnswer(value)
-  }
+  const handleQuestionChange = (value) => {
+    setShowSelectAnswerError(false);
+    setSelectedAnswer(value);
+  };
 
-  const contentStyle = { width: "90%" }
+  const contentStyle = { width: "90%" };
 
   const createDescriptionMarkup = () => {
     return {
       __html: description,
-    }
-  }
+    };
+  };
 
   const updateCanBuyTickets = (isProductSold, remainingTickets) => {
-    const isProductGone = isProductSold || remainingTickets === 0
-    setCanBuyTickets(!isProductGone)
-  }
+    const isProductGone = isProductSold || remainingTickets === 0;
+    setCanBuyTickets(!isProductGone);
+  };
 
   const createGallery = () => {
     const gall = [
@@ -116,17 +116,17 @@ const ItemView = props => {
         original: image,
         thumbnail: image,
       },
-    ]
+    ];
 
     for (let i = 0; i < gallery.length; i++) {
       gall.push({
         original: gallery[i],
         thumbnail: gallery[i],
-      })
+      });
     }
 
-    setImages([...gall])
-  }
+    setImages([...gall]);
+  };
 
   const getProductDetails = async () => {
     const getProductQuery = tag(`
@@ -137,36 +137,36 @@ const ItemView = props => {
           sold
         }
       }
-  `)
+  `);
     const gqlData = await axios({
       url: config.aws_appsync_graphqlEndpoint,
       method: "post",
       headers: {
-        "x-api-key": config.aws_appsync_apiKey,
+        "x-api-key": "da2-yqo6tckoavc65c757lous7xiwa", // config.aws_appsync_apiKey,
       },
       data: {
         query: print(getProductQuery),
         variables: { id },
       },
-    })
+    });
 
     if (gqlData && gqlData.status === 200) {
-      setCurrentInventoryState(gqlData.data.data.getProduct.currentInventory)
-      setDrawDate(gqlData.data.data.getProduct.endDate)
+      setCurrentInventoryState(gqlData.data.data.getProduct.currentInventory);
+      setDrawDate(gqlData.data.data.getProduct.endDate);
 
       updateCanBuyTickets(
         gqlData.data.data.getProduct.sold,
         gqlData.data.data.getProduct.currentInventory
-      )
+      );
     }
-  }
+  };
 
   useEffect(() => {
-    createGallery()
+    createGallery();
 
-    getProductDetails()
+    getProductDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   return (
     <>
@@ -273,17 +273,17 @@ const ItemView = props => {
         closeModal={() => setLoginModalOpen(false)}
       />
     </>
-  )
-}
+  );
+};
 
 function ItemViewWithContext(props) {
   return (
     <ContextProviderComponent>
       <SiteContext.Consumer>
-        {context => <ItemView {...props} context={context} />}
+        {(context) => <ItemView {...props} context={context} />}
       </SiteContext.Consumer>
     </ContextProviderComponent>
-  )
+  );
 }
 
-export default ItemViewWithContext
+export default ItemViewWithContext;

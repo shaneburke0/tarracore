@@ -80,6 +80,8 @@ const calculateOrderAmount = async (items) => {
 
     amount = productInfo.price * items[0].quantity;
   } catch (ex) {
+    console.log("*** EXCEPTION ***");
+    console.log(JSON.stringify(ex));
     throw "Error calculating price. Please try again.";
   }
 

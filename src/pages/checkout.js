@@ -1,45 +1,45 @@
-import React, { useEffect, useState } from "react"
-import { API } from "aws-amplify"
-import Popup from "reactjs-popup"
-import SEO from "../components/seo"
-import { SiteContext, ContextProviderComponent } from "../context/mainContext"
-import { numberFormat } from "../../utils/helpers"
-import { FaLongArrowAltLeft } from "react-icons/fa"
-import { Link, navigate } from "gatsby"
-import uuid from "uuid/v4"
-import { TermsConditions } from "../components"
+import React, { useEffect, useState } from "react";
+import { API } from "aws-amplify";
+import Popup from "reactjs-popup";
+import SEO from "../components/seo";
+import { SiteContext, ContextProviderComponent } from "../context/mainContext";
+import { numberFormat } from "../../utils/helpers";
+import { FaLongArrowAltLeft } from "react-icons/fa";
+import { Link, navigate } from "gatsby";
+import uuid from "uuid/v4";
+import { TermsConditions } from "../components";
 
 import {
   CardElement,
   Elements,
   useStripe,
   useElements,
-} from "@stripe/react-stripe-js"
-import { loadStripe } from "@stripe/stripe-js"
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(
   "pk_test_51IRN3MAefCJ43eZzieeGe9rfdkKQCdvLdftt6SaXdpAJBHUbOANDAzG8X4l0jK1toQiqe8Fjs6nn9fdamIFpSRB400RU5MYot3"
-)
+);
 
 function CheckoutWithContext(props) {
   return (
     <ContextProviderComponent>
       <SiteContext.Consumer>
-        {context => (
+        {(context) => (
           <Elements stripe={stripePromise}>
             <Checkout {...props} context={context} />
           </Elements>
         )}
       </SiteContext.Consumer>
     </ContextProviderComponent>
-  )
+  );
 }
 
 const calculateShipping = () => {
-  return 0
-}
+  return 0;
+};
 
 const Input = ({ onChange, value, name, placeholder }) => (
   <input
@@ -50,7 +50,7 @@ const Input = ({ onChange, value, name, placeholder }) => (
     placeholder={placeholder}
     name={name}
   />
-)
+);
 
 const Checkbox = ({ onChange, name, checked }) => (
   <input
@@ -60,13 +60,13 @@ const Checkbox = ({ onChange, name, checked }) => (
     name={name}
     checked={checked}
   />
-)
+);
 
 const Checkout = ({ context, history }) => {
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [showTermsErrorMessage, setShowTermsErrorMessage] = useState(false)
-  const [showTerms, setShowTerms] = useState(false)
-  const [isTermsAccepted, setTermsAccepted] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [showTermsErrorMessage, setShowTermsErrorMessage] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+  const [isTermsAccepted, setTermsAccepted] = useState(false);
   // const [orderCompleted, setOrderCompleted] = useState(false)
   const [input, setInput] = useState({
     name: "",
@@ -75,62 +75,62 @@ const Checkout = ({ context, history }) => {
     city: "",
     postal_code: "",
     state: "",
-  })
+  });
 
-  const stripe = useStripe()
-  const elements = useElements()
+  const stripe = useStripe();
+  const elements = useElements();
 
-  const [succeeded, setSucceeded] = useState(false)
-  const [error, setError] = useState(null)
-  const [processing, setProcessing] = useState("")
-  const [disabled, setDisabled] = useState(true)
-  const [clientSecret, setClientSecret] = useState("")
+  const [succeeded, setSucceeded] = useState(false);
+  const [error, setError] = useState(null);
+  const [processing, setProcessing] = useState("");
+  const [disabled, setDisabled] = useState(true);
+  const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
-    const { cart } = context
+    const { cart } = context;
 
-    const items = []
+    const items = [];
 
     if (Array.isArray(cart) && cart.length > 0) {
-      cart.forEach(item => [
+      cart.forEach((item) => [
         items.push({
           id: item.id,
           quantity: item.quantity,
         }),
-      ])
+      ]);
     }
 
     const params = {
       body: {
         items,
       },
-    }
+    };
 
     // Create PaymentIntent as soon as the page loads
-    API.post("paymentsapi", "/init", params).then(data => {
-      setClientSecret(data.clientSecret)
-    })
+    API.post("paymentsapi", "/paymentinit", params).then((data) => {
+      setClientSecret(data.clientSecret);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
-  const handleTermsChange = e => {
-    setTermsAccepted(e.target.checked)
-    setShowTermsErrorMessage(false)
-  }
+  const handleTermsChange = (e) => {
+    setTermsAccepted(e.target.checked);
+    setShowTermsErrorMessage(false);
+  };
 
-  const onChange = e => {
-    setErrorMessage(null)
-    setInput({ ...input, [e.target.name]: e.target.value })
-  }
+  const onChange = (e) => {
+    setErrorMessage(null);
+    setInput({ ...input, [e.target.name]: e.target.value });
+  };
 
-  const handleShowTerms = e => {
-    console.log("handleShowTerms", e)
-    e.preventDefault()
-    setShowTerms(!showTerms)
-  }
+  const handleShowTerms = (e) => {
+    console.log("handleShowTerms", e);
+    e.preventDefault();
+    setShowTerms(!showTerms);
+  };
 
-  const { numberOfItemsInCart, cart, total } = context
-  const cartEmpty = numberOfItemsInCart === Number(0)
+  const { numberOfItemsInCart, cart, total } = context;
+  const cartEmpty = numberOfItemsInCart === Number(0);
 
   const cardStyle = {
     style: {
@@ -148,50 +148,50 @@ const Checkout = ({ context, history }) => {
         iconColor: "#fa755a",
       },
     },
-  }
-  const handleChange = async event => {
+  };
+  const handleChange = async (event) => {
     // Listen for changes in the CardElement
     // and display any errors as the customer types their card details
-    setDisabled(event.empty)
-    setError(event.error ? event.error.message : "")
-  }
-  const handleSubmit = async ev => {
-    ev.preventDefault()
+    setDisabled(event.empty);
+    setError(event.error ? event.error.message : "");
+  };
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
 
-    const { email, street, city, postal_code, state } = input
-    const { total, clearCart } = context
+    const { email, street, city, postal_code, state } = input;
+    const { total, clearCart } = context;
 
     if (!stripe || !elements) {
       // Stripe.js has not loaded yet. Make sure to disable
       // form submission until Stripe.js has loaded.
-      return
+      return;
     }
 
     // Validate input
     if (!street || !city || !postal_code || !state) {
-      setErrorMessage("Please fill in the form!")
-      return
+      setErrorMessage("Please fill in the form!");
+      return;
     }
 
     if (!isTermsAccepted) {
-      setShowTermsErrorMessage(true)
-      return
+      setShowTermsErrorMessage(true);
+      return;
     }
 
-    setProcessing(true)
+    setProcessing(true);
     const payload = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
         card: elements.getElement(CardElement),
       },
-    })
+    });
 
     if (payload.error) {
-      setError(`Payment failed ${payload.error.message}`)
-      setProcessing(false)
+      setError(`Payment failed ${payload.error.message}`);
+      setProcessing(false);
     } else {
-      setError(null)
-      setProcessing(false)
-      setSucceeded(true)
+      setError(null);
+      setProcessing(false);
+      setSucceeded(true);
 
       const order = {
         email,
@@ -199,17 +199,17 @@ const Checkout = ({ context, history }) => {
         address: state,
         receipt_email: email,
         id: uuid(),
-      }
-      console.log("payload", payload)
-      console.log("order: ", order)
+      };
+      console.log("payload", payload);
+      console.log("order: ", order);
       // TODO call API
       // setOrderCompleted(true)
-      clearCart()
-      navigate("/complete")
+      clearCart();
+      navigate("/complete");
     }
-  }
+  };
 
-  const contentStyle = { width: "90%", height: "67%" }
+  const contentStyle = { width: "90%", height: "67%" };
 
   return (
     <>
@@ -304,7 +304,7 @@ const Checkout = ({ context, history }) => {
                               x{item.quantity}
                             </span>
                           </div>
-                        )
+                        );
                       })}
 
                       <div className="ml-4 pl-2 flex flex-1 justify-end pt-2 pr-4">
@@ -408,7 +408,7 @@ const Checkout = ({ context, history }) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default CheckoutWithContext
+export default CheckoutWithContext;

@@ -121,6 +121,32 @@ const Checkout = ({ context, history }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const paymentComplete = (paymentRef) => {
+    const { cart } = context;
+
+    const items = [];
+
+    if (Array.isArray(cart) && cart.length > 0) {
+      cart.forEach((item) => [
+        items.push({
+          id: item.id,
+          quantity: item.quantity,
+        }),
+      ]);
+    }
+
+    const params = {
+      body: {
+        items,
+        paymentRef,
+      },
+    };
+
+    API.post("paymentsapi", "/paymentcomplete", params).then((data) => {
+      console.log("paymentcomplete", data);
+    });
+  };
+
   const handleTermsChange = (e) => {
     setTermsAccepted(e.target.checked);
     setShowTermsErrorMessage(false);
@@ -213,7 +239,8 @@ const Checkout = ({ context, history }) => {
       // TODO call API
       // setOrderCompleted(true)
       clearCart();
-      navigate("/complete");
+      // navigate("/complete");
+      paymentComplete(order.id);
     }
   };
 

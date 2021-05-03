@@ -49,6 +49,15 @@ const getProductQuery = gql`
   }
 `;
 
+const updateProduct = gql`
+  mutation UpdateProduct($id: ID!, $currentInventory: Int!) {
+    updateProduct(id: $id, currentInventory: $currentInventory) {
+      id
+      currentInventory
+    }
+  }
+`;
+
 AWS.config.update({ region: process.env.REGION });
 
 const getProductInfo = async (id) => {
@@ -67,6 +76,52 @@ const getProductInfo = async (id) => {
   console.log("graphqlData", graphqlData.data.data.getProduct);
 
   return graphqlData.data.data.getProduct;
+};
+
+const updateProductInfo = async (id, currentInventory) => {
+  const graphqlData = await axios({
+    url: process.env.API_TARRACOREAPI_GRAPHQLAPIENDPOINTOUTPUT,
+    method: "post",
+    headers: {
+      "x-api-key": process.env.API_KEY,
+    },
+    data: {
+      query: print(updateProduct),
+      variables: { id, currentInventory },
+    },
+  });
+  console.log("*** GraphQL Update Response ***");
+  console.log("graphqlData", graphqlData);
+
+  return;
+};
+
+const updateInventory = async (items) => {
+  let productInfo;
+  let newCurrentInventory;
+
+  if (!items || !items.length) {
+    throw "No items! " + JSON.stringify(items);
+  } else if (items && items.length > 1) throw "Too many items.";
+
+  try {
+    productInfo = await getProductInfo(items[0].id);
+    newCurrentInventory = productInfo.currentInventory - items[0].quantity;
+  } catch (ex) {
+    console.log("*** EXCEPTION [Getting Product Info] ***");
+    console.log(JSON.stringify(ex));
+    throw "Error updating order info.";
+  }
+
+  try {
+    await updateProductInfo(items[0].id, newCurrentInventory);
+  } catch (ex) {
+    console.log("*** EXCEPTION [Updating Product Inventory] ***");
+    console.log(JSON.stringify(ex));
+    throw "Error updating order info.";
+  }
+
+  return true;
 };
 
 const calculateOrderAmount = async (items) => {
@@ -131,6 +186,23 @@ app.post("/paymentinit", async (req, res) => {
   } catch (ex) {
     res.send({ ex });
   }
+});
+
+app.post("/paymentcomplete", async (req, res) => {
+  try {
+    // Update Current Inventory
+    await updateInventory(items);
+  } catch (error) {
+    res.send({
+      error,
+    });
+  }
+
+  // Update Orders table
+
+  res.send({
+    status: "ORDER_COMPLETE",
+  });
 });
 
 // Export the app object. When executing the application local this does nothing. However,

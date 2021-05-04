@@ -23,6 +23,7 @@ export const createProduct = /* GraphQL */ `
       options
       answer
       gallery
+      tickets
       createdAt
       updatedAt
     }
@@ -50,6 +51,7 @@ export const updateProduct = /* GraphQL */ `
       options
       answer
       gallery
+      tickets
       createdAt
       updatedAt
     }
@@ -77,6 +79,7 @@ export const deleteProduct = /* GraphQL */ `
       options
       answer
       gallery
+      tickets
       createdAt
       updatedAt
     }
@@ -106,6 +109,7 @@ export const createOrder = /* GraphQL */ `
         options
         answer
         gallery
+        tickets
         createdAt
         updatedAt
       }
@@ -147,6 +151,7 @@ export const updateOrder = /* GraphQL */ `
         options
         answer
         gallery
+        tickets
         createdAt
         updatedAt
       }
@@ -188,6 +193,7 @@ export const deleteOrder = /* GraphQL */ `
         options
         answer
         gallery
+        tickets
         createdAt
         updatedAt
       }

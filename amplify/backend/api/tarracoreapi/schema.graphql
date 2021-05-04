@@ -15,6 +15,7 @@ type Product @model @aws_api_key @aws_cognito_user_pools {
   options: [String]
   answer: String
   gallery: [String]
+  tickets: [Int]!
 }
 
 type Order @model @aws_api_key @aws_cognito_user_pools {
@@ -23,7 +24,7 @@ type Order @model @aws_api_key @aws_cognito_user_pools {
   userId: String!
   quantity: Int!
   paymentRef: String
-  tickets: [String]
+  tickets: [Int]
   answer: String!
   email: String!
   address: String!

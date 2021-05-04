@@ -20,6 +20,7 @@ export const getProduct = /* GraphQL */ `
       options
       answer
       gallery
+      tickets
       createdAt
       updatedAt
     }
@@ -49,6 +50,7 @@ export const listProducts = /* GraphQL */ `
         options
         answer
         gallery
+        tickets
         createdAt
         updatedAt
       }
@@ -77,6 +79,7 @@ export const getOrder = /* GraphQL */ `
         options
         answer
         gallery
+        tickets
         createdAt
         updatedAt
       }
@@ -120,6 +123,7 @@ export const listOrders = /* GraphQL */ `
           options
           answer
           gallery
+          tickets
           createdAt
           updatedAt
         }

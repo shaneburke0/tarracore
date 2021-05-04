@@ -14,7 +14,7 @@ const updateOrder = gql`
     $orderProductId: ID!
     $paymentRef: String
     $quantity: Int!
-    $tickets: [String] = ""
+    $tickets: [Int]
     $userId: String!
   ) {
     createOrder(

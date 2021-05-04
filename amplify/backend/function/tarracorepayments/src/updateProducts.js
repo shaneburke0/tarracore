@@ -5,17 +5,20 @@ const graphql = require("graphql");
 const { print } = graphql;
 
 const updateProduct = gql`
-  mutation UpdateProduct($id: ID!, $currentInventory: Int!) {
-    updateProduct(input: { id: $id, currentInventory: $currentInventory }) {
+  mutation UpdateProduct($id: ID!, $currentInventory: Int!, $tickets: [Int]!) {
+    updateProduct(
+      input: { id: $id, currentInventory: $currentInventory, tickets: $tickets }
+    ) {
       id
       currentInventory
+      tickets
     }
   }
 `;
 
 AWS.config.update({ region: process.env.REGION });
 
-const updateProductInfo = async (id, currentInventory) => {
+const updateProductInfo = async (id, currentInventory, tickets) => {
   const graphqlData = await axios({
     url: process.env.API_TARRACOREAPI_GRAPHQLAPIENDPOINTOUTPUT,
     method: "post",
@@ -24,7 +27,7 @@ const updateProductInfo = async (id, currentInventory) => {
     },
     data: {
       query: print(updateProduct),
-      variables: { id, currentInventory },
+      variables: { id, currentInventory, tickets },
     },
   });
   console.log("*** GraphQL Update Response ***");

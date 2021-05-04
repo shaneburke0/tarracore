@@ -40,6 +40,8 @@ app.use(function(req, res, next) {
 const updateInventory = async (order) => {
   let productInfo;
   let newCurrentInventory;
+  let customerTickets = [];
+  let isAnswerCorrect = false;
 
   if (!order) {
     throw "No Order! " + JSON.stringify(order);
@@ -48,6 +50,17 @@ const updateInventory = async (order) => {
   try {
     productInfo = await getProductInfo(order.orderProductId);
     newCurrentInventory = productInfo.currentInventory - order.quantity;
+    isAnswerCorrect = productInfo.answer === order.answer;
+
+    if (isAnswerCorrect) {
+      customerTickets = productInfo.tickets.splice(0, order.quantity);
+    }
+
+    console.log("*** Cusomer Order Question ***");
+    console.log("Is answer correct: " + isAnswerCorrect);
+    console.log(
+      "Expected: " + productInfo.answer + " | received: " + order.answer
+    );
   } catch (ex) {
     console.log("*** EXCEPTION [Getting Product Info] ***");
     console.log(JSON.stringify(ex));
@@ -55,14 +68,18 @@ const updateInventory = async (order) => {
   }
 
   try {
-    await updateProductInfo(order.orderProductId, newCurrentInventory);
+    await updateProductInfo(
+      order.orderProductId,
+      newCurrentInventory,
+      productInfo.tickets
+    );
   } catch (ex) {
     console.log("*** EXCEPTION [Updating Product Inventory] ***");
     console.log(JSON.stringify(ex));
     throw "Error updating order info.";
   }
 
-  return productInfo.answer;
+  return { isAnswerCorrect: isAnswerCorrect, tickets: customerTickets };
 };
 
 const calculateOrderAmount = async (items) => {
@@ -132,10 +149,10 @@ app.post("/paymentinit", async (req, res) => {
 app.post("/paymentcomplete", async (req, res) => {
   console.log("req.body", req.body);
   const { order } = req.body;
-  let answer = null;
+  let updateReponse = null;
   try {
     // Update Current Inventory
-    answer = await updateInventory(order);
+    updateReponse = await updateInventory(order);
   } catch (error) {
     res.send({
       error,
@@ -143,7 +160,8 @@ app.post("/paymentcomplete", async (req, res) => {
   }
 
   try {
-    order.isAnswerCorrect = answer === order.answer;
+    order.isAnswerCorrect = updateReponse.isAnswerCorrect;
+    order.tickets = [...updateReponse.tickets];
     // Update Orders table
     await updateOrdersTable(order);
     res.send({

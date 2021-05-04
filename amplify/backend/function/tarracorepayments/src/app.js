@@ -14,12 +14,10 @@ See the License for the specific language governing permissions and limitations 
 Amplify Params - DO NOT EDIT */
 
 const express = require("express");
-const AWS = require("aws-sdk");
 const app = express();
-const axios = require("axios");
-const gql = require("graphql-tag");
-const graphql = require("graphql");
-const { print } = graphql;
+const getProductInfo = require("./getProducts");
+const updateProductInfo = require("./updateProducts");
+const updateOrdersTable = require("./updateOrders");
 
 // This is your real test secret API key.
 const stripe = require("stripe")(
@@ -39,74 +37,17 @@ app.use(function(req, res, next) {
   next();
 });
 
-const getProductQuery = gql`
-  query GetProduct($id: ID!) {
-    getProduct(id: $id) {
-      id
-      price
-      currentInventory
-    }
-  }
-`;
-
-const updateProduct = gql`
-  mutation UpdateProduct($id: ID!, $currentInventory: Int!) {
-    updateProduct(id: $id, currentInventory: $currentInventory) {
-      id
-      currentInventory
-    }
-  }
-`;
-
-AWS.config.update({ region: process.env.REGION });
-
-const getProductInfo = async (id) => {
-  const graphqlData = await axios({
-    url: process.env.API_TARRACOREAPI_GRAPHQLAPIENDPOINTOUTPUT,
-    method: "post",
-    headers: {
-      "x-api-key": process.env.API_KEY,
-    },
-    data: {
-      query: print(getProductQuery),
-      variables: { id },
-    },
-  });
-  console.log("*** GraphQL Response ***");
-  console.log("graphqlData", graphqlData.data.data.getProduct);
-
-  return graphqlData.data.data.getProduct;
-};
-
-const updateProductInfo = async (id, currentInventory) => {
-  const graphqlData = await axios({
-    url: process.env.API_TARRACOREAPI_GRAPHQLAPIENDPOINTOUTPUT,
-    method: "post",
-    headers: {
-      "x-api-key": process.env.API_KEY,
-    },
-    data: {
-      query: print(updateProduct),
-      variables: { id, currentInventory },
-    },
-  });
-  console.log("*** GraphQL Update Response ***");
-  console.log("graphqlData", graphqlData);
-
-  return;
-};
-
-const updateInventory = async (items) => {
+const updateInventory = async (order) => {
   let productInfo;
   let newCurrentInventory;
 
-  if (!items || !items.length) {
-    throw "No items! " + JSON.stringify(items);
-  } else if (items && items.length > 1) throw "Too many items.";
+  if (!order) {
+    throw "No Order! " + JSON.stringify(order);
+  }
 
   try {
-    productInfo = await getProductInfo(items[0].id);
-    newCurrentInventory = productInfo.currentInventory - items[0].quantity;
+    productInfo = await getProductInfo(order.orderProductId);
+    newCurrentInventory = productInfo.currentInventory - order.quantity;
   } catch (ex) {
     console.log("*** EXCEPTION [Getting Product Info] ***");
     console.log(JSON.stringify(ex));
@@ -114,14 +55,14 @@ const updateInventory = async (items) => {
   }
 
   try {
-    await updateProductInfo(items[0].id, newCurrentInventory);
+    await updateProductInfo(order.orderProductId, newCurrentInventory);
   } catch (ex) {
     console.log("*** EXCEPTION [Updating Product Inventory] ***");
     console.log(JSON.stringify(ex));
     throw "Error updating order info.";
   }
 
-  return true;
+  return productInfo.answer;
 };
 
 const calculateOrderAmount = async (items) => {
@@ -189,20 +130,28 @@ app.post("/paymentinit", async (req, res) => {
 });
 
 app.post("/paymentcomplete", async (req, res) => {
+  console.log("req.body", req.body);
+  const { order } = req.body;
+  let answer = null;
   try {
     // Update Current Inventory
-    await updateInventory(items);
+    answer = await updateInventory(order);
   } catch (error) {
     res.send({
       error,
     });
   }
 
-  // Update Orders table
-
-  res.send({
-    status: "ORDER_COMPLETE",
-  });
+  try {
+    order.isAnswerCorrect = answer === order.answer;
+    // Update Orders table
+    await updateOrdersTable(order);
+    res.send({
+      status: "ORDER_COMPLETE",
+    });
+  } catch (ex) {
+    res.send({ ex });
+  }
 });
 
 // Export the app object. When executing the application local this does nothing. However,

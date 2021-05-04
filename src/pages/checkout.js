@@ -8,6 +8,8 @@ import { FaLongArrowAltLeft } from "react-icons/fa";
 import { Link, navigate } from "gatsby";
 import uuid from "uuid/v4";
 import { TermsConditions } from "../components";
+import moment from "moment";
+import { Auth } from "aws-amplify";
 
 import {
   CardElement,
@@ -67,6 +69,7 @@ const Checkout = ({ context, history }) => {
   const [showTermsErrorMessage, setShowTermsErrorMessage] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [isTermsAccepted, setTermsAccepted] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState("");
   // const [orderCompleted, setOrderCompleted] = useState(false)
   const [input, setInput] = useState({
     name: "",
@@ -86,9 +89,13 @@ const Checkout = ({ context, history }) => {
   const [disabled, setDisabled] = useState(true);
   const [clientSecret, setClientSecret] = useState("");
 
+  const handleGettingCurrentUser = async () => {
+    const currentUser = await Auth.currentUserInfo();
+    setCurrentUserId(currentUser ? currentUser.attributes.email : "");
+  };
+
   useEffect(() => {
     const { cart } = context;
-
     const items = [];
 
     if (Array.isArray(cart) && cart.length > 0) {
@@ -118,11 +125,14 @@ const Checkout = ({ context, history }) => {
         );
       }
     });
+
+    handleGettingCurrentUser();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const paymentComplete = (paymentRef) => {
-    const { cart } = context;
+    const { cart, clearCart } = context;
 
     const items = [];
 
@@ -131,19 +141,33 @@ const Checkout = ({ context, history }) => {
         items.push({
           id: item.id,
           quantity: item.quantity,
+          answer: item.answer,
         }),
       ]);
     }
 
+    const address = `${input.street}, ${input.city}, ${input.state}, ${input.postal_code}`;
+
     const params = {
       body: {
-        items,
-        paymentRef,
+        order: {
+          address: address,
+          answer: items[0].answer,
+          email: input.email,
+          orderDate: moment(),
+          orderProductId: items[0].id,
+          paymentRef: paymentRef,
+          quantity: items[0].quantity,
+          userId: currentUserId,
+        },
       },
     };
 
     API.post("paymentsapi", "/paymentcomplete", params).then((data) => {
-      console.log("paymentcomplete", data);
+      setProcessing(false);
+      setSucceeded(true);
+      clearCart();
+      navigate("/complete");
     });
   };
 
@@ -158,7 +182,6 @@ const Checkout = ({ context, history }) => {
   };
 
   const handleShowTerms = (e) => {
-    console.log("handleShowTerms", e);
     e.preventDefault();
     setShowTerms(!showTerms);
   };
@@ -193,7 +216,7 @@ const Checkout = ({ context, history }) => {
     ev.preventDefault();
 
     const { email, street, city, postal_code, state } = input;
-    const { total, clearCart } = context;
+    const { total } = context;
 
     if (!stripe || !elements) {
       // Stripe.js has not loaded yet. Make sure to disable
@@ -224,8 +247,6 @@ const Checkout = ({ context, history }) => {
       setProcessing(false);
     } else {
       setError(null);
-      setProcessing(false);
-      setSucceeded(true);
 
       const order = {
         email,
@@ -234,12 +255,6 @@ const Checkout = ({ context, history }) => {
         receipt_email: email,
         id: uuid(),
       };
-      console.log("payload", payload);
-      console.log("order: ", order);
-      // TODO call API
-      // setOrderCompleted(true)
-      clearCart();
-      // navigate("/complete");
       paymentComplete(order.id);
     }
   };

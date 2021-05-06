@@ -18,6 +18,7 @@ const app = express();
 const getProductInfo = require("./getProducts");
 const updateProductInfo = require("./updateProducts");
 const updateOrdersTable = require("./updateOrders");
+const { emailReceipt } = require("./sendEmails");
 
 // This is your real test secret API key.
 const stripe = require("stripe")(
@@ -157,6 +158,12 @@ app.post("/paymentcomplete", async (req, res) => {
     res.send({
       error,
     });
+  }
+
+  try {
+    await emailReceipt(order.email);
+  } catch (ex) {
+    res.send({ ex });
   }
 
   try {

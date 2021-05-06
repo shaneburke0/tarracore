@@ -9,6 +9,7 @@
     "axios": "^0.21.1",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
+    "fs": "0.0.1-security",
     "graphql": "^15.5.0",
     "graphql-tag": "^2.11.0",
     "stripe": "^8.145.0"

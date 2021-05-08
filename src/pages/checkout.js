@@ -176,7 +176,7 @@ const Checkout = ({ context, history }) => {
             total: items[0].price * items[0].quantity,
             name: input.name,
             orderid: paymentRef,
-            date: moment().format("L"),
+            date: moment().format("Do MMM YYYY"),
           },
         },
       },

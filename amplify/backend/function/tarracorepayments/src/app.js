@@ -13,12 +13,31 @@ See the License for the specific language governing permissions and limitations 
 	REGION
 Amplify Params - DO NOT EDIT */
 
+/*
+const now = new Date()  
+const utcMilllisecondsSinceEpoch = now.getTime() + (now.getTimezoneOffset() * 60 * 1000)  
+const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000) 
+
+{
+  "payload": {
+    "accounttypedescription":"ECOM",
+    "currencyiso3a":"EUR",
+    "mainamount":"10.50",
+    "orderreference": "",
+    "sitereference":"test_tarracorelimited88769",
+    "requesttypedescriptions":["THREEDQUERY","AUTH"]
+  },
+  "iat": utcSecondsSinceEpoch,
+  "iss":"jwt.user"
+}
+*/
+
 const express = require("express");
 const app = express();
 const getProductInfo = require("./getProducts");
 const updateProductInfo = require("./updateProducts");
 const updateOrdersTable = require("./updateOrders");
-const { emailReceipt } = require("./sendEmails");
+const { emailReceipt, emailTickets } = require("./sendEmails");
 
 // This is your real test secret API key.
 const stripe = require("stripe")(
@@ -161,7 +180,7 @@ app.post("/paymentcomplete", async (req, res) => {
   }
 
   try {
-    await emailReceipt(order.email);
+    await emailReceipt(order.email, order.cart);
   } catch (ex) {
     res.send({ ex });
   }
@@ -169,8 +188,15 @@ app.post("/paymentcomplete", async (req, res) => {
   try {
     order.isAnswerCorrect = updateReponse.isAnswerCorrect;
     order.tickets = [...updateReponse.tickets];
+    order.cart.items[0].tickets = order.tickets.join(", ");
+
     // Update Orders table
     await updateOrdersTable(order);
+
+    if (order.isAnswerCorrect) {
+      await emailTickets(order.email, order.cart);
+    }
+
     res.send({
       status: "ORDER_COMPLETE",
     });

@@ -5,48 +5,48 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from "react"
-import { Link } from "gatsby"
-import { SiteContext, ContextProviderComponent } from "../context/mainContext"
-import { AuthProvider } from "../context/authContext"
-import { titleIfy, slugify } from "../../utils/helpers"
-import "react-toastify/dist/ReactToastify.css"
-import { toast } from "react-toastify"
-import { PageFooter, NavActions } from "../components"
-import { colors } from "../theme"
+import React from "react";
+import { Link } from "gatsby";
+import { SiteContext, ContextProviderComponent } from "../context/mainContext";
+import { AuthProvider } from "../context/authContext";
+import { titleIfy, slugify } from "../../utils/helpers";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+import { PageFooter, NavActions } from "../components";
+import { colors } from "../theme";
 
 toast.configure({
   progressStyle: {
     background: colors.primary,
   },
-})
+});
 
-const logo = require("../images/logo.svg")
+const logo = require("../images/logo.svg");
 
 class Layout extends React.Component {
   render() {
-    const { children } = this.props
+    const { children } = this.props;
 
     return (
       <AuthProvider>
         <ContextProviderComponent>
           <SiteContext.Consumer>
-            {context => {
-              console.log("baselayout rerendering...")
+            {(context) => {
+              console.log("baselayout rerendering...");
               let {
                 navItems: {
                   navInfo: { data: links },
                 },
-              } = context
+              } = context;
 
-              links = links.map(link => ({
+              links = links.map((link) => ({
                 name: titleIfy(link),
                 link: slugify(link),
-              }))
+              }));
               links.unshift({
                 name: "Home",
                 link: "/",
-              })
+              });
 
               return (
                 <div className="min-h-screen">
@@ -88,13 +88,13 @@ class Layout extends React.Component {
 
                   <PageFooter />
                 </div>
-              )
+              );
             }}
           </SiteContext.Consumer>
         </ContextProviderComponent>
       </AuthProvider>
-    )
+    );
   }
 }
 
-export default Layout
+export default Layout;

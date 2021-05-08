@@ -95,8 +95,17 @@ const Checkout = ({ context, history }) => {
   };
 
   useEffect(() => {
+    // const st = SecureTrading({
+    //   jwt:
+    //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImFjY291bnR0eXBlZGVzY3JpcHRpb24iOiJFQ09NIiwiYmFzZWFtb3VudCI6IjEwNTAiLCJjdXJyZW5jeWlzbzNhIjoiR0JQIiwic2l0ZXJlZmVyZW5jZSI6InRlc3Rfc2l0ZTEyMzQ1IiwicmVxdWVzdHR5cGVkZXNjcmlwdGlvbnMiOlsiVEhSRUVEUVVFUlkiLCJBVVRIIl19LCJpYXQiOjE1NTkwMzM4NDksImlzcyI6Imp3dC51c2VyIn0.4LR3bv1YPOy1E13OwJGRxuyA7j91P7RUTnolVR2FAS4",
+    //   liveStatus: 0,
+    // });
+    // st.Components();
+
     const { cart } = context;
     const items = [];
+
+    console.log("cart", cart);
 
     if (Array.isArray(cart) && cart.length > 0) {
       cart.forEach((item) => [
@@ -142,6 +151,8 @@ const Checkout = ({ context, history }) => {
           id: item.id,
           quantity: item.quantity,
           answer: item.answer,
+          name: item.name,
+          price: item.price,
         }),
       ]);
     }
@@ -159,6 +170,14 @@ const Checkout = ({ context, history }) => {
           paymentRef: paymentRef,
           quantity: items[0].quantity,
           userId: currentUserId,
+          county: input.state,
+          cart: {
+            items: [...cart],
+            total: items[0].price * items[0].quantity,
+            name: input.name,
+            orderid: paymentRef,
+            date: moment().format("L"),
+          },
         },
       },
     };
@@ -339,6 +358,18 @@ const Checkout = ({ context, history }) => {
                             placeholder="Postal Code"
                           />
                         </form>
+
+                        {/* <div id="st-notification-frame"></div>
+                        <form
+                          id="st-form"
+                          action="https://tarracore.ie"
+                          method="POST"
+                        >
+                          <div id="st-card-number"></div>
+                          <div id="st-expiration-date"></div>
+                          <div id="st-security-code"></div>
+                          <button type="submit">Pay securely</button>
+                        </form> */}
                       </div>
                     </div>
                     <div className="md:pt-4 flex-1">

@@ -12,6 +12,8 @@
     "fs": "0.0.1-security",
     "graphql": "^15.5.0",
     "graphql-tag": "^2.11.0",
+    "handlebars": "^4.7.7",
+    "jose": "^3.11.6",
     "stripe": "^8.145.0"
   },
   "devDependencies": {},

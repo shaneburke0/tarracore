@@ -124,6 +124,7 @@ const Checkout = ({ context, history }) => {
         const st = SecureTrading({
           jwt: data.jwt,
           formId: "st-form",
+          buttonId: "paymentSubmitBtn",
           // liveStatus: 0,
         });
         st.Components();
@@ -363,13 +364,19 @@ const Checkout = ({ context, history }) => {
                         <div id="st-notification-frame"></div>
                         <form
                           id="st-form"
-                          action="https://tarracore.ie/"
+                          action="https://q22vup4kpi.execute-api.eu-west-1.amazonaws.com/devk/webhook"
                           method="POST"
                         >
                           <div id="st-card-number"></div>
                           <div id="st-expiration-date"></div>
                           <div id="st-security-code"></div>
-                          <button type="submit">Pay securely</button>
+                          <button
+                            type="submit"
+                            className="example-form__button"
+                            id="paymentSubmitBtn"
+                          >
+                            this is the pay button
+                          </button>
                         </form>
                       </div>
                     </div>

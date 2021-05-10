@@ -11,28 +11,28 @@ import moment from "moment";
 import { Auth } from "aws-amplify";
 import shortid from "shortid";
 
-import {
-  CardElement,
-  Elements,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+// import {
+//   CardElement,
+//   Elements,
+//   useStripe,
+//   useElements,
+// } from "@stripe/react-stripe-js";
+// import { loadStripe } from "@stripe/stripe-js";
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
-const stripePromise = loadStripe(
-  "pk_test_51IRN3MAefCJ43eZzieeGe9rfdkKQCdvLdftt6SaXdpAJBHUbOANDAzG8X4l0jK1toQiqe8Fjs6nn9fdamIFpSRB400RU5MYot3"
-);
+// const stripePromise = loadStripe(
+//   "pk_test_51IRN3MAefCJ43eZzieeGe9rfdkKQCdvLdftt6SaXdpAJBHUbOANDAzG8X4l0jK1toQiqe8Fjs6nn9fdamIFpSRB400RU5MYot3"
+// );
 
 function CheckoutWithContext(props) {
   return (
     <ContextProviderComponent>
       <SiteContext.Consumer>
         {(context) => (
-          <Elements stripe={stripePromise}>
-            <Checkout {...props} context={context} />
-          </Elements>
+          // <Elements stripe={stripePromise}>
+          <Checkout {...props} context={context} />
+          // </Elements>
         )}
       </SiteContext.Consumer>
     </ContextProviderComponent>
@@ -81,8 +81,8 @@ const Checkout = ({ context, history }) => {
     state: "",
   });
 
-  const stripe = useStripe();
-  const elements = useElements();
+  // const stripe = useStripe();
+  // const elements = useElements();
 
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
@@ -123,7 +123,8 @@ const Checkout = ({ context, history }) => {
       if (data && data.jwt) {
         const st = SecureTrading({
           jwt: data.jwt,
-          liveStatus: 0,
+          formId: "st-form",
+          // liveStatus: 0,
         });
         st.Components();
       } else if (data && data.error) {
@@ -310,7 +311,7 @@ const Checkout = ({ context, history }) => {
                     <div className="flex flex-1 pt-0 flex-col">
                       <div className="mt-4 max-w-2xl">
                         <h2>Billing Details</h2>
-                        <form onSubmit={handleSubmit}>
+                        {/* <form onSubmit={handleSubmit}>
                           {errorMessage ? (
                             <span className="text-red-700">{errorMessage}</span>
                           ) : (
@@ -357,19 +358,19 @@ const Checkout = ({ context, history }) => {
                             name="postal_code"
                             placeholder="Postal Code"
                           />
-                        </form>
+                        </form> */}
 
-                        {/* <div id="st-notification-frame"></div>
+                        <div id="st-notification-frame"></div>
                         <form
                           id="st-form"
-                          action="https://tarracore.ie"
+                          action="https://tarracore.ie/"
                           method="POST"
                         >
                           <div id="st-card-number"></div>
                           <div id="st-expiration-date"></div>
                           <div id="st-security-code"></div>
                           <button type="submit">Pay securely</button>
-                        </form> */}
+                        </form>
                       </div>
                     </div>
                     <div className="md:pt-4 flex-1">

@@ -6,10 +6,10 @@ import { SiteContext, ContextProviderComponent } from "../context/mainContext";
 import { numberFormat } from "../../utils/helpers";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { Link, navigate } from "gatsby";
-import uuid from "uuid/v4";
 import { TermsConditions } from "../components";
 import moment from "moment";
 import { Auth } from "aws-amplify";
+import shortid from "shortid";
 
 import {
   CardElement,
@@ -70,6 +70,7 @@ const Checkout = ({ context, history }) => {
   const [showTerms, setShowTerms] = useState(false);
   const [isTermsAccepted, setTermsAccepted] = useState(false);
   const [currentUserId, setCurrentUserId] = useState("");
+  const [orderId, setOrderId] = useState(null);
   // const [orderCompleted, setOrderCompleted] = useState(false)
   const [input, setInput] = useState({
     name: "",
@@ -95,13 +96,7 @@ const Checkout = ({ context, history }) => {
   };
 
   useEffect(() => {
-    // const st = SecureTrading({
-    //   jwt:
-    //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImFjY291bnR0eXBlZGVzY3JpcHRpb24iOiJFQ09NIiwiYmFzZWFtb3VudCI6IjEwNTAiLCJjdXJyZW5jeWlzbzNhIjoiR0JQIiwic2l0ZXJlZmVyZW5jZSI6InRlc3Rfc2l0ZTEyMzQ1IiwicmVxdWVzdHR5cGVkZXNjcmlwdGlvbnMiOlsiVEhSRUVEUVVFUlkiLCJBVVRIIl19LCJpYXQiOjE1NTkwMzM4NDksImlzcyI6Imp3dC51c2VyIn0.4LR3bv1YPOy1E13OwJGRxuyA7j91P7RUTnolVR2FAS4",
-    //   liveStatus: 0,
-    // });
-    // st.Components();
-
+    setOrderId(shortid.generate());
     const { cart } = context;
     const items = [];
 
@@ -119,13 +114,18 @@ const Checkout = ({ context, history }) => {
     const params = {
       body: {
         items,
+        orderId,
       },
     };
 
     // Create PaymentIntent as soon as the page loads
     API.post("paymentsapi", "/paymentinit", params).then((data) => {
-      if (data && data.clientSecret) {
-        setClientSecret(data.clientSecret);
+      if (data && data.jwt) {
+        const st = SecureTrading({
+          jwt: data.jwt,
+          liveStatus: 0,
+        });
+        st.Components();
       } else if (data && data.error) {
         setError(data.error);
       } else {
@@ -272,7 +272,7 @@ const Checkout = ({ context, history }) => {
         amount: total,
         address: state,
         receipt_email: email,
-        id: uuid(),
+        id: orderId,
       };
       paymentComplete(order.id);
     }

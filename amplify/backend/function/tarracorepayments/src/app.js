@@ -13,36 +13,19 @@ See the License for the specific language governing permissions and limitations 
 	REGION
 Amplify Params - DO NOT EDIT */
 
-/*
-const now = new Date()  
-const utcMilllisecondsSinceEpoch = now.getTime() + (now.getTimezoneOffset() * 60 * 1000)  
-const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000) 
-
-{
-  "payload": {
-    "accounttypedescription":"ECOM",
-    "currencyiso3a":"EUR",
-    "mainamount":"10.50",
-    "orderreference": "",
-    "sitereference":"test_tarracorelimited88769",
-    "requesttypedescriptions":["THREEDQUERY","AUTH"]
-  },
-  "iat": utcSecondsSinceEpoch,
-  "iss":"jwt.user"
-}
-*/
-
 const express = require("express");
 const app = express();
-const getProductInfo = require("./getProducts");
-const updateProductInfo = require("./updateProducts");
+const base64url = require("base64url");
+const Crypto = require("crypto-js");
+const calculateOrderAmount = require("./calculateOrderAmount");
+const updateInventory = require("./updateInventory");
 const updateOrdersTable = require("./updateOrders");
 const { emailReceipt, emailTickets } = require("./sendEmails");
 
 // This is your real test secret API key.
-const stripe = require("stripe")(
-  "sk_test_51IRN3MAefCJ43eZzLPuk3jzB44GV3B6gfaiq5kIC8qlFEJ2fFmL7LaJ4eAgt718UkLorwC8QiPYNFnP1ImUVL92a00kmtpfbSc"
-);
+// const stripe = require("stripe")(
+//   "sk_test_51IRN3MAefCJ43eZzLPuk3jzB44GV3B6gfaiq5kIC8qlFEJ2fFmL7LaJ4eAgt718UkLorwC8QiPYNFnP1ImUVL92a00kmtpfbSc"
+// );
 
 app.use(express.static("."));
 app.use(express.json());
@@ -57,88 +40,9 @@ app.use(function(req, res, next) {
   next();
 });
 
-const updateInventory = async (order) => {
-  let productInfo;
-  let newCurrentInventory;
-  let customerTickets = [];
-  let isAnswerCorrect = false;
-
-  if (!order) {
-    throw "No Order! " + JSON.stringify(order);
-  }
-
-  try {
-    productInfo = await getProductInfo(order.orderProductId);
-    newCurrentInventory = productInfo.currentInventory - order.quantity;
-    isAnswerCorrect = productInfo.answer === order.answer;
-
-    if (isAnswerCorrect) {
-      customerTickets = productInfo.tickets.splice(0, order.quantity);
-    }
-
-    console.log("*** Cusomer Order Question ***");
-    console.log("Is answer correct: " + isAnswerCorrect);
-    console.log(
-      "Expected: " + productInfo.answer + " | received: " + order.answer
-    );
-  } catch (ex) {
-    console.log("*** EXCEPTION [Getting Product Info] ***");
-    console.log(JSON.stringify(ex));
-    throw "Error updating order info.";
-  }
-
-  try {
-    await updateProductInfo(
-      order.orderProductId,
-      newCurrentInventory,
-      productInfo.tickets
-    );
-  } catch (ex) {
-    console.log("*** EXCEPTION [Updating Product Inventory] ***");
-    console.log(JSON.stringify(ex));
-    throw "Error updating order info.";
-  }
-
-  return { isAnswerCorrect: isAnswerCorrect, tickets: customerTickets };
-};
-
-const calculateOrderAmount = async (items) => {
-  let amount = 0;
-  let productInfo;
-
-  if (!items || !items.length) {
-    throw "No items! " + JSON.stringify(items);
-  } else if (items && items.length > 1) throw "Too many items in cart";
-
-  try {
-    productInfo = await getProductInfo(items[0].id);
-
-    amount = productInfo.price * items[0].quantity;
-  } catch (ex) {
-    console.log("*** EXCEPTION [Getting Product Info] ***");
-    console.log(JSON.stringify(ex));
-    throw "Error calculating price. Please try again.";
-  }
-
-  if (productInfo && productInfo.currentInventory < items[0].quantity) {
-    console.log("*** EXCEPTION [Stock too low] ***");
-    console.log(`Current stock: ${productInfo.currentInventory}`);
-    console.log(`Requested stock: ${items[0].quantity}`);
-    throw `Stock levels too low. Only ${productInfo.currentInventory} available.`;
-  }
-
-  console.log("*** Amount Response ***");
-  console.log("amount", Math.round(amount * 100));
-
-  // Replace this constant with a calculation of the order's amount
-  // Calculate the order total on the server to prevent
-  // people from directly manipulating the amount on the client
-  return Math.round(amount * 100);
-};
-
 app.post("/paymentinit", async (req, res) => {
   console.log("req.body", req.body);
-  const { items } = req.body;
+  const { items, orderId } = req.body;
   let amount = 0;
 
   try {
@@ -150,15 +54,37 @@ app.post("/paymentinit", async (req, res) => {
   }
 
   try {
-    // Create a PaymentIntent with the order amount and currency
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
-      currency: "eur",
-      metadata: { integration_check: "accept_a_payment" },
-    });
+    const now = new Date();
+    const utcMilllisecondsSinceEpoch =
+      now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+    const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000);
+
+    const header = { alg: "HS256", typ: "JWT" };
+    const payload = {
+      payload: {
+        accounttypedescription: "ECOM",
+        currencyiso3a: "EUR",
+        mainamount: amount,
+        orderreference: orderId,
+        sitereference: "test_tarracorelimited88769",
+        requesttypedescriptions: ["THREEDQUERY", "AUTH"],
+      },
+      iat: utcSecondsSinceEpoch,
+      iss: "jwt@tarracorelimited.com",
+    };
+    const secret =
+      "57-8a27c10068cc0c5949817fddb6b5598f4b3fb7d06b85ba69241ed778aebc66b5";
+
+    const message =
+      base64url(JSON.stringify(header)) +
+      "." +
+      base64url(JSON.stringify(payload));
+    const hash = Crypto.HmacSHA256(message, secret);
+    const hashInBase64 = Crypto.enc.Base64.stringify(hash);
+    const jwt = message + "." + base64url.fromBase64(hashInBase64);
 
     res.send({
-      clientSecret: paymentIntent.client_secret,
+      jwt,
       amount,
     });
   } catch (ex) {

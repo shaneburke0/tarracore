@@ -38,6 +38,10 @@
         "tarracorepayments": {
           "deploymentBucketName": "amplify-my-aws-project-devk-74938-deployment",
           "s3Key": "amplify-builds/tarracorepayments-61576545665745676f74-build.zip"
+        },
+        "webhook": {
+          "deploymentBucketName": "amplify-my-aws-project-devk-74938-deployment",
+          "s3Key": "amplify-builds/webhook-315059537330482f3649-build.zip"
         }
       }
     }

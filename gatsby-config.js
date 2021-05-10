@@ -49,7 +49,7 @@ module.exports = {
       resolve: "gatsby-plugin-load-script",
       options: {
         src: "https://webservices.securetrading.net/js/v3/st.js",
-        crossorigin: "anonymous",
+        // crossorigin: "anonymous",
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality

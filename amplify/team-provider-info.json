@@ -41,7 +41,7 @@
         },
         "webhook": {
           "deploymentBucketName": "amplify-my-aws-project-devk-74938-deployment",
-          "s3Key": "amplify-builds/webhook-315059537330482f3649-build.zip"
+          "s3Key": "amplify-builds/webhook-5a2b6e617a6d447a7631-build.zip"
         }
       }
     }

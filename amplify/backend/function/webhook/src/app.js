@@ -30,15 +30,80 @@ app.use(function(req, res, next) {
   next();
 });
 
+/**********************
+ * Example get method *
+ **********************/
+
+app.get("/webhook", function(req, res) {
+  console.log("*** WEBHOOK ***");
+  console.log("GET:", JSON.stringify(req.body));
+  // Add your code here
+  res.json({ success: "get call succeed!", url: req.url });
+});
+
+app.get("/webhook/*", function(req, res) {
+  console.log("*** WEBHOOK ***");
+  console.log("GET /* :", JSON.stringify(req.body));
+  // Add your code here
+  res.json({ success: "get call succeed!", url: req.url });
+});
+
 /****************************
  * Example post method *
  ****************************/
 
 app.post("/webhook", function(req, res) {
   console.log("*** WEBHOOK ***");
-  console.log("REQUEST", JSON.stringify(req.body));
+  console.log("POST:", JSON.stringify(req.body));
   // Add your code here
-  res.status(200).send({});
+  res.json({ success: "post call succeed!", url: req.url, body: req.body });
+});
+
+app.post("/webhook/*", function(req, res) {
+  console.log("*** WEBHOOK ***");
+  console.log("POST /* :", JSON.stringify(req.body));
+  // Add your code here
+  res.json({ success: "post call succeed!", url: req.url, body: req.body });
+});
+
+/****************************
+ * Example put method *
+ ****************************/
+
+app.put("/webhook", function(req, res) {
+  console.log("*** WEBHOOK ***");
+  console.log("PUT:", JSON.stringify(req.body));
+  // Add your code here
+  res.json({ success: "put call succeed!", url: req.url, body: req.body });
+});
+
+app.put("/webhook/*", function(req, res) {
+  console.log("*** WEBHOOK ***");
+  console.log("PUT /* :", JSON.stringify(req.body));
+  // Add your code here
+  res.json({ success: "put call succeed!", url: req.url, body: req.body });
+});
+
+/****************************
+ * Example delete method *
+ ****************************/
+
+app.delete("/webhook", function(req, res) {
+  console.log("*** WEBHOOK ***");
+  console.log("DELETE:", JSON.stringify(req.body));
+  // Add your code here
+  res.json({ success: "delete call succeed!", url: req.url });
+});
+
+app.delete("/webhook/*", function(req, res) {
+  console.log("*** WEBHOOK ***");
+  console.log("DELETE /* :", JSON.stringify(req.body));
+  // Add your code here
+  res.json({ success: "delete call succeed!", url: req.url });
+});
+
+app.listen(3000, function() {
+  console.log("App started");
 });
 
 // Export the app object. When executing the application local this does nothing. However,

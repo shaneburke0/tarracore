@@ -61,13 +61,27 @@
         }
       ]
     },
-    "webhook": {
+    "paymentswebhook": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "webhook",
+          "resourceName": "paymentswebhook",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
+    },
+    "checkout": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "checkout",
           "attributes": [
             "Name",
             "Arn"
@@ -93,6 +107,34 @@
       ]
     },
     "webhook": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "tarracoreapi",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "tarracorepayments",
+          "attributes": [
+            "Name"
+          ]
+        }
+      ]
+    },
+    "paymentswebhook": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
+    },
+    "checkout": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",

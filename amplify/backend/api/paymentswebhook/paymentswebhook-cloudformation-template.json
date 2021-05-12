@@ -8,15 +8,15 @@
         },
     
     
-          "functionwebhookName": {
+          "functionpaymentswebhookName": {
             "Type": "String",
-            "Default": "functionwebhookName"
+            "Default": "functionpaymentswebhookName"
           },
 
           
-          "functionwebhookArn": {
+          "functionpaymentswebhookArn": {
             "Type": "String",
-            "Default": "functionwebhookArn"
+            "Default": "functionpaymentswebhookArn"
           }
 
           
@@ -37,16 +37,16 @@
         
         
         
-      "webhook": {
+      "paymentswebhook": {
         "Type": "AWS::ApiGateway::RestApi",
         "Properties": {
           "Description": "",
-          "Name": "webhook",
+          "Name": "paymentswebhook",
           "Body": {
             "swagger": "2.0",
             "info": {
               "version": "2018-05-24T17:52:00Z",
-              "title": "webhook"
+              "title": "paymentswebhook"
             },
             "host": {
                 "Fn::Join": [
@@ -82,7 +82,7 @@
             ],
             "paths": {
               
-              "/webhook": {
+              "/paymentswebhook": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -168,7 +168,7 @@
                             
                             {
 
-                                "Ref": "functionwebhookArn"
+                                "Ref": "functionpaymentswebhookArn"
                             },
                             
                             "/invocations"
@@ -181,7 +181,7 @@
                   }
                 }
               },
-              "/webhook/{proxy+}": {
+              "/paymentswebhook/{proxy+}": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -267,7 +267,7 @@
                           
                           {
 
-                            "Ref": "functionwebhookArn"
+                            "Ref": "functionpaymentswebhookArn"
                           },
                           
                           "/invocations"
@@ -324,12 +324,12 @@
       
         
 
-        "functionwebhookPermissionwebhook": {
+        "functionpaymentswebhookPermissionpaymentswebhook": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
                 "FunctionName": 
                     {
-                        "Ref":  "functionwebhookName"
+                        "Ref":  "functionpaymentswebhookName"
                     },
                     
                     "Action": "lambda:InvokeFunction",
@@ -348,7 +348,7 @@
                             },
                             ":",
                             {
-                                "Ref": "webhook"
+                                "Ref": "paymentswebhook"
                             },
                             "/*/*/*"
                         ]
@@ -359,7 +359,7 @@
         
         
 
-      "DeploymentAPIGWwebhook": {
+      "DeploymentAPIGWpaymentswebhook": {
         "Type": "AWS::ApiGateway::Deployment",
         "Properties": {
           "Description": "The Development stage deployment of your API.",
@@ -373,7 +373,7 @@
             ]
           },
           "RestApiId": {
-            "Ref": "webhook"
+            "Ref": "paymentswebhook"
           }
         }
       }
@@ -381,15 +381,15 @@
     "Outputs": {
         "RootUrl": {
             "Description": "Root URL of the API gateway",
-            "Value": {"Fn::Join": ["", ["https://", {"Ref": "webhook"}, ".execute-api.", {"Ref": "AWS::Region"}, ".amazonaws.com/", {"Fn::If": ["ShouldNotCreateEnvResources","Prod", {"Ref": "env"} ]}]]}
+            "Value": {"Fn::Join": ["", ["https://", {"Ref": "paymentswebhook"}, ".execute-api.", {"Ref": "AWS::Region"}, ".amazonaws.com/", {"Fn::If": ["ShouldNotCreateEnvResources","Prod", {"Ref": "env"} ]}]]}
         },
         "ApiName": {
           "Description": "API Friendly name",
-          "Value": "webhook"
+          "Value": "paymentswebhook"
         },
         "ApiId": {
           "Description": "API ID (prefix of API URL)",
-          "Value": {"Ref": "webhook"}
+          "Value": {"Ref": "paymentswebhook"}
         }
     }
   }

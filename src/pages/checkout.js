@@ -11,29 +11,11 @@ import moment from "moment";
 import { Auth } from "aws-amplify";
 import shortid from "shortid";
 
-// import {
-//   CardElement,
-//   Elements,
-//   useStripe,
-//   useElements,
-// } from "@stripe/react-stripe-js";
-// import { loadStripe } from "@stripe/stripe-js";
-
-// Make sure to call `loadStripe` outside of a component’s render to avoid
-// recreating the `Stripe` object on every render.
-// const stripePromise = loadStripe(
-//   "pk_test_51IRN3MAefCJ43eZzieeGe9rfdkKQCdvLdftt6SaXdpAJBHUbOANDAzG8X4l0jK1toQiqe8Fjs6nn9fdamIFpSRB400RU5MYot3"
-// );
-
 function CheckoutWithContext(props) {
   return (
     <ContextProviderComponent>
       <SiteContext.Consumer>
-        {(context) => (
-          // <Elements stripe={stripePromise}>
-          <Checkout {...props} context={context} />
-          // </Elements>
-        )}
+        {(context) => <Checkout {...props} context={context} />}
       </SiteContext.Consumer>
     </ContextProviderComponent>
   );
@@ -81,9 +63,6 @@ const Checkout = ({ context, history }) => {
     state: "",
   });
 
-  // const stripe = useStripe();
-  // const elements = useElements();
-
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState("");
@@ -96,7 +75,8 @@ const Checkout = ({ context, history }) => {
   };
 
   useEffect(() => {
-    setOrderId(shortid.generate());
+    const oId = shortid.generate();
+    setOrderId(oId);
     const { cart } = context;
     const items = [];
 
@@ -114,7 +94,7 @@ const Checkout = ({ context, history }) => {
     const params = {
       body: {
         items,
-        orderId,
+        orderId: oId,
       },
     };
 
@@ -128,6 +108,9 @@ const Checkout = ({ context, history }) => {
           // liveStatus: 0,
         });
         st.Components();
+        // st.successCallback = (d) => alert("Success alert", JSON.stringify(d));
+        // st.errorCallback = (d) =>
+        //   alert("This is error message", JSON.stringify(d));
       } else if (data && data.error) {
         setError(data.error);
       } else {
@@ -210,23 +193,6 @@ const Checkout = ({ context, history }) => {
   const { numberOfItemsInCart, cart, total } = context;
   const cartEmpty = numberOfItemsInCart === Number(0);
 
-  const cardStyle = {
-    style: {
-      base: {
-        color: "#32325d",
-        fontFamily: "Arial, sans-serif",
-        fontSmoothing: "antialiased",
-        fontSize: "16px",
-        "::placeholder": {
-          color: "#32325d",
-        },
-      },
-      invalid: {
-        color: "#fa755a",
-        iconColor: "#fa755a",
-      },
-    },
-  };
   const handleChange = async (event) => {
     // Listen for changes in the CardElement
     // and display any errors as the customer types their card details
@@ -238,12 +204,6 @@ const Checkout = ({ context, history }) => {
 
     const { email, street, city, postal_code, state } = input;
     const { total } = context;
-
-    if (!stripe || !elements) {
-      // Stripe.js has not loaded yet. Make sure to disable
-      // form submission until Stripe.js has loaded.
-      return;
-    }
 
     // Validate input
     if (!street || !city || !postal_code || !state) {
@@ -312,59 +272,11 @@ const Checkout = ({ context, history }) => {
                     <div className="flex flex-1 pt-0 flex-col">
                       <div className="mt-4 max-w-2xl">
                         <h2>Billing Details</h2>
-                        {/* <form onSubmit={handleSubmit}>
-                          {errorMessage ? (
-                            <span className="text-red-700">{errorMessage}</span>
-                          ) : (
-                            ""
-                          )}
-                          <Input
-                            onChange={onChange}
-                            value={input.name}
-                            name="name"
-                            placeholder="Cardholder name"
-                          />
-                          <CardElement
-                            className="mt-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            options={cardStyle}
-                            onChange={handleChange}
-                          />
-                          <Input
-                            onChange={onChange}
-                            value={input.email}
-                            name="email"
-                            placeholder="Email"
-                          />
-                          <Input
-                            onChange={onChange}
-                            value={input.street}
-                            name="street"
-                            placeholder="Street"
-                          />
-                          <Input
-                            onChange={onChange}
-                            value={input.city}
-                            name="city"
-                            placeholder="City"
-                          />
-                          <Input
-                            onChange={onChange}
-                            value={input.state}
-                            name="state"
-                            placeholder="State"
-                          />
-                          <Input
-                            onChange={onChange}
-                            value={input.postal_code}
-                            name="postal_code"
-                            placeholder="Postal Code"
-                          />
-                        </form> */}
 
                         <div id="st-notification-frame"></div>
                         <form
                           id="st-form"
-                          action="https://q22vup4kpi.execute-api.eu-west-1.amazonaws.com/devk/webhook"
+                          action="https://fyx13u9xi9.execute-api.eu-west-1.amazonaws.com/devk/checkout"
                           method="POST"
                         >
                           <div id="st-card-number"></div>

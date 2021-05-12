@@ -1,19 +1,19 @@
 {
   "paths": [
     {
-      "name": "/webhook",
-      "lambdaFunction": "webhook",
+      "name": "/paymentswebhook",
+      "lambdaFunction": "paymentswebhook",
       "privacy": {
         "open": true
       },
-      "policyResourceName": "/webhook"
+      "policyResourceName": "/paymentswebhook"
     }
   ],
-  "resourceName": "webhook",
-  "apiName": "webhook",
+  "resourceName": "paymentswebhook",
+  "apiName": "paymentswebhook",
   "functionArns": [
     {
-      "lambdaFunction": "webhook"
+      "lambdaFunction": "paymentswebhook"
     }
   ],
   "privacy": {
@@ -25,7 +25,7 @@
   "dependsOn": [
     {
       "category": "function",
-      "resourceName": "webhook",
+      "resourceName": "paymentswebhook",
       "attributes": [
         "Name",
         "Arn"

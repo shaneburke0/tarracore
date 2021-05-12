@@ -41,7 +41,15 @@
         },
         "webhook": {
           "deploymentBucketName": "amplify-my-aws-project-devk-74938-deployment",
-          "s3Key": "amplify-builds/webhook-5a2b6e617a6d447a7631-build.zip"
+          "s3Key": "amplify-builds/webhook-4a3334316d4658595037-build.zip"
+        },
+        "paymentswebhook": {
+          "deploymentBucketName": "amplify-my-aws-project-devk-74938-deployment",
+          "s3Key": "amplify-builds/paymentswebhook-714750786a4a36773156-build.zip"
+        },
+        "checkout": {
+          "deploymentBucketName": "amplify-my-aws-project-devk-74938-deployment",
+          "s3Key": "amplify-builds/checkout-754a7943424550624b30-build.zip"
         }
       }
     }

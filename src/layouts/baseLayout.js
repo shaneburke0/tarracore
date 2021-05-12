@@ -47,6 +47,10 @@ class Layout extends React.Component {
                 name: "Home",
                 link: "/",
               });
+              links.push({
+                name: "Previous Winners",
+                link: "/previous-winners",
+              });
 
               return (
                 <div className="min-h-screen">

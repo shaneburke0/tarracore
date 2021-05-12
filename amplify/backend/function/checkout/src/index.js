@@ -1,4 +1,5 @@
 const queryString = require("query-string");
+const jwt_decode = require("jwt-decode");
 
 /* Amplify Params - DO NOT EDIT
 	API_TARRACOREAPI_GRAPHQLAPIENDPOINTOUTPUT
@@ -7,14 +8,6 @@ const queryString = require("query-string");
 	FUNCTION_TARRACOREPAYMENTS_NAME
 	REGION
 Amplify Params - DO NOT EDIT */
-
-const parseJwt = (token) => {
-  try {
-    return JSON.parse(atob(token.split(".")[0]));
-  } catch (e) {
-    return null;
-  }
-};
 
 exports.handler = async (event, context, callback) => {
   console.log("EVENT BODY", event.body);
@@ -26,8 +19,9 @@ exports.handler = async (event, context, callback) => {
     errorcode = qs.errorcode;
 
     console.log("BODY JWT", qs.jwt);
+    jwt = jwt_decode(qs.jwt);
 
-    console.log("JWT PARAMS", parseJwt(qs.jwt));
+    console.log("JWT PARAMS", JSON.stringify(jwt));
 
     // "errorcode":"0",
     // "errormessage":"Payment has been successfully processed",
@@ -36,20 +30,8 @@ exports.handler = async (event, context, callback) => {
     console.log("message", JSON.stringify(ex));
   }
 
-  // TODO implement
-  //   const response = {
-  //     statusCode: 200,
-  //     //  Uncomment below to enable CORS requests
-  //     headers: {
-  //       "Access-Control-Allow-Origin": "*",
-  //       "Access-Control-Allow-Headers": "*",
-  //     },
-  //     body: JSON.stringify(event),
-  //   };
-  //   callback(null, response);
-
   const redirectResponse = {
-    statusCode: 301,
+    statusCode: 302,
     headers: {
       Location: `${process.env.CHECKOUT_REDIRECT}?code=${errorcode}`,
     },

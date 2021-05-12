@@ -14,7 +14,7 @@ exports.handler = async (event, context, callback) => {
 
   /* eslint-disable */
   console.log("---------------------------------");
-  console.log(`Trust-Payments-Event: "${event}"`);
+  console.log(`Trust-Payments-Event: "${JSON.stringify(event)}"`);
   console.log("---------------------------------");
   console.log("Payload", event.body);
   console.log("---------------------------------");

@@ -29,11 +29,30 @@ const Input = ({ onChange, value, name, placeholder }) => (
   <input
     onChange={onChange}
     value={value}
-    className="mt-2 text-sm shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    className="mt-2 text-sm shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full"
     type="text"
     placeholder={placeholder}
     name={name}
   />
+);
+
+const Select = ({ onChange, value, name, placeholder }) => (
+  <select
+    onChange={onChange}
+    placeholder={placeholder}
+    name={name}
+    value={value}
+    className="mt-2 text-sm shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full"
+  >
+    <option value="" disabled>
+      Select your country
+    </option>
+    <option value="GB">England</option>
+    <option value="IE">Ireland</option>
+    <option value="GB">Northern Ireland</option>
+    <option value="GB">Scotland</option>
+    <option value="GB">Wales</option>
+  </select>
 );
 
 const Checkbox = ({ onChange, name, checked }) => (
@@ -53,79 +72,46 @@ const Checkout = ({ context, history }) => {
   const [isTermsAccepted, setTermsAccepted] = useState(false);
   const [currentUserId, setCurrentUserId] = useState("");
   const [orderId, setOrderId] = useState(null);
-  // const [orderCompleted, setOrderCompleted] = useState(false)
+  const [orderCompleted, setOrderCompleted] = useState(false);
+
   const [input, setInput] = useState({
     name: "",
+    surname: "",
     email: "",
     street: "",
     city: "",
     postal_code: "",
     state: "",
+    country: "",
+    number: "",
   });
 
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState("");
-  const [disabled, setDisabled] = useState(true);
-  const [clientSecret, setClientSecret] = useState("");
+  const [isPaymentLoading, setPaymentLoading] = useState(false);
+  const [isPaymentLoaded, setPaymentLoaded] = useState(false);
 
   const handleGettingCurrentUser = async () => {
     const currentUser = await Auth.currentUserInfo();
     setCurrentUserId(currentUser ? currentUser.attributes.email : "");
   };
 
+  const handlePaymentSuccess = async () => {
+    paymentComplete();
+  };
+
   useEffect(() => {
     const oId = shortid.generate();
     setOrderId(oId);
-    const { cart } = context;
-    const items = [];
-
-    console.log("cart", cart);
-
-    if (Array.isArray(cart) && cart.length > 0) {
-      cart.forEach((item) => [
-        items.push({
-          id: item.id,
-          quantity: item.quantity,
-        }),
-      ]);
-    }
-
-    const params = {
-      body: {
-        items,
-        orderId: oId,
-      },
-    };
-
-    // Create PaymentIntent as soon as the page loads
-    API.post("paymentsapi", "/paymentinit", params).then((data) => {
-      if (data && data.jwt) {
-        const st = SecureTrading({
-          jwt: data.jwt,
-          formId: "st-form",
-          buttonId: "paymentSubmitBtn",
-          // liveStatus: 0,
-        });
-        st.Components();
-        // st.successCallback = (d) => alert("Success alert", JSON.stringify(d));
-        // st.errorCallback = (d) =>
-        //   alert("This is error message", JSON.stringify(d));
-      } else if (data && data.error) {
-        setError(data.error);
-      } else {
-        setError(
-          "There has been an issue connecting to payment provder. Please try again later."
-        );
-      }
-    });
 
     handleGettingCurrentUser();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const paymentComplete = (paymentRef) => {
+  const paymentComplete = () => {
+    setProcessing(true);
     const { cart, clearCart } = context;
 
     const items = [];
@@ -152,7 +138,7 @@ const Checkout = ({ context, history }) => {
           email: input.email,
           orderDate: moment(),
           orderProductId: items[0].id,
-          paymentRef: paymentRef,
+          paymentRef: "",
           quantity: items[0].quantity,
           userId: currentUserId,
           county: input.state,
@@ -160,7 +146,7 @@ const Checkout = ({ context, history }) => {
             items: [...cart],
             total: items[0].price * items[0].quantity,
             name: input.name,
-            orderid: paymentRef,
+            orderid: orderId,
             date: moment().format("Do MMM YYYY"),
           },
         },
@@ -193,20 +179,34 @@ const Checkout = ({ context, history }) => {
   const { numberOfItemsInCart, cart, total } = context;
   const cartEmpty = numberOfItemsInCart === Number(0);
 
-  const handleChange = async (event) => {
-    // Listen for changes in the CardElement
-    // and display any errors as the customer types their card details
-    setDisabled(event.empty);
-    setError(event.error ? event.error.message : "");
-  };
-  const handleSubmit = async (ev) => {
+  const handleSubmitDetails = async (ev) => {
+    console.log("handleSubmitDetails");
     ev.preventDefault();
 
-    const { email, street, city, postal_code, state } = input;
+    const {
+      email,
+      street,
+      city,
+      postal_code,
+      state,
+      name,
+      surname,
+      country,
+      number,
+    } = input;
     const { total } = context;
 
     // Validate input
-    if (!street || !city || !postal_code || !state) {
+    if (
+      !street ||
+      !city ||
+      !postal_code ||
+      !state ||
+      !name ||
+      !surname ||
+      !country ||
+      !number
+    ) {
       setErrorMessage("Please fill in the form!");
       return;
     }
@@ -217,27 +217,65 @@ const Checkout = ({ context, history }) => {
     }
 
     setProcessing(true);
-    const payload = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: elements.getElement(CardElement),
-      },
-    });
+    setPaymentLoading(true);
 
-    if (payload.error) {
-      setError(`Payment failed ${payload.error.message}`);
-      setProcessing(false);
-    } else {
-      setError(null);
+    const items = [];
 
-      const order = {
-        email,
-        amount: total,
-        address: state,
-        receipt_email: email,
-        id: orderId,
-      };
-      paymentComplete(order.id);
+    if (Array.isArray(cart) && cart.length > 0) {
+      cart.forEach((item) => [
+        items.push({
+          id: item.id,
+          quantity: item.quantity,
+        }),
+      ]);
     }
+
+    const params = {
+      body: {
+        items,
+        orderId: orderId,
+        details: {
+          firstname: name,
+          surname: surname,
+          email,
+          street,
+          city,
+          postal_code,
+          state,
+          countryIso: country,
+          number,
+        },
+        total,
+      },
+    };
+
+    // Create PaymentIntent as soon as the page loads
+    API.post("paymentsapi", "/paymentinit", params)
+      .then((data) => {
+        if (data && data.jwt) {
+          setPaymentLoaded(true);
+          const st = SecureTrading({
+            jwt: data.jwt,
+            formId: "st-form",
+            buttonId: "paymentSubmitBtn",
+            submitOnSuccess: false,
+            // liveStatus: 0,
+          });
+          st.Components();
+          st.successCallback = () => handlePaymentSuccess();
+          st.errorCallback = (d) =>
+            alert("This is error message", JSON.stringify(d));
+        } else if (data && data.error) {
+          setError(data.error);
+        } else {
+          setError(
+            "There has been an issue connecting to payment provder. Please try again later."
+          );
+        }
+      })
+      .finally(() => {
+        setPaymentLoading(false);
+      });
   };
 
   const contentStyle = { width: "90%", height: "67%" };
@@ -272,24 +310,165 @@ const Checkout = ({ context, history }) => {
                     <div className="flex flex-1 pt-0 flex-col">
                       <div className="mt-4 max-w-2xl">
                         <h2>Billing Details</h2>
-
-                        <div id="st-notification-frame"></div>
-                        <form
-                          id="st-form"
-                          action="https://fyx13u9xi9.execute-api.eu-west-1.amazonaws.com/devk/checkout"
-                          method="POST"
-                        >
-                          <div id="st-card-number"></div>
-                          <div id="st-expiration-date"></div>
-                          <div id="st-security-code"></div>
-                          <button
-                            type="submit"
-                            className="example-form__button"
-                            id="paymentSubmitBtn"
-                          >
-                            this is the pay button
-                          </button>
-                        </form>
+                        {!isPaymentLoaded && (
+                          <div>
+                            {errorMessage ? (
+                              <span className="text-red-700">
+                                {errorMessage}
+                              </span>
+                            ) : (
+                              ""
+                            )}
+                            <div className="flex">
+                              <Input
+                                onChange={onChange}
+                                value={input.name}
+                                name="name"
+                                placeholder="First name"
+                              />
+                              <Input
+                                onChange={onChange}
+                                value={input.surname}
+                                name="surname"
+                                placeholder="Last name"
+                              />
+                            </div>
+                            <Input
+                              onChange={onChange}
+                              value={input.email}
+                              name="email"
+                              placeholder="Email"
+                            />
+                            <Input
+                              onChange={onChange}
+                              value={input.number}
+                              name="number"
+                              placeholder="Phone"
+                            />
+                            <Input
+                              onChange={onChange}
+                              value={input.street}
+                              name="street"
+                              placeholder="Street"
+                            />
+                            <Input
+                              onChange={onChange}
+                              value={input.city}
+                              name="city"
+                              placeholder="City / Town"
+                            />
+                            <Input
+                              onChange={onChange}
+                              value={input.state}
+                              name="state"
+                              placeholder="County / State"
+                            />
+                            <Select
+                              onChange={onChange}
+                              value={input.country}
+                              name="country"
+                              placeholder="Select Country"
+                            />
+                            <Input
+                              onChange={onChange}
+                              value={input.postal_code}
+                              name="postal_code"
+                              placeholder="Postal Code"
+                            />
+                            <Popup
+                              open={showTerms}
+                              closeOnDocumentClick
+                              onClose={() => setShowTerms(false)}
+                              modal
+                              {...{ contentStyle }}
+                            >
+                              <div className="text-left p-4 mb-4 h-4/6 overflow-auto">
+                                <span
+                                  role="button"
+                                  tabIndex="0"
+                                  className="modal-close"
+                                  onClick={() => setShowTerms(false)}
+                                  onKeyDown={() => setShowTerms(false)}
+                                >
+                                  &times;
+                                </span>
+                                <TermsConditions />
+                              </div>
+                            </Popup>
+                            <div className="my-3 ml-4 pl-2 text-right">
+                              <Checkbox
+                                name="terms"
+                                onChange={handleTermsChange}
+                                checked={isTermsAccepted}
+                              />
+                              <label htmlFor="terms">
+                                {" "}
+                                I have read and agree to the website{" "}
+                                <span
+                                  role="button"
+                                  tabIndex="0"
+                                  className="text-green-800 hover:text-gray-700 hover:underline"
+                                  onClick={handleShowTerms}
+                                  onKeyDown={handleShowTerms}
+                                >
+                                  terms and conditions
+                                </span>{" "}
+                                *
+                              </label>
+                              {showTermsErrorMessage ? (
+                                <div className="text-red-700 text-sm">
+                                  Please read and accept the Terms &amp;
+                                  Conditions to continue.
+                                </div>
+                              ) : null}
+                            </div>
+                            {/* Show any error that happens when processing the payment */}
+                            {error && (
+                              <div
+                                className="card-error text-red-700 flex flex-1 justify-end"
+                                role="alert"
+                              >
+                                {error}
+                              </div>
+                            )}
+                            <div className="flex flex-1 justify-end">
+                              <button
+                                type="submit"
+                                disabled={
+                                  processing ||
+                                  succeeded ||
+                                  error ||
+                                  isPaymentLoading
+                                }
+                                onClick={handleSubmitDetails}
+                                className="bg-secondary hover:bg-black text-white font-bold py-2 px-4 mt-4 rounded focus:outline-none focus:shadow-outline w-full md:w-60"
+                              >
+                                Continue to Payment
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                        {isPaymentLoaded && (
+                          <>
+                            <form
+                              id="st-form"
+                              action="https://fyx13u9xi9.execute-api.eu-west-1.amazonaws.com/devk/checkout"
+                              method="POST"
+                            >
+                              <div id="st-card-number"></div>
+                              <div id="st-expiration-date"></div>
+                              <div id="st-security-code"></div>
+                              <button
+                                type="submit"
+                                className="bg-secondary hover:bg-black text-white font-bold py-2 px-4 mt-4 rounded focus:outline-none focus:shadow-outline w-full md:w-60"
+                                id="paymentSubmitBtn"
+                              >
+                                Pay
+                              </button>
+                            </form>
+                            <div id="st-notification-frame"></div>
+                          </>
+                        )}
                       </div>
                     </div>
                     <div className="md:pt-4 flex-1">
@@ -319,74 +498,6 @@ const Checkout = ({ context, history }) => {
                         <p className="font-semibold tracking-tighter w-24 flex justify-end">
                           {numberFormat(total + calculateShipping())}
                         </p>
-                      </div>
-                      <Popup
-                        open={showTerms}
-                        closeOnDocumentClick
-                        onClose={() => setShowTerms(false)}
-                        modal
-                        {...{ contentStyle }}
-                      >
-                        <div className="text-left p-4 mb-4 h-4/6 overflow-auto">
-                          <span
-                            role="button"
-                            tabIndex="0"
-                            className="modal-close"
-                            onClick={() => setShowTerms(false)}
-                            onKeyDown={() => setShowTerms(false)}
-                          >
-                            &times;
-                          </span>
-                          <TermsConditions />
-                        </div>
-                      </Popup>
-                      <div className="my-3 ml-4 pl-2 text-right">
-                        <Checkbox
-                          name="terms"
-                          onChange={handleTermsChange}
-                          checked={isTermsAccepted}
-                        />
-                        <label htmlFor="terms">
-                          {" "}
-                          I have read and agree to the website{" "}
-                          <span
-                            role="button"
-                            tabIndex="0"
-                            className="text-green-800 hover:text-gray-700 hover:underline"
-                            onClick={handleShowTerms}
-                            onKeyDown={handleShowTerms}
-                          >
-                            terms and conditions
-                          </span>{" "}
-                          *
-                        </label>
-                        {showTermsErrorMessage ? (
-                          <div className="text-red-700 text-sm">
-                            Please read and accept the terms and conditions to
-                            place your order.
-                          </div>
-                        ) : null}
-                      </div>
-                      {/* Show any error that happens when processing the payment */}
-                      {error && (
-                        <div
-                          className="card-error text-red-700 flex flex-1 justify-end"
-                          role="alert"
-                        >
-                          {error}
-                        </div>
-                      )}
-                      <div className="flex flex-1 justify-end">
-                        <button
-                          type="submit"
-                          disabled={
-                            processing || disabled || succeeded || error
-                          }
-                          onClick={handleSubmit}
-                          className="bg-secondary hover:bg-black text-white font-bold py-2 px-4 mt-4 rounded focus:outline-none focus:shadow-outline w-full md:w-60"
-                        >
-                          Confirm order
-                        </button>
                       </div>
                     </div>
                   </div>

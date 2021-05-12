@@ -42,7 +42,7 @@ app.use(function(req, res, next) {
 
 app.post("/paymentinit", async (req, res) => {
   console.log("req.body", req.body);
-  const { items, orderId } = req.body;
+  const { items, orderId, details } = req.body;
   let amount = 0;
 
   try {
@@ -58,7 +58,6 @@ app.post("/paymentinit", async (req, res) => {
     const utcMilllisecondsSinceEpoch =
       now.getTime() + now.getTimezoneOffset() * 60 * 1000;
     const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000);
-
     const header = { alg: "HS256", typ: "JWT" };
     const payload = {
       payload: {
@@ -68,6 +67,15 @@ app.post("/paymentinit", async (req, res) => {
         orderreference: orderId,
         sitereference: "test_tarracorelimited88769",
         requesttypedescriptions: ["THREEDQUERY", "AUTH"],
+        billingfirstname: details.firstname,
+        billinglastname: details.surname,
+        billingstreet: details.street,
+        billingtown: details.city,
+        billingpostcode: details.postal_code,
+        billingcounty: details.state,
+        billingcountryiso2a: details.countryIso,
+        billingemail: details.email,
+        billingtelephone: details.number,
       },
       iat: utcSecondsSinceEpoch,
       iss: "jwt@tarracorelimited.com",
@@ -112,16 +120,20 @@ app.post("/paymentcomplete", async (req, res) => {
   }
 
   try {
-    order.isAnswerCorrect = updateReponse.isAnswerCorrect;
-    order.tickets = [...updateReponse.tickets];
-    order.cart.items[0].tickets = order.tickets.join(", ");
+    /*
+     *   Need to re-think ticket email strategy
+     */
 
-    // Update Orders table
-    await updateOrdersTable(order);
+    // order.isAnswerCorrect = updateReponse.isAnswerCorrect;
+    // order.tickets = [...updateReponse.tickets];
+    // order.cart.items[0].tickets = order.tickets.join(", ");
 
-    if (order.isAnswerCorrect) {
-      await emailTickets(order.email, order.cart);
-    }
+    // // Update Orders table
+    // await updateOrdersTable(order);
+
+    // if (order.isAnswerCorrect) {
+    //   await emailTickets(order.email, order.cart);
+    // }
 
     res.send({
       status: "ORDER_COMPLETE",

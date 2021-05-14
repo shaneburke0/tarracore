@@ -25,9 +25,8 @@ const updateOrder = gql`
         isAnswerCorrect: $isAnswerCorrect
         orderDate: $orderDate
         orderProductId: $orderProductId
-        paymentRef: $paymentRef
+        orderRef: $paymentRef
         quantity: $quantity
-        tickets: $tickets
         userId: $userId
       }
     ) {

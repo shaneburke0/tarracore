@@ -20,12 +20,8 @@ const Crypto = require("crypto-js");
 const calculateOrderAmount = require("./calculateOrderAmount");
 const updateInventory = require("./updateInventory");
 const updateOrdersTable = require("./updateOrders");
+const updateTransactionTable = require("./updateTransactions");
 const { emailReceipt, emailTickets } = require("./sendEmails");
-
-// This is your real test secret API key.
-// const stripe = require("stripe")(
-//   "sk_test_51IRN3MAefCJ43eZzLPuk3jzB44GV3B6gfaiq5kIC8qlFEJ2fFmL7LaJ4eAgt718UkLorwC8QiPYNFnP1ImUVL92a00kmtpfbSc"
-// );
 
 app.use(express.static("."));
 app.use(express.json());
@@ -42,11 +38,14 @@ app.use(function(req, res, next) {
 
 app.post("/paymentinit", async (req, res) => {
   console.log("req.body", req.body);
-  const { items, orderId, details } = req.body;
+  const { items, orderId, details, email } = req.body;
   let amount = 0;
+  let correctAnswer = "";
 
   try {
-    amount = await calculateOrderAmount(items);
+    const calcOrderResponse = await calculateOrderAmount(items);
+    amount = calcOrderResponse.amount;
+    correctAnswer = calcOrderResponse.answer;
   } catch (error) {
     res.send({
       error,
@@ -55,6 +54,36 @@ app.post("/paymentinit", async (req, res) => {
 
   try {
     const now = new Date();
+
+    const address =
+      details.street +
+      ", " +
+      details.city +
+      ", " +
+      details.state +
+      ", " +
+      details.postal_code +
+      ", " +
+      details.countryIso;
+
+    const transaction = {
+      address,
+      country: details.state,
+      firstName: details.firstname,
+      surname: details.surname,
+      answer: details.answer,
+      email: details.email,
+      orderDate: now,
+      transactionProductId: items[0].id,
+      quantity: items[0].quantity,
+      userId: email,
+      isAnswerCorrect: correctAnswer === details.answer,
+      orderRef: orderId,
+    };
+
+    // Update Transactions table
+    const transactionId = await updateTransactionTable(transaction);
+
     const utcMilllisecondsSinceEpoch =
       now.getTime() + now.getTimezoneOffset() * 60 * 1000;
     const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000);
@@ -65,7 +94,7 @@ app.post("/paymentinit", async (req, res) => {
         currencyiso3a: "EUR",
         mainamount: amount,
         orderreference: orderId,
-        sitereference: "test_tarracorelimited88769",
+        sitereference: "test_tarracorelimited88769", // TODO: move env var
         requesttypedescriptions: ["THREEDQUERY", "AUTH"],
         billingfirstname: details.firstname,
         billinglastname: details.surname,
@@ -76,12 +105,15 @@ app.post("/paymentinit", async (req, res) => {
         billingcountryiso2a: details.countryIso,
         billingemail: details.email,
         billingtelephone: details.number,
+        customfield1: details.answer,
+        customfield2: transactionId,
+        customermiddlename: transactionId,
       },
       iat: utcSecondsSinceEpoch,
-      iss: "jwt@tarracorelimited.com",
+      iss: "jwt@tarracorelimited.com", // TODO: move env var
     };
     const secret =
-      "57-8a27c10068cc0c5949817fddb6b5598f4b3fb7d06b85ba69241ed778aebc66b5";
+      "57-8a27c10068cc0c5949817fddb6b5598f4b3fb7d06b85ba69241ed778aebc66b5"; // TODO: move env var
 
     const message =
       base64url(JSON.stringify(header)) +

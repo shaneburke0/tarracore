@@ -111,54 +111,49 @@ const Checkout = ({ context, history }) => {
   }, []);
 
   const paymentComplete = () => {
-    setProcessing(true);
-    const { cart, clearCart } = context;
-
-    const items = [];
-
-    if (Array.isArray(cart) && cart.length > 0) {
-      cart.forEach((item) => [
-        items.push({
-          id: item.id,
-          quantity: item.quantity,
-          answer: item.answer,
-          name: item.name,
-          price: item.price,
-        }),
-      ]);
-    }
-
-    const address = `${input.street}, ${input.city}, ${input.state}, ${input.postal_code}`;
-
-    const params = {
-      body: {
-        order: {
-          address: address,
-          answer: items[0].answer,
-          email: input.email,
-          orderDate: moment(),
-          orderProductId: items[0].id,
-          paymentRef: "",
-          quantity: items[0].quantity,
-          userId: currentUserId,
-          county: input.state,
-          cart: {
-            items: [...cart],
-            total: items[0].price * items[0].quantity,
-            name: input.name,
-            orderid: orderId,
-            date: moment().format("Do MMM YYYY"),
-          },
-        },
-      },
-    };
-
-    API.post("paymentsapi", "/paymentcomplete", params).then((data) => {
-      setProcessing(false);
-      setSucceeded(true);
-      clearCart();
-      navigate("/complete");
-    });
+    // setProcessing(true);
+    // const { cart, clearCart } = context;
+    // const items = [];
+    // if (Array.isArray(cart) && cart.length > 0) {
+    //   cart.forEach((item) => [
+    //     items.push({
+    //       id: item.id,
+    //       quantity: item.quantity,
+    //       answer: item.answer,
+    //       name: item.name,
+    //       price: item.price,
+    //     }),
+    //   ]);
+    // }
+    // const address = `${input.street}, ${input.city}, ${input.state}, ${input.postal_code}`;
+    // const params = {
+    //   body: {
+    //     order: {
+    //       address: address,
+    //       answer: items[0].answer,
+    //       email: input.email,
+    //       orderDate: moment(),
+    //       orderProductId: items[0].id,
+    //       paymentRef: "",
+    //       quantity: items[0].quantity,
+    //       userId: currentUserId,
+    //       county: input.state,
+    //       cart: {
+    //         items: [...cart],
+    //         total: items[0].price * items[0].quantity,
+    //         name: input.name,
+    //         orderid: orderId,
+    //         date: moment().format("Do MMM YYYY"),
+    //       },
+    //     },
+    //   },
+    // };
+    // API.post("paymentsapi", "/paymentcomplete", params).then((data) => {
+    //   setProcessing(false);
+    //   setSucceeded(true);
+    //   clearCart();
+    //   navigate("/complete");
+    // });
   };
 
   const handleTermsChange = (e) => {
@@ -226,6 +221,7 @@ const Checkout = ({ context, history }) => {
         items.push({
           id: item.id,
           quantity: item.quantity,
+          answer: item.answer,
         }),
       ]);
     }
@@ -244,8 +240,10 @@ const Checkout = ({ context, history }) => {
           state,
           countryIso: country,
           number,
+          answer: items[0].answer,
         },
         total,
+        email: currentUserId,
       },
     };
 
@@ -258,13 +256,9 @@ const Checkout = ({ context, history }) => {
             jwt: data.jwt,
             formId: "st-form",
             buttonId: "paymentSubmitBtn",
-            submitOnSuccess: false,
             // liveStatus: 0,
           });
           st.Components();
-          st.successCallback = () => handlePaymentSuccess();
-          st.errorCallback = (d) =>
-            alert("This is error message", JSON.stringify(d));
         } else if (data && data.error) {
           setError(data.error);
         } else {

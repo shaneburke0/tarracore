@@ -115,6 +115,7 @@ export const createOrder = /* GraphQL */ `
       }
       userId
       quantity
+      orderRef
       paymentRef
       tickets
       answer
@@ -122,6 +123,7 @@ export const createOrder = /* GraphQL */ `
       address
       orderDate
       isAnswerCorrect
+      country
       createdAt
       updatedAt
     }
@@ -157,6 +159,7 @@ export const updateOrder = /* GraphQL */ `
       }
       userId
       quantity
+      orderRef
       paymentRef
       tickets
       answer
@@ -164,6 +167,7 @@ export const updateOrder = /* GraphQL */ `
       address
       orderDate
       isAnswerCorrect
+      country
       createdAt
       updatedAt
     }
@@ -199,6 +203,7 @@ export const deleteOrder = /* GraphQL */ `
       }
       userId
       quantity
+      orderRef
       paymentRef
       tickets
       answer
@@ -206,6 +211,139 @@ export const deleteOrder = /* GraphQL */ `
       address
       orderDate
       isAnswerCorrect
+      country
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createTransaction = /* GraphQL */ `
+  mutation CreateTransaction(
+    $input: CreateTransactionInput!
+    $condition: ModelTransactionConditionInput
+  ) {
+    createTransaction(input: $input, condition: $condition) {
+      id
+      product {
+        id
+        categories
+        price
+        name
+        image
+        description
+        currentInventory
+        maxInventory
+        brand
+        intro
+        sold
+        endDate
+        question
+        options
+        answer
+        gallery
+        tickets
+        createdAt
+        updatedAt
+      }
+      firstName
+      surname
+      userId
+      quantity
+      orderRef
+      answer
+      email
+      address
+      orderDate
+      isAnswerCorrect
+      county
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTransaction = /* GraphQL */ `
+  mutation UpdateTransaction(
+    $input: UpdateTransactionInput!
+    $condition: ModelTransactionConditionInput
+  ) {
+    updateTransaction(input: $input, condition: $condition) {
+      id
+      product {
+        id
+        categories
+        price
+        name
+        image
+        description
+        currentInventory
+        maxInventory
+        brand
+        intro
+        sold
+        endDate
+        question
+        options
+        answer
+        gallery
+        tickets
+        createdAt
+        updatedAt
+      }
+      firstName
+      surname
+      userId
+      quantity
+      orderRef
+      answer
+      email
+      address
+      orderDate
+      isAnswerCorrect
+      county
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTransaction = /* GraphQL */ `
+  mutation DeleteTransaction(
+    $input: DeleteTransactionInput!
+    $condition: ModelTransactionConditionInput
+  ) {
+    deleteTransaction(input: $input, condition: $condition) {
+      id
+      product {
+        id
+        categories
+        price
+        name
+        image
+        description
+        currentInventory
+        maxInventory
+        brand
+        intro
+        sold
+        endDate
+        question
+        options
+        answer
+        gallery
+        tickets
+        createdAt
+        updatedAt
+      }
+      firstName
+      surname
+      userId
+      quantity
+      orderRef
+      answer
+      email
+      address
+      orderDate
+      isAnswerCorrect
+      county
       createdAt
       updatedAt
     }

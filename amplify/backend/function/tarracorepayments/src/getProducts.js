@@ -11,7 +11,6 @@ const getProductQuery = gql`
       price
       currentInventory
       answer
-      tickets
     }
   }
 `;

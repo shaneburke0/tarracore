@@ -85,6 +85,7 @@ export const getOrder = /* GraphQL */ `
       }
       userId
       quantity
+      orderRef
       paymentRef
       tickets
       answer
@@ -92,6 +93,7 @@ export const getOrder = /* GraphQL */ `
       address
       orderDate
       isAnswerCorrect
+      country
       createdAt
       updatedAt
     }
@@ -129,6 +131,7 @@ export const listOrders = /* GraphQL */ `
         }
         userId
         quantity
+        orderRef
         paymentRef
         tickets
         answer
@@ -136,6 +139,96 @@ export const listOrders = /* GraphQL */ `
         address
         orderDate
         isAnswerCorrect
+        country
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getTransaction = /* GraphQL */ `
+  query GetTransaction($id: ID!) {
+    getTransaction(id: $id) {
+      id
+      product {
+        id
+        categories
+        price
+        name
+        image
+        description
+        currentInventory
+        maxInventory
+        brand
+        intro
+        sold
+        endDate
+        question
+        options
+        answer
+        gallery
+        tickets
+        createdAt
+        updatedAt
+      }
+      firstName
+      surname
+      userId
+      quantity
+      orderRef
+      answer
+      email
+      address
+      orderDate
+      isAnswerCorrect
+      county
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listTransactions = /* GraphQL */ `
+  query ListTransactions(
+    $filter: ModelTransactionFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTransactions(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        product {
+          id
+          categories
+          price
+          name
+          image
+          description
+          currentInventory
+          maxInventory
+          brand
+          intro
+          sold
+          endDate
+          question
+          options
+          answer
+          gallery
+          tickets
+          createdAt
+          updatedAt
+        }
+        firstName
+        surname
+        userId
+        quantity
+        orderRef
+        answer
+        email
+        address
+        orderDate
+        isAnswerCorrect
+        county
         createdAt
         updatedAt
       }

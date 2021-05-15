@@ -1,27 +1,24 @@
-const getProductInfo = require("./getProducts");
 const updateProductInfo = require("./updateProducts");
 
 const updateInventory = async (order) => {
   let productInfo;
   let newCurrentInventory;
   let customerTickets = [];
-  let isAnswerCorrect = false;
 
   if (!order) {
     throw "No Order! " + JSON.stringify(order);
   }
 
   try {
-    productInfo = await getProductInfo(order.orderProductId);
+    productInfo = order.product;
     newCurrentInventory = productInfo.currentInventory - order.quantity;
-    isAnswerCorrect = productInfo.answer === order.answer;
 
-    if (isAnswerCorrect) {
+    if (order.isAnswerCorrect) {
       customerTickets = productInfo.tickets.splice(0, order.quantity);
     }
 
     console.log("*** Cusomer Order Question ***");
-    console.log("Is answer correct: " + isAnswerCorrect);
+    console.log("Is answer correct: " + order.isAnswerCorrect);
     console.log(
       "Expected: " + productInfo.answer + " | received: " + order.answer
     );
@@ -33,7 +30,7 @@ const updateInventory = async (order) => {
 
   try {
     await updateProductInfo(
-      order.orderProductId,
+      productInfo.id,
       newCurrentInventory,
       productInfo.tickets
     );
@@ -43,7 +40,7 @@ const updateInventory = async (order) => {
     throw "Error updating order info.";
   }
 
-  return { isAnswerCorrect: isAnswerCorrect, tickets: customerTickets };
+  return { isAnswerCorrect: order.isAnswerCorrect, tickets: customerTickets };
 };
 
 module.exports = updateInventory;

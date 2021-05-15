@@ -1,32 +1,31 @@
-import React, { useState } from "react"
-import { signIn } from "../../services/authService"
-import { useAuthDispatch } from "../../context/authContext"
+import React, { useState } from "react";
+import { signIn } from "../../services/authService";
+import { useAuthDispatch } from "../../context/authContext";
 
 const SignIn = ({ closeModal }) => {
-  const [isSignInLoading, setSignInLoading] = useState(false)
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+  const [isSignInLoading, setSignInLoading] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const dispatch = useAuthDispatch()
+  const dispatch = useAuthDispatch();
 
   const signInUser = async () => {
-    setSignInLoading(true)
+    setSignInLoading(true);
     signIn(username, password)
-      .then(r => {
-        console.log(r)
+      .then((r) => {
         dispatch({
           type: "SIGN_IN",
           token: r.signInUserSession.accessToken.jwtToken,
-        })
-        closeModal()
+        });
+        closeModal();
       })
-      .catch(e => {
-        console.log(e)
+      .catch((e) => {
+        console.log(e);
       })
       .finally(() => {
-        setSignInLoading(false)
-      })
-  }
+        setSignInLoading(false);
+      });
+  };
 
   return (
     <div>
@@ -42,7 +41,7 @@ const SignIn = ({ closeModal }) => {
                 Username or Email
               </label>
               <input
-                onChange={e => setUsername(e.target.value)}
+                onChange={(e) => setUsername(e.target.value)}
                 name="username"
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="username"
@@ -58,7 +57,7 @@ const SignIn = ({ closeModal }) => {
                 Password
               </label>
               <input
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 name="password"
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 id="password"
@@ -86,7 +85,7 @@ const SignIn = ({ closeModal }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SignIn
+export default SignIn;

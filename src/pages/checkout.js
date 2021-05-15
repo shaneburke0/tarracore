@@ -175,7 +175,6 @@ const Checkout = ({ context, history }) => {
   const cartEmpty = numberOfItemsInCart === Number(0);
 
   const handleSubmitDetails = async (ev) => {
-    console.log("handleSubmitDetails");
     ev.preventDefault();
 
     const {

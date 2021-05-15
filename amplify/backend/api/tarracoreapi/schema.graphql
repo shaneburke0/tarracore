@@ -31,7 +31,7 @@ type Order @model @aws_api_key @aws_cognito_user_pools {
   address: String!
   orderDate: String!
   isAnswerCorrect: Boolean
-  country: String
+  county: String
 }
 
 type Transaction @model @aws_api_key @aws_cognito_user_pools {

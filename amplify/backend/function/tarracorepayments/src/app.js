@@ -17,11 +17,9 @@ const express = require("express");
 const app = express();
 const base64url = require("base64url");
 const Crypto = require("crypto-js");
+const moment = require("moment");
 const calculateOrderAmount = require("./calculateOrderAmount");
-const updateInventory = require("./updateInventory");
-const updateOrdersTable = require("./updateOrders");
 const updateTransactionTable = require("./updateTransactions");
-const { emailReceipt, emailTickets } = require("./sendEmails");
 
 app.use(express.static("."));
 app.use(express.json());
@@ -73,7 +71,7 @@ app.post("/paymentinit", async (req, res) => {
       surname: details.surname,
       answer: details.answer,
       email: details.email,
-      orderDate: now,
+      orderDate: moment().format("Do MMM YYYY"),
       transactionProductId: items[0].id,
       quantity: items[0].quantity,
       userId: email,
@@ -126,49 +124,6 @@ app.post("/paymentinit", async (req, res) => {
     res.send({
       jwt,
       amount,
-    });
-  } catch (ex) {
-    res.send({ ex });
-  }
-});
-
-app.post("/paymentcomplete", async (req, res) => {
-  console.log("req.body", req.body);
-  const { order } = req.body;
-  let updateReponse = null;
-  try {
-    // Update Current Inventory
-    updateReponse = await updateInventory(order);
-  } catch (error) {
-    res.send({
-      error,
-    });
-  }
-
-  try {
-    await emailReceipt(order.email, order.cart);
-  } catch (ex) {
-    res.send({ ex });
-  }
-
-  try {
-    /*
-     *   Need to re-think ticket email strategy
-     */
-
-    // order.isAnswerCorrect = updateReponse.isAnswerCorrect;
-    // order.tickets = [...updateReponse.tickets];
-    // order.cart.items[0].tickets = order.tickets.join(", ");
-
-    // // Update Orders table
-    // await updateOrdersTable(order);
-
-    // if (order.isAnswerCorrect) {
-    //   await emailTickets(order.email, order.cart);
-    // }
-
-    res.send({
-      status: "ORDER_COMPLETE",
     });
   } catch (ex) {
     res.send({ ex });

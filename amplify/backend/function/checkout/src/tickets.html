@@ -174,11 +174,11 @@
     <div class="body">
         <div class="">
             <div class="text-left">
-                Hi {{name}},
+                Hi {{firstName}},
             </div>
             <div class="text-right">
                 <span>Date: </span>
-                {{date}}
+                {{orderDate}}
             </div>
 
         </div>
@@ -206,23 +206,21 @@
                 </div>
             </div>
             <hr class="hr" />
-            {{#each items}}
             <div class="">
                 <div class="text-left">
-                    {{name}}
+                    {{product.name}}
                     <br />
                     Answer: {{answer}}
                     <br />
-                    Ticket number(s): {{tickets}}
+                    Ticket number(s): {{product.tickets}}
                 </div>
                 <div class="text-right">
                     <span>{{quantity}}</span>
                     <span class="total-spacer"></span>
-                    {{price}}
+                    {{product.price}}
                 </div>
             </div>
             <hr class="hr" />
-            {{/each}}
             <div class="">
                 <div class="text-right-full">
                     <span class="bold">Total:</span> <span class="total-spacer"></span>{{total}}

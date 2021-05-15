@@ -16,6 +16,7 @@ const updateOrder = gql`
     $quantity: Int!
     $tickets: [Int]
     $userId: String!
+    $county: String
   ) {
     createOrder(
       input: {
@@ -28,6 +29,8 @@ const updateOrder = gql`
         orderRef: $paymentRef
         quantity: $quantity
         userId: $userId
+        county: $county
+        tickets: $tickets
       }
     ) {
       id
@@ -52,7 +55,7 @@ const updateOrdersTable = async (order) => {
   console.log("*** GraphQL Create Order Response ***");
   console.log("graphqlData", JSON.stringify(graphqlData.data));
 
-  return;
+  return graphqlData.data.data.createOrder.id;
 };
 
 module.exports = updateOrdersTable;

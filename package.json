@@ -37,6 +37,7 @@
     "moment": "^2.29.1",
     "path": "^0.12.7",
     "prop-types": "^15.7.2",
+    "query-string": "^7.0.0",
     "react": "^17.0.1",
     "react-country-region-selector": "^1.4.7",
     "react-dom": "^16.12.0",

@@ -441,6 +441,7 @@ const Checkout = ({ context, history }) => {
                             </div>
                           </div>
                         )}
+
                         {isPaymentLoaded && (
                           <>
                             <form
@@ -497,19 +498,13 @@ const Checkout = ({ context, history }) => {
                 </div>
               )}
 
-              {/* Show a success message upon completion */}
-              <p
-                className={
-                  succeeded ? "result-message" : "result-message hidden"
-                }
-              >
-                Payment succeeded, see the result in your
-                <a href={`https://dashboard.stripe.com/test/payments`}>
-                  {" "}
-                  Stripe dashboard.
-                </a>{" "}
-                Refresh the page to pay again.
-              </p>
+              {isPaymentLoading && (
+                <div className="loader-container-mask">
+                  <div className="loader-container">
+                    <div className="loader">Loading...</div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

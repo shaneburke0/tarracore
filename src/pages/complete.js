@@ -27,7 +27,9 @@ const CheckoutCompletePage = ({ context }) => {
       <div className="mobile:px-10 px-4 pb-10 flex justify-center main-content">
         <div className="w-fw">
           {isLoading ? (
-            <div>Loading...</div>
+            <div className="loader-container">
+              <div className="loader">Loading...</div>
+            </div>
           ) : (
             <div className="">
               <h1 className="text-5xl font-light mt-4">{title}</h1>

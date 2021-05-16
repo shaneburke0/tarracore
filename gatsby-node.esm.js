@@ -19,6 +19,7 @@ const PrivacyPage = require.resolve("./src/pages/privacyPolicy");
 const TermsOfUsePage = require.resolve("./src/pages/termsOfUse");
 const ContactPage = require.resolve("./src/pages/contact");
 const PreviousWinnersPage = require.resolve("./src/pages/previousWinners");
+const MyAccountPage = require.resolve("./src/pages/myAccount");
 
 async function fetchInventory() {
   /* new */
@@ -221,6 +222,16 @@ exports.createPages = async ({ graphql, actions }) => {
     context: {
       content: "",
       title: "Previous Winners",
+      type: "staticPage",
+    },
+  });
+
+  createPage({
+    path: slugify("My Account"),
+    component: MyAccountPage,
+    context: {
+      content: "",
+      title: "My Account",
       type: "staticPage",
     },
   });

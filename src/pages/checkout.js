@@ -5,9 +5,8 @@ import SEO from "../components/seo";
 import { SiteContext, ContextProviderComponent } from "../context/mainContext";
 import { numberFormat } from "../../utils/helpers";
 import { FaLongArrowAltLeft } from "react-icons/fa";
-import { Link, navigate } from "gatsby";
+import { Link } from "gatsby";
 import { TermsConditions } from "../components";
-import moment from "moment";
 import { Auth } from "aws-amplify";
 import shortid from "shortid";
 
@@ -97,10 +96,6 @@ const Checkout = ({ context, history }) => {
     setCurrentUserId(currentUser ? currentUser.attributes.email : "");
   };
 
-  const handlePaymentSuccess = async () => {
-    paymentComplete();
-  };
-
   useEffect(() => {
     const oId = shortid.generate();
     setOrderId(oId);
@@ -109,52 +104,6 @@ const Checkout = ({ context, history }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const paymentComplete = () => {
-    // setProcessing(true);
-    // const { cart, clearCart } = context;
-    // const items = [];
-    // if (Array.isArray(cart) && cart.length > 0) {
-    //   cart.forEach((item) => [
-    //     items.push({
-    //       id: item.id,
-    //       quantity: item.quantity,
-    //       answer: item.answer,
-    //       name: item.name,
-    //       price: item.price,
-    //     }),
-    //   ]);
-    // }
-    // const address = `${input.street}, ${input.city}, ${input.state}, ${input.postal_code}`;
-    // const params = {
-    //   body: {
-    //     order: {
-    //       address: address,
-    //       answer: items[0].answer,
-    //       email: input.email,
-    //       orderDate: moment(),
-    //       orderProductId: items[0].id,
-    //       paymentRef: "",
-    //       quantity: items[0].quantity,
-    //       userId: currentUserId,
-    //       county: input.state,
-    //       cart: {
-    //         items: [...cart],
-    //         total: items[0].price * items[0].quantity,
-    //         name: input.name,
-    //         orderid: orderId,
-    //         date: moment().format("Do MMM YYYY"),
-    //       },
-    //     },
-    //   },
-    // };
-    // API.post("paymentsapi", "/paymentcomplete", params).then((data) => {
-    //   setProcessing(false);
-    //   setSucceeded(true);
-    //   clearCart();
-    //   navigate("/complete");
-    // });
-  };
 
   const handleTermsChange = (e) => {
     setTermsAccepted(e.target.checked);

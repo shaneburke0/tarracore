@@ -3,7 +3,6 @@ import SEO from "../components/seo";
 import { SiteContext, ContextProviderComponent } from "../context/mainContext";
 import { FaTimes } from "react-icons/fa";
 import { Link, navigate } from "gatsby";
-import NavActions from "../components/NavActions";
 import Button from "../components/Button";
 import LoginModal from "../components/LoginModal/LoginModal";
 import { useAuthState } from "../context/authContext";

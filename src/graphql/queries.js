@@ -93,7 +93,7 @@ export const getOrder = /* GraphQL */ `
       address
       orderDate
       isAnswerCorrect
-      country
+      county
       createdAt
       updatedAt
     }
@@ -139,7 +139,7 @@ export const listOrders = /* GraphQL */ `
         address
         orderDate
         isAnswerCorrect
-        country
+        county
         createdAt
         updatedAt
       }
@@ -229,6 +229,51 @@ export const listTransactions = /* GraphQL */ `
         orderDate
         isAnswerCorrect
         county
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getProfile = /* GraphQL */ `
+  query GetProfile($id: ID!) {
+    getProfile(id: $id) {
+      id
+      firstName
+      surname
+      userId
+      county
+      country
+      street
+      city
+      state
+      postcode
+      phone
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listProfiles = /* GraphQL */ `
+  query ListProfiles(
+    $filter: ModelProfileFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listProfiles(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        firstName
+        surname
+        userId
+        county
+        country
+        street
+        city
+        state
+        postcode
+        phone
         createdAt
         updatedAt
       }

@@ -62,6 +62,7 @@ exports.handler = async (event, context, callback) => {
     transactionDetails.tickets = [...updateReponse.tickets];
     transactionDetails.orderProductId = transactionDetails.product.id;
     transactionDetails.product.tickets = transactionDetails.tickets.join(", ");
+    transactionDetails.paymentRef = jwt.payload.requestreference;
     const orderid = await updateOrdersTable(transactionDetails);
     // --------
     // Send Payment Receipt

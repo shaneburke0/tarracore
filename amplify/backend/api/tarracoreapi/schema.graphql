@@ -49,3 +49,17 @@ type Transaction @model @aws_api_key @aws_cognito_user_pools {
   isAnswerCorrect: Boolean
   county: String
 }
+
+type Profile @model @aws_api_key @aws_cognito_user_pools {
+  id: ID!
+  firstName: String!
+  surname: String!
+  userId: String!
+  county: String
+  country: String
+  street: String
+  city: String
+  state: String
+  postcode: String
+  phone: String
+}

@@ -66,7 +66,7 @@ app.post("/paymentinit", async (req, res) => {
 
     const transaction = {
       address,
-      country: details.state,
+      county: details.state,
       firstName: details.firstname,
       surname: details.surname,
       answer: details.answer,

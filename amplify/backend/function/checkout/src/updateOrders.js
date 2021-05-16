@@ -13,6 +13,7 @@ const updateOrder = gql`
     $orderDate: String!
     $orderProductId: ID!
     $paymentRef: String
+    $orderRef: String
     $quantity: Int!
     $tickets: [Int]
     $userId: String!
@@ -26,7 +27,8 @@ const updateOrder = gql`
         isAnswerCorrect: $isAnswerCorrect
         orderDate: $orderDate
         orderProductId: $orderProductId
-        orderRef: $paymentRef
+        orderRef: $orderRef
+        paymentRef: $paymentRef
         quantity: $quantity
         userId: $userId
         county: $county

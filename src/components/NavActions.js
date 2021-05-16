@@ -2,12 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import { isMobile } from "react-device-detect";
 import { slide as Menu } from "react-burger-menu";
 import { SiteContext } from "../context/mainContext";
-import { FaShoppingCart, FaCircle } from "react-icons/fa";
+import { FaShoppingCart, FaCircle, FaUserAlt } from "react-icons/fa";
 import { Link } from "gatsby";
 import { colors } from "../theme";
 import LoginModal from "./LoginModal/LoginModal";
-import { useAuthDispatch, useAuthState } from "../context/authContext";
-import { signOut } from "../services/authService";
+import { useAuthState } from "../context/authContext";
 const { secondary } = colors;
 
 const styles = {
@@ -36,7 +35,7 @@ const styles = {
     top: 0,
   },
   bmMenu: {
-    background: "#373a47",
+    background: "#161c20",
     padding: "2.5em 1.5em 0",
     fontSize: "1.15em",
   },
@@ -81,17 +80,10 @@ const NavActions = (props) => {
     showCart = true,
     links = [],
   } = props;
-  const dispatch = useAuthDispatch();
+
   const { userToken } = useAuthState();
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const ctx = useContext(MyContext);
-
-  const handleSignOut = () => {
-    signOut();
-    dispatch({
-      type: "SIGN_OUT",
-    });
-  };
 
   useEffect(() => {
     if (userToken) setLoginModalOpen(false);
@@ -101,15 +93,18 @@ const NavActions = (props) => {
     <>
       <div className="flex flex-row z-10 items-center mobile:px-10 desktop:px-0 px-4 pt-6 pb-6">
         {userToken ? (
-          <div
-            role="button"
-            tabIndex="0"
-            className="text-white hover:text-gold pr-4 text-base mr-4 sm:mr-8 font-semibold nav-link"
-            onClick={handleSignOut}
-            onKeyDown={handleSignOut}
-          >
-            Sign Out
-          </div>
+          // <div
+          //   role="button"
+          //   tabIndex="0"
+          //   className="text-white hover:text-gold pr-4 text-base mr-4 sm:mr-8 font-semibold nav-link"
+          //   onClick={handleSignOut}
+          //   onKeyDown={handleSignOut}
+          // >
+          //   Sign Out
+          // </div>
+          <Link to="/my-account" className="mr-6 text-2xl text-white">
+            <FaUserAlt />
+          </Link>
         ) : (
           <div
             role="button"
@@ -124,7 +119,7 @@ const NavActions = (props) => {
 
         {showCart && (
           <div className="flex flex-1 justify-end pr-4 relative">
-            <Link to="/cart" className="nav-cart">
+            <Link to="/cart" className="nav-cart text-2xl">
               <FaShoppingCart />
             </Link>
             {numberOfItemsInCart > Number(0) && (

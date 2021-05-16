@@ -111,7 +111,7 @@ export const onCreateOrder = /* GraphQL */ `
       address
       orderDate
       isAnswerCorrect
-      country
+      county
       createdAt
       updatedAt
     }
@@ -152,7 +152,7 @@ export const onUpdateOrder = /* GraphQL */ `
       address
       orderDate
       isAnswerCorrect
-      country
+      county
       createdAt
       updatedAt
     }
@@ -193,7 +193,7 @@ export const onDeleteOrder = /* GraphQL */ `
       address
       orderDate
       isAnswerCorrect
-      country
+      county
       createdAt
       updatedAt
     }
@@ -317,6 +317,63 @@ export const onDeleteTransaction = /* GraphQL */ `
       orderDate
       isAnswerCorrect
       county
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateProfile = /* GraphQL */ `
+  subscription OnCreateProfile {
+    onCreateProfile {
+      id
+      firstName
+      surname
+      userId
+      county
+      country
+      street
+      city
+      state
+      postcode
+      phone
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateProfile = /* GraphQL */ `
+  subscription OnUpdateProfile {
+    onUpdateProfile {
+      id
+      firstName
+      surname
+      userId
+      county
+      country
+      street
+      city
+      state
+      postcode
+      phone
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteProfile = /* GraphQL */ `
+  subscription OnDeleteProfile {
+    onDeleteProfile {
+      id
+      firstName
+      surname
+      userId
+      county
+      country
+      street
+      city
+      state
+      postcode
+      phone
       createdAt
       updatedAt
     }

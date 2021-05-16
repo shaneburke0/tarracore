@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react"
-import SEO from "../components/seo"
-import { SiteContext, ContextProviderComponent } from "../context/mainContext"
-import { FaTimes } from "react-icons/fa"
-import { Link, navigate } from "gatsby"
-import NavActions from "../components/NavActions"
-import Button from "../components/Button"
-import LoginModal from "../components/LoginModal/LoginModal"
-import { useAuthState } from "../context/authContext"
-import QuantityPicker from "../components/QuantityPicker"
-import { slugify, numberFormat } from "../../utils/helpers"
-import Image from "../components/Image"
+import React, { useState, useEffect } from "react";
+import SEO from "../components/seo";
+import { SiteContext, ContextProviderComponent } from "../context/mainContext";
+import { FaTimes } from "react-icons/fa";
+import { Link, navigate } from "gatsby";
+import NavActions from "../components/NavActions";
+import Button from "../components/Button";
+import LoginModal from "../components/LoginModal/LoginModal";
+import { useAuthState } from "../context/authContext";
+import QuantityPicker from "../components/QuantityPicker";
+import { slugify, numberFormat } from "../../utils/helpers";
+import Image from "../components/Image";
 
 const Cart = ({ context }) => {
   const {
@@ -18,39 +18,38 @@ const Cart = ({ context }) => {
     removeFromCart,
     total,
     setItemQuantity,
-  } = context
-  const cartEmpty = numberOfItemsInCart === Number(0)
+  } = context;
+  const cartEmpty = numberOfItemsInCart === Number(0);
 
-  const { userToken } = useAuthState()
-  const [isLoginModalOpen, setLoginModalOpen] = useState(false)
+  const { userToken } = useAuthState();
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
 
   useEffect(() => {
-    if (userToken) setLoginModalOpen(false)
-  }, [userToken])
+    if (userToken) setLoginModalOpen(false);
+  }, [userToken]);
 
   function increment(item) {
-    item.quantity = item.quantity + 1
-    setItemQuantity(item)
+    item.quantity = item.quantity + 1;
+    setItemQuantity(item);
   }
 
   function decrement(item) {
-    if (item.quantity === 1) return
-    item.quantity = item.quantity - 1
-    setItemQuantity(item)
+    if (item.quantity === 1) return;
+    item.quantity = item.quantity - 1;
+    setItemQuantity(item);
   }
 
   function checkout() {
     if (!userToken) {
-      setLoginModalOpen(true)
-      return
+      setLoginModalOpen(true);
+      return;
     }
-    navigate("/checkout")
+    navigate("/checkout");
   }
 
   return (
     <>
       <SEO title="Cart" />
-      <NavActions />
       <div className="mobile:px-10 px-4 pb-10 flex justify-center main-content">
         <div className="w-fw">
           <div className="flex flex-col items-center pb-10">
@@ -74,7 +73,7 @@ const Cart = ({ context }) => {
               ) : (
                 <div className="flex flex-col">
                   <div className="">
-                    {cart.map(item => {
+                    {cart.map((item) => {
                       return (
                         <div className="border-b py-10" key={item.id}>
                           {/* Responsive - Desktop */}
@@ -170,7 +169,7 @@ const Cart = ({ context }) => {
                             </button>
                           </div>
                         </div>
-                      )
+                      );
                     })}
                   </div>
                 </div>
@@ -199,17 +198,17 @@ const Cart = ({ context }) => {
         closeModal={() => setLoginModalOpen(false)}
       />
     </>
-  )
-}
+  );
+};
 
 function CartWithContext(props) {
   return (
     <ContextProviderComponent>
       <SiteContext.Consumer>
-        {context => <Cart {...props} context={context} />}
+        {(context) => <Cart {...props} context={context} />}
       </SiteContext.Consumer>
     </ContextProviderComponent>
-  )
+  );
 }
 
-export default CartWithContext
+export default CartWithContext;

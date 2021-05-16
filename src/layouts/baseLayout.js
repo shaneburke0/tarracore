@@ -7,6 +7,7 @@
 
 import React from "react";
 import { Link } from "gatsby";
+import { isMobile } from "react-device-detect";
 import { SiteContext, ContextProviderComponent } from "../context/mainContext";
 import { AuthProvider } from "../context/authContext";
 import { titleIfy, slugify } from "../../utils/helpers";
@@ -70,20 +71,22 @@ class Layout extends React.Component {
                             width="216"
                           />
                         </Link>
-                        <div className="flex flex-wrap mt-2">
-                          {links.map((l, i) => (
-                            <Link to={l.link} key={i}>
-                              <span
-                                key={i}
-                                className="text-left m-0 text-base mr-4 sm:mr-8 font-semibold nav-link"
-                              >
-                                {l.name}
-                              </span>
-                            </Link>
-                          ))}
-                        </div>
+                        {!isMobile && (
+                          <div className="flex flex-wrap mt-2">
+                            {links.map((l, i) => (
+                              <Link to={l.link} key={i}>
+                                <span
+                                  key={i}
+                                  className="text-left m-0 text-base mr-4 sm:mr-8 font-semibold nav-link"
+                                >
+                                  {l.name}
+                                </span>
+                              </Link>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                      <NavActions />
+                      <NavActions links={links} />
                     </div>
                   </nav>
 

@@ -1,15 +1,14 @@
-import React from "react"
-import SEO from "../components/seo"
-import NavActions from "../components/NavActions"
+import React from "react";
+import SEO from "../components/seo";
+import NavActions from "../components/NavActions";
 
-const ContactPage = props => {
+const ContactPage = (props) => {
   const {
     pageContext: { title },
-  } = props
+  } = props;
   return (
     <>
       <SEO title="Contact" />
-      <NavActions />
       <div className="mobile:px-10 px-4 pb-10 flex justify-center main-content">
         <div className="w-fw">
           <div className="">
@@ -21,7 +20,7 @@ const ContactPage = props => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ContactPage
+export default ContactPage;

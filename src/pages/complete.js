@@ -23,7 +23,6 @@ const CheckoutCompletePage = ({ context }) => {
   return (
     <>
       <SEO title="Checkout Complete" />
-      <NavActions />
       <div className="mobile:px-10 px-4 pb-10 flex justify-center main-content">
         <div className="w-fw">
           {isLoading ? (

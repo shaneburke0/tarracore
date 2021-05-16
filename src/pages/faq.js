@@ -1,13 +1,13 @@
-import React from "react"
-import Faq from "react-faq-component"
-import { Link } from "gatsby"
-import SEO from "../components/seo"
-import NavActions from "../components/NavActions"
+import React from "react";
+import Faq from "react-faq-component";
+import { Link } from "gatsby";
+import SEO from "../components/seo";
+import NavActions from "../components/NavActions";
 
-const FaqPage = props => {
+const FaqPage = (props) => {
   const {
     pageContext: { title },
-  } = props
+  } = props;
 
   const data = {
     title: "",
@@ -84,7 +84,7 @@ const FaqPage = props => {
         ),
       },
     ],
-  }
+  };
 
   const styles = {
     // bgColor: 'white',
@@ -92,18 +92,17 @@ const FaqPage = props => {
     rowTitleColor: "#0e1215",
     // rowContentColor: 'grey',
     // arrowColor: "red",
-  }
+  };
 
   const config = {
     // animate: true,
     // arrowIcon: "V",
     // tabFocus: true
-  }
+  };
 
   return (
     <>
       <SEO title="FAQ" />
-      <NavActions />
       <div className="mobile:px-10 px-4 pb-10 flex justify-center main-content">
         <div className="">
           <div className="">
@@ -115,7 +114,7 @@ const FaqPage = props => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default FaqPage
+export default FaqPage;

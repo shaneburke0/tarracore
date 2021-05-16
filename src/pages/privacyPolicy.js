@@ -1,15 +1,14 @@
-import React from "react"
-import SEO from "../components/seo"
-import NavActions from "../components/NavActions"
+import React from "react";
+import SEO from "../components/seo";
+import NavActions from "../components/NavActions";
 
-const PrivacyPolicyPage = props => {
+const PrivacyPolicyPage = (props) => {
   const {
     pageContext: { title },
-  } = props
+  } = props;
   return (
     <>
       <SEO title="Privacy Policy" />
-      <NavActions />
       <div className="mobile:px-10 px-4 pb-10 main-content">
         <div className="">
           <div className="">
@@ -475,7 +474,7 @@ const PrivacyPolicyPage = props => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default PrivacyPolicyPage
+export default PrivacyPolicyPage;

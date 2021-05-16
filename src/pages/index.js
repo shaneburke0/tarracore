@@ -21,7 +21,6 @@ const Home = ({ data: gqlData }) => {
 
   return (
     <>
-      <NavActions />
       <SEO title="Home" />
       <div className="flex justify-center main-content">
         <div className="w-fw">

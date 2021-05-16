@@ -1,15 +1,14 @@
-import React from "react"
-import SEO from "../components/seo"
-import NavActions from "../components/NavActions"
+import React from "react";
+import SEO from "../components/seo";
+import NavActions from "../components/NavActions";
 
-const TermsConditionsPage = props => {
+const TermsConditionsPage = (props) => {
   const {
     pageContext: { title },
-  } = props
+  } = props;
   return (
     <>
       <SEO title="Terms &amp; Conditions" />
-      <NavActions />
       <div className="mobile:px-10 px-4 pb-10 flex justify-center main-content">
         <div className="">
           <div className="">
@@ -482,7 +481,7 @@ const TermsConditionsPage = props => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default TermsConditionsPage
+export default TermsConditionsPage;

@@ -362,12 +362,21 @@ const TermsConditionsPage = (props) => {
                   take up the prize.
                 </p>
                 <p>
-                  9.3 All prizes will be delivered free of charge across the
-                  Republic of Ireland and Northern Ireland. The promoter does
-                  not deliver any prizes free of charge to the rest of the
-                  United Kingdom. Collection from the promoters business
-                  premises is available or delivery outside the island of
-                  Ireland can be arranged for a fee.
+                  9.3 All prizes will be delivered free of charge within 1 week
+                  across the Republic of Ireland and Northern Ireland. The
+                  promoter does not deliver any prizes free of charge to the
+                  rest of the United Kingdom. Collection from the promoters
+                  business premises is available or delivery outside the island
+                  of Ireland can be arranged for a fee. Delivery times to rest
+                  of the UK may take up to 4 weeks but will be subject to the
+                  availablity of the choosen delivery company. You will be
+                  informed of the delivery date at least 1 week prior to
+                  delivery.
+                </p>
+                <p>
+                  The Promoter does not accept any responsibility and is not
+                  liable to pay any compensation if you are unable to or do not
+                  take up the prize.
                 </p>
                 <h3>10. Limitation of Liability</h3>
                 <p>

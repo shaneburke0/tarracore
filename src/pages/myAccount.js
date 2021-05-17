@@ -6,13 +6,13 @@ import { toast } from "react-toastify";
 import SEO from "../components/seo";
 import { signOut } from "../services/authService";
 import { useAuthDispatch, useAuthState } from "../context/authContext";
+import {
+  fetchProfileDetails,
+  fetchOrderDetails,
+  createProfileDetails,
+  updateProfileDetails,
+} from "../services";
 import "react-web-tabs/dist/react-web-tabs.css";
-
-import config from "../aws-exports";
-import axios from "axios";
-import tag from "graphql-tag";
-const graphql = require("graphql");
-const { print } = graphql;
 
 const Input = ({ onChange, value, name, placeholder, disabled }) => (
   <input
@@ -50,6 +50,7 @@ const MyAccountPage = (props) => {
     pageContext: { title },
   } = props;
 
+  const [currentUserId, setCurrentUserId] = useState("");
   const [isInitialLoading, setInitialLoading] = useState(true);
   const [isAccountLoading, setAccountLoading] = useState(true);
   const [isOrdersLoading, setOrdersLoading] = useState(false);
@@ -57,15 +58,16 @@ const MyAccountPage = (props) => {
   const [orders, setOrders] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null);
   const [input, setInput] = useState({
-    name: "",
+    id: "",
+    firstName: "",
     surname: "",
     email: "",
     street: "",
     city: "",
-    postal_code: "",
-    state: "",
+    postcode: "",
+    county: "",
     country: "",
-    number: "",
+    phone: "",
   });
 
   const dispatch = useAuthDispatch();
@@ -74,108 +76,6 @@ const MyAccountPage = (props) => {
   const onChange = (e) => {
     setErrorMessage(null);
     setInput({ ...input, [e.target.name]: e.target.value });
-  };
-
-  const getOrderDetails = async () => {
-    setOrdersLoading(true);
-    const currentUser = await Auth.currentUserInfo();
-    const userId = currentUser ? currentUser.attributes.email : "";
-    const getOrderQuery = tag(`
-        query ListOrders(
-            $userId: String!
-            $limit: Int = 50
-        ) {
-            listOrders(filter: { userId: { ge: $userId } }, limit: $limit) {
-                items {
-                    id
-                    product {
-                        price
-                        name
-                        image
-                    }
-                    userId
-                    quantity
-                    orderRef
-                    paymentRef
-                    tickets
-                    answer
-                    email
-                    address
-                    orderDate
-                }
-            }
-        }
-    `);
-    const gqlData = await axios({
-      url: config.aws_appsync_graphqlEndpoint,
-      method: "post",
-      headers: {
-        "x-api-key": "da2-mgfdzk6odvdb7hm5laltb7ai6q", // config.aws_appsync_apiKey,
-      },
-      data: {
-        query: print(getOrderQuery),
-        variables: { userId },
-      },
-    });
-
-    if (gqlData && gqlData.status === 200) {
-      console.log(gqlData.data.data);
-      setOrders([...gqlData.data.data.listOrders.items]);
-    }
-    setOrdersLoading(false);
-  };
-
-  const getAccountDetails = async (userId) => {
-    setAccountLoading(true);
-
-    const getAccountQuery = tag(`
-        query ListProfiles(
-            $userId: String!
-            $limit: Int = 1
-        ) {
-          listProfiles(filter: { userId: { ge: $userId } }, limit: $limit) {
-                items {
-                  id
-                  firstName
-                  surname
-                  userId
-                  county
-                  country
-                  street
-                  city
-                  state
-                  postcode
-                  phone
-                  createdAt
-                  updatedAt
-                }
-            }
-        }
-    `);
-    const gqlData = await axios({
-      url: config.aws_appsync_graphqlEndpoint,
-      method: "post",
-      headers: {
-        "x-api-key": "da2-mgfdzk6odvdb7hm5laltb7ai6q", // config.aws_appsync_apiKey,
-      },
-      data: {
-        query: print(getAccountQuery),
-        variables: { userId },
-      },
-    });
-
-    if (gqlData && gqlData.status === 200) {
-      console.log(gqlData.data);
-      try {
-        if (
-          gqlData.data.data.listProfiles.items &&
-          gqlData.data.data.listProfiles.items.length > 0
-        ) {
-          setExistingProfile(true);
-        }
-      } catch (ex) {}
-    }
-    setAccountLoading(false);
   };
 
   const handleSignOut = () => {
@@ -189,11 +89,26 @@ const MyAccountPage = (props) => {
   const getUserDetails = async () => {
     const currentUser = await Auth.currentUserInfo();
     const userId = currentUser ? currentUser.attributes.email : "";
+    setCurrentUserId(userId);
     const evt = {
       target: { name: "email", value: userId },
     };
     onChange(evt);
-    getAccountDetails(userId);
+    setAccountLoading(true);
+    const profile = await fetchProfileDetails(userId);
+
+    setInput(profile);
+    setExistingProfile(profile ? true : false);
+    setAccountLoading(false);
+  };
+
+  const getOrderDetails = async () => {
+    const currentUser = await Auth.currentUserInfo();
+    const userId = currentUser ? currentUser.attributes.email : "";
+    setOrdersLoading(true);
+    const orderDetails = await fetchOrderDetails(userId);
+    setOrders([...orderDetails]);
+    setOrdersLoading(false);
   };
 
   useEffect(() => {
@@ -207,15 +122,30 @@ const MyAccountPage = (props) => {
 
   const handleTabChange = async (tabId) => {
     if (tabId === "vertical-tab-two") {
-      await getOrderDetails();
+      getOrderDetails();
     }
   };
 
-  const updateUserDetails = () => {
-    console.log("Saving...");
-    toast("Successfully saved details.", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
+  const updateUserDetails = async () => {
+    let userSaved = false;
+    setAccountLoading(true);
+
+    const details = {
+      ...input,
+      userId: currentUserId,
+    };
+    if (hasExistingProfile) {
+      userSaved = await updateProfileDetails(details);
+    } else {
+      userSaved = await createProfileDetails(details);
+    }
+
+    if (userSaved) {
+      toast("Successfully saved details.", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+    setAccountLoading(false);
   };
 
   return (
@@ -259,8 +189,8 @@ const MyAccountPage = (props) => {
                         <div className="flex">
                           <Input
                             onChange={onChange}
-                            value={input.name}
-                            name="name"
+                            value={input.firstName}
+                            name="firstName"
                             placeholder="First name"
                           />
                           <Input
@@ -272,15 +202,15 @@ const MyAccountPage = (props) => {
                         </div>
                         <Input
                           onChange={onChange}
-                          value={input.email}
+                          value={input.userId}
                           name="email"
                           placeholder="Email"
                           disabled={true}
                         />
                         <Input
                           onChange={onChange}
-                          value={input.number}
-                          name="number"
+                          value={input.phone}
+                          name="phone"
                           placeholder="Phone"
                         />
                         <Input
@@ -297,8 +227,8 @@ const MyAccountPage = (props) => {
                         />
                         <Input
                           onChange={onChange}
-                          value={input.state}
-                          name="state"
+                          value={input.county}
+                          name="county"
                           placeholder="County / State"
                         />
                         <Select
@@ -309,9 +239,9 @@ const MyAccountPage = (props) => {
                         />
                         <Input
                           onChange={onChange}
-                          value={input.postal_code}
-                          name="postal_code"
-                          placeholder="Postal Code"
+                          value={input.postcode}
+                          name="postcode"
+                          placeholder="Postcode"
                         />
                         <div className="flex justify-end">
                           <button

@@ -9,6 +9,11 @@ import { Link } from "gatsby";
 import { TermsConditions } from "../components";
 import { Auth } from "aws-amplify";
 import shortid from "shortid";
+import {
+  fetchProfileDetails,
+  createProfileDetails,
+  updateProfileDetails,
+} from "../services";
 
 function CheckoutWithContext(props) {
   return (
@@ -19,10 +24,6 @@ function CheckoutWithContext(props) {
     </ContextProviderComponent>
   );
 }
-
-const calculateShipping = () => {
-  return 0;
-};
 
 const Input = ({ onChange, value, name, placeholder }) => (
   <input
@@ -90,10 +91,31 @@ const Checkout = ({ context, history }) => {
   const [processing, setProcessing] = useState("");
   const [isPaymentLoading, setPaymentLoading] = useState(false);
   const [isPaymentLoaded, setPaymentLoaded] = useState(false);
+  const [hasExistingProfile, setExistingProfile] = useState(false);
+  const [existingProfileId, setExistingProfileId] = useState("");
 
   const handleGettingCurrentUser = async () => {
     const currentUser = await Auth.currentUserInfo();
-    setCurrentUserId(currentUser ? currentUser.attributes.email : "");
+    const userId = currentUser ? currentUser.attributes.email : "";
+    setCurrentUserId(userId);
+
+    const profile = await fetchProfileDetails(userId);
+
+    if (profile) {
+      setInput({
+        name: profile.firstName,
+        surname: profile.surname,
+        email: profile.userId,
+        street: profile.street,
+        city: profile.city,
+        postal_code: profile.postcode,
+        state: profile.county,
+        country: profile.country,
+        number: profile.phone,
+      });
+      setExistingProfileId(profile.id);
+      setExistingProfile(true);
+    }
   };
 
   useEffect(() => {
@@ -217,7 +239,29 @@ const Checkout = ({ context, history }) => {
       })
       .finally(() => {
         setPaymentLoading(false);
+        handleUdateProfile();
       });
+  };
+
+  const handleUdateProfile = () => {
+    const details = {
+      id: existingProfileId,
+      firstName: input.name,
+      surname: input.surname,
+      street: input.street,
+      city: input.city,
+      postcode: input.postal_code,
+      county: input.state,
+      country: input.country,
+      phone: input.number,
+      userId: currentUserId,
+    };
+
+    if (hasExistingProfile) {
+      updateProfileDetails(details);
+    } else {
+      createProfileDetails(details);
+    }
   };
 
   const contentStyle = { width: "90%", height: "67%" };
@@ -439,7 +483,7 @@ const Checkout = ({ context, history }) => {
                       <div className="md:ml-4 pl-2 flex flex-1 justify-end bg-gray-200 pr-4 pt-6">
                         <p className="text-sm pr-10">Total</p>
                         <p className="font-semibold tracking-tighter w-24 flex justify-end">
-                          {numberFormat(total + calculateShipping())}
+                          {numberFormat(total)}
                         </p>
                       </div>
                     </div>

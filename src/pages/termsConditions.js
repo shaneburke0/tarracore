@@ -357,9 +357,6 @@ const TermsConditionsPage = (props) => {
                   entered, your old details and your new details. If your
                   details change within 2 days of the Closing Date, the Promoter
                   will use your old details if it needs to try to contact you.
-                  8.3 The Promoter does not accept any responsibility and is not
-                  liable to pay any compensation if you are unable to or do not
-                  take up the prize.
                 </p>
                 <p>
                   9.3 All prizes will be delivered free of charge within 1 week
@@ -374,7 +371,7 @@ const TermsConditionsPage = (props) => {
                   delivery.
                 </p>
                 <p>
-                  The Promoter does not accept any responsibility and is not
+                  9.4 The Promoter does not accept any responsibility and is not
                   liable to pay any compensation if you are unable to or do not
                   take up the prize.
                 </p>

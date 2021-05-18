@@ -157,7 +157,7 @@ const SignUp = ({ closeModal }) => {
                         "capital",
                         "match",
                       ]}
-                      minLength={6}
+                      minLength={8}
                       value={password}
                       valueAgain={confirmPassword}
                       onChange={(isValid) => {}}

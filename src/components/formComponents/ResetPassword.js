@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Auth } from "aws-amplify";
+import PasswordChecklist from "react-password-checklist";
 
 const Input = ({ onChange, value, name, placeholder, type = "text" }) => (
   <input
@@ -141,28 +142,43 @@ export default function ResetPassword({ navigateSignIn }) {
           </div>
         </div>
         <hr />
-        <div className="mb-2 md:mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            New Password
-          </label>
-          <Input
-            type="password"
-            value={fields.password}
-            name="password"
-            onChange={handleFieldChange}
-          />
+        <div className="flex flex-col md:flex-row justify-between">
+          <div className="flex-grow">
+            <div className="mb-2 md:mb-6">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                New Password
+              </label>
+              <Input
+                type="password"
+                value={fields.password}
+                name="password"
+                onChange={handleFieldChange}
+              />
+            </div>
+            <div className="mb-2 md:mb-6">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Confirm Password
+              </label>
+              <Input
+                type="password"
+                value={fields.confirmPassword}
+                name="confirmPassword"
+                onChange={handleFieldChange}
+              />
+            </div>
+          </div>
+
+          <div className="text-xs md:mt-8 md:ml-4">
+            <PasswordChecklist
+              rules={["length", "specialChar", "number", "capital", "match"]}
+              minLength={8}
+              value={fields.password}
+              valueAgain={fields.confirmPassword}
+              onChange={(isValid) => {}}
+            />
+          </div>
         </div>
-        <div className="mb-2 md:mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Confirm Password
-          </label>
-          <Input
-            type="password"
-            value={fields.confirmPassword}
-            name="confirmPassword"
-            onChange={handleFieldChange}
-          />
-        </div>
+
         {error && <div className="text-red-700">{error.message}</div>}
         <div className="text-right">
           <button

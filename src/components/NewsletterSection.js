@@ -1,6 +1,21 @@
-import React from "react"
+import React, { useState } from "react";
+import addToMailchimp from "gatsby-plugin-mailchimp";
 
 const NewsletterSection = () => {
+  const [email, setEmail] = useState("");
+  const [isSubscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = async () => {
+    const response = await addToMailchimp(email);
+    if (response && response.result === "success") {
+      setSubscribed(true);
+    }
+  };
+
+  const onChange = (e) => {
+    setEmail(e.target.value);
+  };
+
   return (
     <div>
       <h3 className="">Don't Miss Out</h3>
@@ -15,16 +30,24 @@ const NewsletterSection = () => {
           id="newsletter"
           type="text"
           placeholder="Enter your E-mail address"
+          onChange={onChange}
+          value={email}
         />
-        <button
-          className="bg-secondary hover:bg-secondary-darker text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline m-0.5"
-          type="button"
-        >
-          Subscribe
-        </button>
+        {!isSubscribed && (
+          <button
+            className="bg-secondary hover:bg-secondary-darker text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline m-0.5"
+            type="button"
+            onClick={handleSubscribe}
+          >
+            Subscribe
+          </button>
+        )}
+        {isSubscribed && (
+          <div className="text-green-700 font-bold py-2 px-4">Subscribed</div>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default NewsletterSection
+export default NewsletterSection;

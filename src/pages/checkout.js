@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { API } from "aws-amplify";
 import Popup from "reactjs-popup";
+import addToMailchimp from "gatsby-plugin-mailchimp";
 import SEO from "../components/seo";
 import { SiteContext, ContextProviderComponent } from "../context/mainContext";
 import { numberFormat } from "../../utils/helpers";
@@ -216,6 +217,9 @@ const Checkout = ({ context, history }) => {
         email: currentUserId,
       },
     };
+
+    // subscribe to email
+    addToMailchimp(email);
 
     // Create PaymentIntent as soon as the page loads
     API.post("paymentsapi", "/paymentinit", params)

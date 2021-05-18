@@ -678,6 +678,24 @@ footer {
   background-color: #161c20;
   color: #ffffff;
 }
+
+.st-card-number-input {
+  width: 100%;
+  --text-opacity: 1;
+  color: #4a5568;
+  color: rgba(74, 85, 104, var(--text-opacity));
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  line-height: 1.25;
+  font-size: 0.875rem;
+  border-width: 1px;
+  border-radius: 0.25rem;
+}
+
 .min-w-80 {
   min-width: 80px;
 }
@@ -712,6 +730,14 @@ footer {
 }
 
 .loader-container {
+  min-height: 100px;
+}
+
+.loader-container-mask .loader-container--login {
+  margin-top: 160px;
+}
+
+.loader-container--login {
   min-height: 100px;
 }
 

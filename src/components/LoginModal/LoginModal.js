@@ -1,13 +1,28 @@
-import React from "react"
-import Popup from "reactjs-popup"
+import React, { useState } from "react";
+import Popup from "reactjs-popup";
+import { Tabs, Tab, TabPanel, TabList } from "react-web-tabs";
 // import { Auth } from "aws-amplify"
-import SignUp from "../formComponents/SignUp"
+import SignUp from "../formComponents/SignUp";
 // import ConfirmSignUp from "../formComponents/ConfirmSignUp"
-import SignIn from "../formComponents/SignIn"
+import SignIn from "../formComponents/SignIn";
+import ResetPassword from "../formComponents/ResetPassword";
 
-const contentStyle = { width: "90%" }
+const contentStyle = { width: "800px", maxWidth: "90%", minheight: "500px" };
 
 const LoginModal = ({ open, closeModal }) => {
+  const [selectedTab, setSelectedTab] = useState("one");
+  const navigateToSignUp = () => {
+    setSelectedTab("two");
+  };
+
+  const navigateToForgot = () => {
+    setSelectedTab("three");
+  };
+
+  const navigateSignIn = () => {
+    setSelectedTab("one");
+  };
+
   return (
     <Popup
       modal
@@ -16,20 +31,28 @@ const LoginModal = ({ open, closeModal }) => {
       closeOnDocumentClick
       onClose={closeModal}
     >
-      <div
-        className="flex flex-1 flex-col
-      md:flex-row
-      w-full p-8"
-      >
-        <div className="flex-1">
-          <SignIn closeModal={closeModal} />
-        </div>
-        <div className="flex-1">
+      <Tabs defaultTab={selectedTab}>
+        <TabList>
+          <Tab tabFor="one">Login</Tab>
+          <Tab tabFor="two">Sign up</Tab>
+          <Tab tabFor="three">&nbsp;</Tab>
+        </TabList>
+        <TabPanel tabId="one">
+          <SignIn
+            closeModal={closeModal}
+            navigateToSignUp={navigateToSignUp}
+            navigateToForgot={navigateToForgot}
+          />
+        </TabPanel>
+        <TabPanel tabId="two">
           <SignUp closeModal={closeModal} />
-        </div>
-      </div>
+        </TabPanel>
+        <TabPanel tabId="three">
+          <ResetPassword navigateSignIn={navigateSignIn} />
+        </TabPanel>
+      </Tabs>
     </Popup>
-  )
-}
+  );
+};
 
-export default LoginModal
+export default LoginModal;

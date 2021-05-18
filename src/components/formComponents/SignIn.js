@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { signIn } from "../../services/authService";
 import { useAuthDispatch } from "../../context/authContext";
 
-const SignIn = ({ closeModal }) => {
+const SignIn = ({ closeModal, navigateToSignUp, navigateToForgot }) => {
   const [isSignInLoading, setSignInLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const [error, setError] = useState("");
   const dispatch = useAuthDispatch();
 
   const signInUser = async () => {
+    setError(null);
     setSignInLoading(true);
     signIn(username, password)
       .then((r) => {
@@ -21,6 +22,7 @@ const SignIn = ({ closeModal }) => {
       })
       .catch((e) => {
         console.log(e);
+        setError(e);
       })
       .finally(() => {
         setSignInLoading(false);
@@ -29,7 +31,6 @@ const SignIn = ({ closeModal }) => {
 
   return (
     <div>
-      <h3 className="pl-2 md:pl-8">Login</h3>
       <div className="flex flex-1 justify-center">
         <div className="w-full max-w-144">
           <form className="bg-white px-2 md:px-8 pt-2 md:pt-6 pb-2 md:pb-8 mb-1 md:mb-4">
@@ -65,7 +66,14 @@ const SignIn = ({ closeModal }) => {
                 placeholder="******************"
               />
             </div>
+            {error && <div className="text-red-700 mb-4">{error.message}</div>}
             <div className="flex items-center justify-between">
+              <span
+                className="inline-block align-baseline text-sm cursor-pointer"
+                onClick={() => navigateToForgot()}
+              >
+                Forgot Password?
+              </span>
               <button
                 onClick={signInUser}
                 className="bg-secondary hover:bg-black text-white font-bold py-2 px-1 md:px-4 rounded focus:outline-none focus:shadow-outline"
@@ -74,16 +82,27 @@ const SignIn = ({ closeModal }) => {
               >
                 Login
               </button>
-              <a
-                className="inline-block align-baseline font-bold text-sm"
-                href="#/"
+            </div>
+            <div className="mt-4 inline-block align-baseline text-sm">
+              Don't have an account?{" "}
+              <span
+                onClick={() => navigateToSignUp()}
+                className="text-green-700 cursor-pointer"
               >
-                Forgot Password?
-              </a>
+                Sign Up
+              </span>{" "}
+              here
             </div>
           </form>
         </div>
       </div>
+      {isSignInLoading && (
+        <div className="loader-container-mask">
+          <div className="loader-container--login">
+            <div className="loader">Loading...</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -96,9 +96,16 @@ const MyAccountPage = (props) => {
     onChange(evt);
     setAccountLoading(true);
     const profile = await fetchProfileDetails(userId);
-
-    setInput(profile);
-    setExistingProfile(profile ? true : false);
+    if (profile) {
+      setInput(profile);
+      setExistingProfile(true);
+    } else {
+      setInput({
+        ...input,
+        email: userId,
+        userId: userId,
+      });
+    }
     setAccountLoading(false);
   };
 
@@ -146,6 +153,28 @@ const MyAccountPage = (props) => {
       });
     }
     setAccountLoading(false);
+  };
+
+  const onRemoveAccount = () => {
+    if (window.confirm("Do you really want to delete your account?")) {
+      Auth.currentAuthenticatedUser()
+        .then(
+          (user) =>
+            new Promise((resolve, reject) => {
+              console.log("user", user);
+              user.deleteUser((error) => {
+                console.log("error", error);
+                if (error) {
+                  return reject(error);
+                }
+                document.location.href = "/";
+
+                resolve();
+              });
+            })
+        )
+        .catch((err) => console.log("err", err));
+    }
   };
 
   return (
@@ -243,7 +272,15 @@ const MyAccountPage = (props) => {
                           name="postcode"
                           placeholder="Postcode"
                         />
-                        <div className="flex justify-end">
+
+                        <div className="flex justify-between flex-col-reverse sm:flex-row">
+                          <button
+                            type="submit"
+                            className="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 mt-4 rounded focus:outline-none focus:shadow-outline w-full md:w-40 text-sm"
+                            onClick={onRemoveAccount}
+                          >
+                            Delete My Account
+                          </button>
                           <button
                             type="submit"
                             className="bg-secondary hover:bg-black text-white font-bold py-2 px-4 mt-4 rounded focus:outline-none focus:shadow-outline w-full md:w-60"
@@ -263,12 +300,14 @@ const MyAccountPage = (props) => {
                     ) : Array.isArray(orders) && orders.length > 0 ? (
                       <div className="">
                         <div className="flex justify-between">
-                          <div className="min-w-150">Order Id</div>
-                          <div className="min-w-150">Date</div>
-                          <div className="flex-grow">Name</div>
-                          <div className="min-w-80">Quantity</div>
-                          <div className="min-w-80">Price</div>
-                          <div className="min-w-80">Tickets</div>
+                          <div className="min-w-150 font-semibold">
+                            Order Id
+                          </div>
+                          <div className="min-w-150 font-semibold">Date</div>
+                          <div className="flex-grow font-semibold">Name</div>
+                          <div className="min-w-80 font-semibold">Quantity</div>
+                          <div className="min-w-80 font-semibold">Price</div>
+                          <div className="min-w-80 font-semibold">Tickets</div>
                         </div>
 
                         {orders &&

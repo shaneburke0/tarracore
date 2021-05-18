@@ -226,6 +226,19 @@ const Checkout = ({ context, history }) => {
             jwt: data.jwt,
             formId: "st-form",
             buttonId: "paymentSubmitBtn",
+            panIcon: true,
+            translations: {
+              "Expiration date": "Expiry Date",
+              "Security code": "CVV",
+            },
+            styles: {
+              "font-size-label": "18px",
+              "background-color-input": "#ffffff", //	Set the input background colour.
+              "border-radius-input": "0.25rem", //	Set the input border radius.
+              "color-input": "#4a5568", //	Set the input colour.
+              "font-size-input": "21px", //	Set the input font size.
+              "line-height-input": "1.25", //	Set the input line height.
+            },
             // liveStatus: 0,
           });
           st.Components();
@@ -278,12 +291,12 @@ const Checkout = ({ context, history }) => {
             c_large:w-c_large
           "
             >
-              <div className="pt-10 pb-1">
+              <div className="pt-10 pb-1 mb-4">
                 <h1 className="text-5xl font-light">Checkout</h1>
                 <Link to="/cart">
                   <div className="cursor-pointer flex">
                     <FaLongArrowAltLeft className="mr-2 text-gray-600 mt-1" />
-                    <p className="text-gray-600 text-sm">Edit Cart</p>
+                    <p className="text-gray-600 text-sm mb-0">Edit Cart</p>
                   </div>
                 </Link>
               </div>
@@ -442,13 +455,23 @@ const Checkout = ({ context, history }) => {
                               action="https://fyx13u9xi9.execute-api.eu-west-1.amazonaws.com/devk/checkout"
                               method="POST"
                             >
-                              <div id="st-card-number"></div>
-                              <div id="st-expiration-date"></div>
-                              <div id="st-security-code"></div>
+                              <div
+                                id="st-card-number"
+                                className="card-input-field"
+                              ></div>
+                              <div
+                                id="st-expiration-date"
+                                className="card-input-field"
+                              ></div>
+                              <div
+                                id="st-security-code"
+                                className="card-input-field"
+                              ></div>
                               <button
                                 type="submit"
                                 className="bg-secondary hover:bg-black text-white font-bold py-2 px-4 mt-4 rounded focus:outline-none focus:shadow-outline w-full md:w-60"
                                 id="paymentSubmitBtn"
+                                onClick={() => console.log("submitted")}
                               >
                                 Pay
                               </button>

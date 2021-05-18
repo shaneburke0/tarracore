@@ -236,7 +236,7 @@ const Checkout = ({ context, history }) => {
               "background-color-input": "#ffffff", //	Set the input background colour.
               "border-radius-input": "0.25rem", //	Set the input border radius.
               "color-input": "#4a5568", //	Set the input colour.
-              "font-size-input": "21px", //	Set the input font size.
+              "font-size-input": "18px", //	Set the input font size.
               "line-height-input": "1.25", //	Set the input line height.
             },
             // liveStatus: 0,

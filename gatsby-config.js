@@ -11,7 +11,6 @@ module.exports = {
         component: require.resolve(`./src/layouts/baseLayout.js`),
       },
     },
-    `gatsby-plugin-stripe`,
     `gatsby-plugin-postcss`,
     `gatsby-plugin-react-helmet`,
     {

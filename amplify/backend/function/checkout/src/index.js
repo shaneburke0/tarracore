@@ -53,23 +53,27 @@ exports.handler = async (event, context, callback) => {
     const transactionDetails = await getTransactionDetails(
       details.payload.customermiddlename
     );
-    // ------
+
+    // -----------------
     // Update Inventory
     const updateReponse = await updateInventory(transactionDetails);
     console.log("updateInventory", JSON.stringify(updateReponse));
-    // ------
+
+    // --------------------
     // Update Orders table
     transactionDetails.tickets = [...updateReponse.tickets];
     transactionDetails.orderProductId = transactionDetails.product.id;
     transactionDetails.product.tickets = transactionDetails.tickets.join(", ");
     transactionDetails.paymentRef = jwt.payload.requestreference;
     const orderid = await updateOrdersTable(transactionDetails);
-    // --------
+
+    // --------------------
     // Send Payment Receipt
     transactionDetails.orderid = orderid;
     transactionDetails.total = details.payload.mainamount;
     await emailReceipt(transactionDetails.email, transactionDetails);
-    // --------
+
+    // -------------------
     // Send ticket Receipt
     if (transactionDetails.isAnswerCorrect) {
       await emailTickets(transactionDetails.email, transactionDetails);

@@ -120,6 +120,8 @@ app.post("/paymentinit", async (req, res) => {
     const hashInBase64 = Crypto.enc.Base64.stringify(hash);
     const jwt = message + "." + base64url.fromBase64(hashInBase64);
 
+    console.log("jwt", jwt);
+
     res.send({
       jwt,
       amount,

@@ -13,7 +13,22 @@
     },
     "categories": {
       "auth": {
-        "cognito704b3e59": {}
+        "cognito704b3e59": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "tarracorepayments": {
+          "deploymentBucketName": "amplify-tarracore-prod-81255-deployment",
+          "s3Key": "amplify-builds/tarracorepayments-5633675a6a7a4f687270-build.zip"
+        },
+        "paymentswebhook": {
+          "deploymentBucketName": "amplify-tarracore-prod-81255-deployment",
+          "s3Key": "amplify-builds/paymentswebhook-716a6345515056667432-build.zip"
+        },
+        "checkout": {
+          "deploymentBucketName": "amplify-tarracore-prod-81255-deployment",
+          "s3Key": "amplify-builds/checkout-33516c652b6776784146-build.zip"
+        }
       }
     }
   },

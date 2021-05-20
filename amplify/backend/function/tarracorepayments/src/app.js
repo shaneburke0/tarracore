@@ -92,7 +92,7 @@ app.post("/paymentinit", async (req, res) => {
         currencyiso3a: "EUR",
         mainamount: amount,
         orderreference: orderId,
-        sitereference: "test_tarracorelimited88769", // TODO: move env var
+        sitereference: process.env.PAYMENTS_SITE,
         requesttypedescriptions: ["THREEDQUERY", "AUTH"],
         billingfirstname: details.firstname,
         billinglastname: details.surname,
@@ -108,10 +108,9 @@ app.post("/paymentinit", async (req, res) => {
         customermiddlename: transactionId,
       },
       iat: utcSecondsSinceEpoch,
-      iss: "jwt@tarracorelimited.com", // TODO: move env var
+      iss: process.env.PAYMENTS_USER,
     };
-    const secret =
-      "57-8a27c10068cc0c5949817fddb6b5598f4b3fb7d06b85ba69241ed778aebc66b5"; // TODO: move env var
+    const secret = process.env.PAYMENTS_SECRET;
 
     const message =
       base64url(JSON.stringify(header)) +

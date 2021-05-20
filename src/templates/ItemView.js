@@ -142,7 +142,7 @@ const ItemView = (props) => {
       url: config.aws_appsync_graphqlEndpoint,
       method: "post",
       headers: {
-        "x-api-key": "da2-mgfdzk6odvdb7hm5laltb7ai6q", // config.aws_appsync_apiKey,
+        "x-api-key": process.env.AWS_API_KEY,
       },
       data: {
         query: print(getProductQuery),

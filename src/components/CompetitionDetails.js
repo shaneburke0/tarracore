@@ -50,7 +50,7 @@ const CompetitionDetails = ({ currentInventory, maxInventory, endDate }) => {
         </div>
       </Popup>
       <div
-        className="text-green-700 mb-4 text-sm"
+        className="text-green-700 mb-4 text-sm cursor-pointer"
         onClick={() => setFreeEntry(true)}
       >
         Free Entry Route Available

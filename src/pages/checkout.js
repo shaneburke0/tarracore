@@ -15,6 +15,7 @@ import {
   createProfileDetails,
   updateProfileDetails,
 } from "../services";
+import config from "../aws-exports";
 
 function CheckoutWithContext(props) {
   return (
@@ -74,6 +75,7 @@ const Checkout = ({ context, history }) => {
   const [currentUserId, setCurrentUserId] = useState("");
   const [orderId, setOrderId] = useState(null);
   const [orderCompleted, setOrderCompleted] = useState(false);
+  const [postbackUrl, setPostbackUrl] = useState("");
 
   const [input, setInput] = useState({
     name: "",
@@ -124,6 +126,11 @@ const Checkout = ({ context, history }) => {
     setOrderId(oId);
 
     handleGettingCurrentUser();
+
+    const found = config.aws_cloud_logic_custom.find(
+      (item) => item.name === "checkout"
+    );
+    setPostbackUrl(`${found.endpoint}/checkout`);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -456,7 +463,7 @@ const Checkout = ({ context, history }) => {
                           <>
                             <form
                               id="st-form"
-                              action="https://fyx13u9xi9.execute-api.eu-west-1.amazonaws.com/devk/checkout"
+                              action={postbackUrl}
                               method="POST"
                             >
                               <div

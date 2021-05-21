@@ -1,36 +1,35 @@
 {
-    "paths": [
-        {
-            "name": "/checkout",
-            "lambdaFunction": "checkout",
-            "privacy": {
-                "open": true
-            },
-            "policyResourceName": "/checkout"
-        }
-    ],
-    "resourceName": "checkout",
-    "apiName": "checkout",
-    "functionArns": [
-        {
-            "lambdaFunction": "checkout"
-        }
-    ],
-    "privacy": {
-        "auth": 0,
-        "unauth": 0,
-        "authRoleName": "amplify-tarracore-prod-81255-authRole",
-        "unAuthRoleName": "amplify-tarracore-prod-81255-unauthRole"
-    },
-    "dependsOn": [
-        {
-            "category": "function",
-            "resourceName": "checkout",
-            "attributes": [
-                "Name",
-                "Arn"
-            ]
-        }
-    ],
-    "uuid": "d0cc6b03"
+  "paths": [
+    {
+      "name": "/checkout",
+      "lambdaFunction": "checkout",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/checkout"
+    }
+  ],
+  "resourceName": "checkout",
+  "apiName": "checkout",
+  "functionArns": [
+    {
+      "lambdaFunction": "checkout"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-my-aws-project-devk-74938-authRole",
+    "unAuthRoleName": "amplify-my-aws-project-devk-74938-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "checkout",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
 }

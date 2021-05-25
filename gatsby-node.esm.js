@@ -50,7 +50,8 @@ async function fetchInventory() {
     url: config.aws_appsync_graphqlEndpoint,
     method: "post",
     headers: {
-      "x-api-key": process.env.TCORE_API_KEY,
+      "x-api-key":
+        process.env.TCORE_API_KEY || "da2-mgfdzk6odvdb7hm5laltb7ai6q",
     },
     data: {
       query: print(listProductsQuery),

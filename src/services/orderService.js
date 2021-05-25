@@ -35,7 +35,7 @@ export const fetchOrderDetails = async (userId) => {
     url: config.aws_appsync_graphqlEndpoint,
     method: "post",
     headers: {
-      "x-api-key": process.env.TCORE_API_KEY,
+      "x-api-key": window.TCORE_API_KEY,
     },
     data: {
       query: print(getOrderQuery),

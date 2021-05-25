@@ -34,7 +34,7 @@ export const fetchProfileDetails = async (userId) => {
     url: config.aws_appsync_graphqlEndpoint,
     method: "post",
     headers: {
-      "x-api-key": process.env.TCORE_API_KEY,
+      "x-api-key": window.TCORE_API_KEY,
     },
     data: {
       query: print(getAccountQuery),
@@ -91,7 +91,7 @@ export const createProfileDetails = async (details) => {
     url: config.aws_appsync_graphqlEndpoint,
     method: "post",
     headers: {
-      "x-api-key": process.env.TCORE_API_KEY,
+      "x-api-key": window.TCORE_API_KEY,
     },
     data: {
       query: print(createProfile),
@@ -143,7 +143,7 @@ export const updateProfileDetails = async (details) => {
     url: config.aws_appsync_graphqlEndpoint,
     method: "post",
     headers: {
-      "x-api-key": process.env.TCORE_API_KEY,
+      "x-api-key": window.TCORE_API_KEY,
     },
     data: {
       query: print(updateProfile),

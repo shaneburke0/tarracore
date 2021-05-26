@@ -5,16 +5,43 @@ import SEO from "../components/seo";
 import NavActions from "../components/NavActions";
 
 const CheckoutCompletePage = ({ context }) => {
-  const { clearCart } = context;
+  const { cart, clearCart } = context;
   const [isLoading, setLoading] = useState(true);
   const [title, setTitle] = useState("Payment Failure");
   const [isSuccess, setSuccess] = useState(false);
 
+  const initGA = (purchasedCart, ref) => {
+    if (window.gtag) {
+      let total = 0;
+      const items = [];
+
+      purchasedCart.forEach((item) => {
+        items.push({
+          id: item.id,
+          name: item.name,
+          brand: item.brand,
+          price: item.price,
+          quantity: item.quantity,
+        });
+        total += item.price * item.quantity;
+      });
+
+      window.gtag("event", "purchase", {
+        currency: "EUR",
+        transaction_id: ref,
+        value: total,
+        items,
+      });
+    }
+  };
+
   useEffect(() => {
-    const { code } = queryString.parse(window.location.search);
+    const { code, ref } = queryString.parse(window.location.search);
     if (code === "0") {
       setTitle("Checkout Complete");
       setSuccess(true);
+
+      initGA(cart, ref);
       clearCart();
     }
     setLoading(false);

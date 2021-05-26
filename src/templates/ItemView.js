@@ -72,6 +72,23 @@ const ItemView = (props) => {
     item["quantity"] = numberOfitems;
     item["answer"] = selectedAnswer;
     addToCart(item);
+
+    if (window.gtag) {
+      window.gtag("event", "add_to_cart", {
+        currency: "EUR",
+        items: [
+          {
+            id: item.id,
+            name: item.name,
+            brand: item.brand,
+            price: item.price,
+            quantity: item.quantity,
+          },
+        ],
+        value: item.price * item.quantity,
+      });
+    }
+
     navigate("/cart");
   }
 
@@ -161,10 +178,28 @@ const ItemView = (props) => {
     }
   };
 
+  const initGA = () => {
+    if (window.gtag) {
+      gtag("event", "view_item", {
+        items: [
+          {
+            id: item.id,
+            name: item.name,
+            brand: item.brand,
+            price: item.price,
+            quantity: item.quantity,
+          },
+        ],
+      });
+    }
+  };
+
   useEffect(() => {
     createGallery();
 
     getProductDetails();
+
+    initGA();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

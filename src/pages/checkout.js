@@ -253,6 +253,10 @@ const Checkout = ({ context, history }) => {
             // liveStatus: 0,
           });
           st.Components();
+
+          if (window.gtag) {
+            window.gtag("event", "add_payment_info");
+          }
         } else if (data && data.error) {
           setError(data.error);
         } else {

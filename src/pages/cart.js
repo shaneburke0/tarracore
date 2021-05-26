@@ -43,6 +43,31 @@ const Cart = ({ context }) => {
       setLoginModalOpen(true);
       return;
     }
+
+    console.log("cart", cart);
+
+    if (window.gtag) {
+      let total = 0;
+      const items = [];
+
+      cart.forEach((item) => {
+        items.push({
+          id: item.id,
+          name: item.name,
+          brand: item.brand,
+          price: item.price,
+          quantity: item.quantity,
+        });
+        total += item.price * item.quantity;
+      });
+
+      window.gtag("event", "begin_checkout", {
+        value: total,
+        currency: "EUR",
+        items,
+      });
+    }
+
     navigate("/checkout");
   }
 

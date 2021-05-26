@@ -16,12 +16,13 @@ Amplify Params - DO NOT EDIT */
 exports.handler = async (event, context, callback) => {
   console.log("EVENT BODY", event.body);
 
-  let qs, jwt, errorcode, errormessage, details;
+  let qs, jwt, errorcode, errormessage, details, orderreference;
   try {
     qs = queryString.parse(event.body);
     console.log("REQUEST PARAMS", qs);
     errorcode = qs.errorcode;
     errormessage = qs.errormessage;
+    orderreference = qs.orderreference;
 
     console.log("BODY JWT", qs.jwt);
     jwt = jwt_decode(qs.jwt);
@@ -40,7 +41,7 @@ exports.handler = async (event, context, callback) => {
   const redirectResponse = {
     statusCode: 302,
     headers: {
-      Location: `${process.env.CHECKOUT_REDIRECT}?code=${errorcode}`,
+      Location: `${process.env.CHECKOUT_REDIRECT}?code=${errorcode}&ref=${orderreference}`,
     },
   };
 

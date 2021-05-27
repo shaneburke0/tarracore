@@ -1,9 +1,6 @@
+var AWS = require("aws-sdk");
 const queryString = require("query-string");
 const jwt_decode = require("jwt-decode");
-const getTransactionDetails = require("./getTransaction");
-const updateInventory = require("./updateInventory");
-const updateOrdersTable = require("./updateOrders");
-const { emailReceipt, emailTickets } = require("./sendEmails");
 
 /* Amplify Params - DO NOT EDIT
 	API_TARRACOREAPI_GRAPHQLAPIENDPOINTOUTPUT
@@ -12,6 +9,12 @@ const { emailReceipt, emailTickets } = require("./sendEmails");
 	FUNCTION_TARRACOREPAYMENTS_NAME
 	REGION
 Amplify Params - DO NOT EDIT */
+
+// Set the region
+AWS.config.update({ region: process.env.REGION });
+
+// Create an SQS service object
+var sqs = new AWS.SQS({ apiVersion: "2012-11-05" });
 
 exports.handler = async (event, context, callback) => {
   console.log("EVENT BODY", event.body);
@@ -49,36 +52,38 @@ exports.handler = async (event, context, callback) => {
     return callback(null, redirectResponse);
   }
 
-  try {
-    // Get transaction by id e.g. details.payload.customermiddlename
-    const transactionDetails = await getTransactionDetails(
-      details.payload.customermiddlename
-    );
-    // ------
-    // Update Inventory
-    const updateReponse = await updateInventory(transactionDetails);
-    console.log("updateInventory", JSON.stringify(updateReponse));
-    // ------
-    // Update Orders table
-    transactionDetails.tickets = [...updateReponse.tickets];
-    transactionDetails.orderProductId = transactionDetails.product.id;
-    transactionDetails.product.tickets = transactionDetails.tickets.join(", ");
-    transactionDetails.paymentRef = jwt.payload.requestreference;
-    const orderid = await updateOrdersTable(transactionDetails);
-    // --------
-    // Send Payment Receipt
-    transactionDetails.orderid = orderid;
-    transactionDetails.total = details.payload.mainamount;
-    await emailReceipt(transactionDetails.email, transactionDetails);
-    // --------
-    // Send ticket Receipt
-    if (transactionDetails.isAnswerCorrect) {
-      await emailTickets(transactionDetails.email, transactionDetails);
+  var params = {
+    MessageAttributes: {
+      TransactionId: {
+        DataType: "String",
+        StringValue: details.payload.customermiddlename,
+      },
+      OrderRef: {
+        DataType: "String",
+        StringValue: orderreference,
+      },
+      RequestReference: {
+        DataType: "String",
+        StringValue: jwt.payload.requestreference,
+      },
+      Amount: {
+        DataType: "String",
+        StringValue: details.payload.mainamount.toString(),
+      },
+    },
+    MessageBody: `Checkout success message for order ref: ${orderreference} & transactionId: ${details.payload.customermiddlename}`,
+    MessageDeduplicationId: orderreference, // Required for FIFO queues
+    MessageGroupId: "Checkout", // Required for FIFO queues
+    QueueUrl: process.env.SQS_QUEUE_URL,
+  };
+
+  sqs.sendMessage(params, function(err, data) {
+    if (err) {
+      console.log("*** Error Sending SQS ***", JSON.stringify(err));
+    } else {
+      console.log("SQS Sent", data.MessageId);
     }
-  } catch (ex) {
-    console.log("*** EXCEPTION ***");
-    console.log("message", JSON.stringify(ex));
-  }
+  });
 
   return callback(null, redirectResponse);
 };

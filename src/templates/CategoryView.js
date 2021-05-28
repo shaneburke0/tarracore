@@ -28,12 +28,12 @@ const CategoryView = (props) => {
                       <ListItem
                         key={index}
                         link={
-                          window.TCORE_SHOW_COMING_SOON
+                          process.env.TCORE_SHOW_COMING_SOON
                             ? "/"
                             : slugify(item.name)
                         }
                         title={
-                          window.TCORE_SHOW_COMING_SOON
+                          process.env.TCORE_SHOW_COMING_SOON
                             ? "Coming Soon"
                             : item.name
                         }

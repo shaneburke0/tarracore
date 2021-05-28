@@ -1,7 +1,7 @@
 import React from "react";
 import SEO from "../components/seo";
 import ListItem from "../components/ListItem";
-import { titleIfy, slugify } from "../../utils/helpers";
+import { titleIfy, slugify, isBoolTrue } from "../../utils/helpers";
 // const comingSoonImage = require("../images/img-coming-soon.png");
 
 const CategoryView = (props) => {
@@ -28,12 +28,12 @@ const CategoryView = (props) => {
                       <ListItem
                         key={index}
                         link={
-                          process.env.TCORE_SHOW_COMING_SOON
+                          isBoolTrue(process.env.TCORE_SHOW_COMING_SOON)
                             ? "/"
                             : slugify(item.name)
                         }
                         title={
-                          process.env.TCORE_SHOW_COMING_SOON
+                          isBoolTrue(process.env.TCORE_SHOW_COMING_SOON)
                             ? "Coming Soon"
                             : item.name
                         }

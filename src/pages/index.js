@@ -16,7 +16,7 @@ const Home = ({ data: gqlData }) => {
   const { inventoryInfo } = gqlData;
 
   const liveCompetitions = _.filter(inventoryInfo.data, (d) => {
-    return d.categories.includes("Competitions") && !d.sold;
+    return d.categories.includes("Competitions") && d.sold === false;
   });
 
   return (

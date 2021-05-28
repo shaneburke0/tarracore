@@ -3,6 +3,7 @@ module.exports = {
     title: `Tarracore`,
     description: `Tractors & plant machinery competitions.`,
     author: `@tarracore`,
+    siteUrl: process.env.siteUrl || `https://tarracore.ie`,
   },
   plugins: [
     {
@@ -99,6 +100,8 @@ module.exports = {
         },
       },
     },
+    `gatsby-plugin-sitemap`,
+    `gatsby-plugin-react-helmet`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,

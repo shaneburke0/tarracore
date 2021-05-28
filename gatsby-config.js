@@ -3,6 +3,7 @@ module.exports = {
     title: `Tarracore`,
     description: `Tractors & plant machinery competitions.`,
     author: `@tarracore`,
+    siteUrl: process.env.siteUrl || `https://tarracore.ie`,
   },
   plugins: [
     {
@@ -35,12 +36,13 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
+        name: `Tarracore`,
+        short_name: `tarracore`,
         start_url: `/`,
+        lang: `en`,
         background_color: `#60994a`,
         theme_color: `#60994a`,
-        display: `minimal-ui`,
+        display: `standalone`,
         icon: `src/images/icon.png`, // This path is relative to the root of the site.
       },
     },
@@ -99,8 +101,9 @@ module.exports = {
         },
       },
     },
+    `gatsby-plugin-sitemap`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
-    // `gatsby-plugin-offline`,
+    `gatsby-plugin-offline`,
   ],
 };

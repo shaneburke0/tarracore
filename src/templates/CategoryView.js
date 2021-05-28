@@ -2,7 +2,7 @@ import React from "react";
 import SEO from "../components/seo";
 import ListItem from "../components/ListItem";
 import { titleIfy, slugify } from "../../utils/helpers";
-import NavActions from "../components/NavActions";
+// const comingSoonImage = require("../images/img-coming-soon.png");
 
 const CategoryView = (props) => {
   const {
@@ -12,6 +12,7 @@ const CategoryView = (props) => {
       seo,
     },
   } = props;
+
   return (
     <>
       <SEO {...seo} />
@@ -26,8 +27,16 @@ const CategoryView = (props) => {
                     return (
                       <ListItem
                         key={index}
-                        link={slugify(item.name)}
-                        title={item.name}
+                        link={
+                          window.TCORE_SHOW_COMING_SOON
+                            ? "/"
+                            : slugify(item.name)
+                        }
+                        title={
+                          window.TCORE_SHOW_COMING_SOON
+                            ? "Coming Soon"
+                            : item.name
+                        }
                         price={item.price}
                         imageSrc={item.image}
                       />

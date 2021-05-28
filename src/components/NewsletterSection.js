@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import addToMailchimp from "gatsby-plugin-mailchimp";
 
-const NewsletterSection = () => {
+const NewsletterSection = ({ showText = true, inputStyle = {} }) => {
   const [email, setEmail] = useState("");
   const [isSubscribed, setSubscribed] = useState(false);
 
@@ -18,12 +18,14 @@ const NewsletterSection = () => {
 
   return (
     <div>
-      <h3 className="">Don't Miss Out</h3>
-      <p>
-        Be the first to hear about our latest competitions as soon as they are
-        live!
-      </p>
-      <div className="flex flex-col">
+      {showText && <h3 className="">Don't Miss Out</h3>}
+      {showText && (
+        <p>
+          Be the first to hear about our latest competitions as soon as they are
+          live!
+        </p>
+      )}
+      <div className="flex flex-col" style={inputStyle}>
         <input
           name="newsletter"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline m-0.5 mb-8 lg:mb-4"

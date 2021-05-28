@@ -8,15 +8,15 @@ import {
   HowToPlaySection,
   AboutUsSection,
   NewsletterSection,
+  ComingSoonPage,
 } from "../components";
-import NavActions from "../components/NavActions";
 import { slugify } from "../../utils/helpers";
 
 const Home = ({ data: gqlData }) => {
   const { inventoryInfo } = gqlData;
 
   const liveCompetitions = _.filter(inventoryInfo.data, (d) => {
-    return d.categories.includes("Competitions");
+    return d.categories.includes("Competitions") && !d.sold;
   });
 
   return (
@@ -51,6 +51,12 @@ const Home = ({ data: gqlData }) => {
             ))}
         </div>
       </div>
+
+      {Array.isArray(liveCompetitions) && liveCompetitions.length === 0 && (
+        <div className="">
+          <ComingSoonPage />
+        </div>
+      )}
 
       <HowToPlaySection />
       <div className="mobile:px-10 px-4 pb-10 flex justify-center pt-8">

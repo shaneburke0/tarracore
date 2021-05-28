@@ -25,7 +25,7 @@ async function fetchInventory() {
   /* new */
   const listProductsQuery = tag(`
     query listProducts {
-      listProducts(limit: 500) {
+      listProducts(limit: 50) {
         items {
           id
           categories

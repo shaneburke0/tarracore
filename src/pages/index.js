@@ -10,14 +10,16 @@ import {
   NewsletterSection,
   ComingSoonPage,
 } from "../components";
-import { slugify } from "../../utils/helpers";
+import { slugify, isBoolTrue } from "../../utils/helpers";
 
 const Home = ({ data: gqlData }) => {
   const { inventoryInfo } = gqlData;
 
   const liveCompetitions = _.filter(inventoryInfo.data, (d) => {
-    return d.categories.includes("Competitions") && d.sold === false;
+    return d.categories.includes("Competitions");
   });
+
+  const isComingSoon = isBoolTrue(window.TCORE_SHOW_COMING_SOON);
 
   return (
     <>
@@ -25,6 +27,7 @@ const Home = ({ data: gqlData }) => {
       <div className="flex justify-center main-content">
         <div className="w-fw">
           {Array.isArray(liveCompetitions) &&
+            !isComingSoon &&
             liveCompetitions.map((comp) => (
               <div className="w-full" key={slugify(comp.name)}>
                 <div
@@ -52,7 +55,7 @@ const Home = ({ data: gqlData }) => {
         </div>
       </div>
 
-      {Array.isArray(liveCompetitions) && liveCompetitions.length === 0 && (
+      {isComingSoon && (
         <div className="">
           <ComingSoonPage />
         </div>

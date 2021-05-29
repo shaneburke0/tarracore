@@ -13,6 +13,8 @@ const CategoryView = (props) => {
     },
   } = props;
 
+  const isComingSoon = true;
+
   return (
     <>
       <SEO {...seo} />
@@ -27,16 +29,8 @@ const CategoryView = (props) => {
                     return (
                       <ListItem
                         key={index}
-                        link={
-                          isBoolTrue(process.env.TCORE_SHOW_COMING_SOON)
-                            ? "/"
-                            : slugify(item.name)
-                        }
-                        title={
-                          isBoolTrue(process.env.TCORE_SHOW_COMING_SOON)
-                            ? "Coming Soon"
-                            : item.name
-                        }
+                        link={isComingSoon ? "/" : slugify(item.name)}
+                        title={isComingSoon ? "Coming Soon" : item.name}
                         price={item.price}
                         imageSrc={item.image}
                       />

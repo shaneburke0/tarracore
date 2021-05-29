@@ -19,7 +19,7 @@ const Home = ({ data: gqlData }) => {
     return d.categories.includes("Competitions");
   });
 
-  const isComingSoon = isBoolTrue(window.TCORE_SHOW_COMING_SOON);
+  const isComingSoon = isBoolTrue(process.env.TCORE_SHOW_COMING_SOON);
 
   return (
     <>

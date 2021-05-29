@@ -44,7 +44,13 @@ function numberFormat(number) {
 }
 
 function isBoolTrue(str) {
-  return str && str.toLowerCase() === "true";
+  if (typeof str === "boolean") {
+    return str;
+  } else if (typeof str === "string") {
+    return str.toLowerCase() === "true";
+  }
+
+  return false;
 }
 
 export { slugify, titleIfy, getTrimmedString, numberFormat, isBoolTrue };

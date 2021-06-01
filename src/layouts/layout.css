@@ -703,6 +703,10 @@ footer {
   min-width: 150px;
 }
 
+.image-gallery-content .image-gallery-thumbnail {
+  vertical-align: middle;
+}
+
 .modal-close {
   cursor: pointer;
   position: absolute;

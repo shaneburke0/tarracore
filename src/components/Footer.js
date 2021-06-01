@@ -63,7 +63,7 @@ const Footer = () => {
               <a
                 className="flex items-center justify-center h-12 w-12 mx-2 fas fill-current text-white text-2xl rounded-full"
                 style={{ backgroundColor: "#125688" }}
-                href="https://instagram.com"
+                href="https://www.instagram.com/tarracore_irl/"
                 target="_blank"
                 rel="noreferrer"
               >

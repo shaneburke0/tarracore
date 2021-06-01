@@ -44,7 +44,7 @@ const ComingSoonPage = () => (
           </div>
           <div className="m-3">
             <a
-              href="https://instagram.com/"
+              href="https://www.instagram.com/tarracore_irl/"
               title="Tarracore On Instagram"
               className="md:w-32 bg-white tracking-wide text-gray-800 font-bold rounded border-2 border-orange-500 hover:border-orange-500 hover:bg-orange-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
               target="_blank"

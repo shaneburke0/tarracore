@@ -186,7 +186,7 @@ const Cart = ({ context }) => {
                             <button
                               onClick={() => removeFromCart(item)}
                               className="
-                            m-0 ml-10 text-gray-900 text-s cursor-pointer mr-2
+                            m-0 ml-4 text-gray-900 text-s cursor-pointer mr-2
                             "
                             >
                               <FaTimes />

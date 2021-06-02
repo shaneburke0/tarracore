@@ -703,6 +703,10 @@ footer {
   min-width: 150px;
 }
 
+.w-fw {
+  max-width: 100% !important;
+}
+
 .image-gallery-content .image-gallery-thumbnail {
   vertical-align: middle;
 }

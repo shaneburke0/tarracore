@@ -251,7 +251,7 @@ const ItemView = (props) => {
                   hasError={showSelectAnswerError}
                 />
               </div>
-              <div className="mb-6 flex flex-row items-baseline">
+              <div className="mb-6 flex flex-row items-baseline justify-between">
                 {canBuyTickets && (
                   <div className="justify-self-start">
                     <QuantityPicker
@@ -261,7 +261,7 @@ const ItemView = (props) => {
                     />
                   </div>
                 )}
-                <h2 className="text-xl tracking-tighter pl-8">
+                <h2 className="text-xl tracking-tighter">
                   {numberFormat(price)}
                 </h2>
               </div>

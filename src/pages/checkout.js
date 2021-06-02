@@ -496,19 +496,27 @@ const Checkout = ({ context, history }) => {
                         )}
                       </div>
                     </div>
-                    <div className="md:pt-4 flex-1">
+                    <div className="pt-4 flex-1 mt-4 md:mt-0">
                       <h2 className="ml-4 pl-2">Your Order</h2>
                       {cart.map((item, index) => {
                         return (
-                          <div
-                            className="ml-4 pl-2 flex flex-1 justify-end pt-2 md:pt-8 pr-4"
-                            key={item.id}
-                          >
-                            <span className="text-sm pr-10">{item.name}</span>
-                            <span className="tracking-tighter w-24 flex justify-end">
-                              x{item.quantity}
-                            </span>
-                          </div>
+                          <>
+                            <div
+                              className="ml-4 pl-2 flex flex-1 justify-end pt-2 md:pt-8 pr-4"
+                              key={item.id}
+                            >
+                              <span className="text-sm pr-10">{item.name}</span>
+                              <span className="tracking-tighter w-24 flex justify-end">
+                                x{item.quantity}
+                              </span>
+                            </div>
+                            <div className="ml-4 pl-2 flex flex-1 justify-end pt-2 pr-4">
+                              <p className="text-xs pr-10">Answer</p>
+                              <p className="tracking-tighter w-24 flex justify-end text-xs">
+                                {item.answer}
+                              </p>
+                            </div>
+                          </>
                         );
                       })}
 

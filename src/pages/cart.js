@@ -44,8 +44,6 @@ const Cart = ({ context }) => {
       return;
     }
 
-    console.log("cart", cart);
-
     if (window.gtag) {
       let total = 0;
       const items = [];

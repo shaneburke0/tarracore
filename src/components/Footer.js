@@ -76,6 +76,13 @@ const Footer = () => {
                 Company Registration Number: 689220
               </p>
             </div>
+            <div className="text-xs my-4">
+              <img
+                className="cards-img mx-auto lg:mx-0"
+                src="/images/visa-mastercard.png"
+                alt="Visa &amp; Mastercard Logo"
+              />
+            </div>
           </div>
         </div>
       </div>

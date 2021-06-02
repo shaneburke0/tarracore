@@ -707,8 +707,23 @@ footer {
   max-width: 100% !important;
 }
 
+.cards-img {
+  width: 150px;
+  max-width: 100%;
+}
+
 .image-gallery-content .image-gallery-thumbnail {
   vertical-align: middle;
+}
+
+.image-gallery-thumbnail .image-gallery-thumbnail-image {
+  margin-bottom: 0;
+}
+
+.image-gallery-thumbnail.active,
+.image-gallery-thumbnail:hover,
+.image-gallery-thumbnail:focus {
+  border-color: rgb(251, 225, 22) !important;
 }
 
 .modal-close {

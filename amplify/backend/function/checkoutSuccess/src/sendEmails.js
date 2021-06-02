@@ -13,6 +13,7 @@ const emailReceipt = async (to, data) => {
   const params = {
     Destination: {
       ToAddresses: [to],
+      BccAddresses: [process.env.TRUST_PILOT_EMAIL],
     },
     Message: {
       Body: {

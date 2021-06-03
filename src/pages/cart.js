@@ -207,7 +207,7 @@ const Cart = ({ context }) => {
                   <Button
                     title="Checkout"
                     onClick={() => checkout()}
-                    customClasses="w-full md:w-6/12"
+                    customClasses="w-full md:w-2/6"
                   />
                 </div>
               )}

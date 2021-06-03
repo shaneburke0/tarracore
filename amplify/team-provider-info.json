@@ -64,7 +64,7 @@
         },
         "checkoutSuccess": {
           "deploymentBucketName": "amplify-my-aws-project-devk-74938-deployment",
-          "s3Key": "amplify-builds/checkoutSuccess-4864553079344a637832-build.zip"
+          "s3Key": "amplify-builds/checkoutSuccess-69567678426e78755452-build.zip"
         }
       }
     }

@@ -87,6 +87,22 @@ const Footer = () => {
         </div>
       </div>
       <div className="text-center">
+        <div
+          className="trustpilot-widget"
+          data-locale="en-GB"
+          data-template-id="56278e9abfbbba0bdcd568bc"
+          data-businessunit-id="60aeb7306f4b750001c7394f"
+          data-style-height="52px"
+          data-style-width="100%"
+        >
+          <a
+            href="https://uk.trustpilot.com/review/tarracore.ie"
+            target="_blank"
+            rel="noopener"
+          >
+            Trustpilot
+          </a>
+        </div>
         <div className="px-8 block text-gray-100 pt-4 pb-8 mt-2 text-xs">
           Copyright © {new Date().getFullYear()} Tarracore Ltd. All rights
           reserved.

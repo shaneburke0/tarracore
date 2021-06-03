@@ -66,6 +66,12 @@ module.exports = {
       },
     },
     {
+      resolve: "gatsby-plugin-load-script",
+      options: {
+        src: "//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js",
+      },
+    },
+    {
       resolve: "gatsby-plugin-mailchimp",
       options: {
         endpoint:

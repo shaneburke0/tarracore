@@ -679,6 +679,10 @@ footer {
   color: #ffffff;
 }
 
+body .lg\:h-hero {
+  height: 500px;
+}
+
 .st-card-number-input {
   width: 100%;
   --text-opacity: 1;

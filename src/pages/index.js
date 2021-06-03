@@ -61,6 +61,26 @@ const Home = ({ data: gqlData }) => {
         </div>
       )}
 
+      <div className="mt-4 lg:mt-0">
+        <div
+          className="trustpilot-widget"
+          data-locale="en-GB"
+          data-template-id="5419b6a8b0d04a076446a9ad"
+          data-businessunit-id="60aeb7306f4b750001c7394f"
+          data-style-height="24px"
+          data-style-width="100%"
+          data-theme="light"
+        >
+          <a
+            href="https://uk.trustpilot.com/review/tarracore.ie"
+            target="_blank"
+            rel="noopener"
+          >
+            Trustpilot
+          </a>
+        </div>
+      </div>
+
       <HowToPlaySection />
       <div className="mobile:px-10 px-4 pb-10 flex justify-center pt-8">
         <div className="w-fw">

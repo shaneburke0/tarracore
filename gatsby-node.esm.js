@@ -6,6 +6,7 @@ import tag from "graphql-tag";
 import fs from "fs";
 import downloadImage from "./utils/downloadImage";
 import Amplify, { Storage } from "aws-amplify";
+import { split } from "lodash";
 Amplify.configure(config);
 
 const graphql = require("graphql");
@@ -66,8 +67,22 @@ async function fetchInventory() {
     fs.mkdirSync(`${__dirname}/public/downloads`);
   }
 
-  const getImage = async (img) => {
+  const getImage = async (img, id) => {
+    console.log("*** GET IMAGE", img);
     try {
+      const imgParts = img.split("/");
+      console.log("*** IMAGE PARTS", imgParts);
+      if (imgParts.length > 1) {
+        const imgPrefix = imgParts[0];
+        if (!fs.existsSync(`${__dirname}/public/downloads/${imgPrefix}`)) {
+          console.log(
+            "Creating dir:",
+            `${__dirname}/public/downloads/${imgPrefix}`
+          );
+          fs.mkdirSync(`${__dirname}/public/downloads/${imgPrefix}`);
+        }
+      }
+
       const relativeUrl = `../downloads/${img}`;
       if (!fs.existsSync(`${__dirname}/public/downloads/${img}`)) {
         const image = await Storage.get(img);
@@ -82,11 +97,14 @@ async function fetchInventory() {
 
   await Promise.all(
     inventory.map(async (item, index) => {
-      inventory[index].image = await getImage(item.image);
+      inventory[index].image = await getImage(item.image, item.id);
 
       Array.isArray(item.gallery) &&
         item.gallery.map(async (galleryItem, galleryIndex) => {
-          inventory[index].gallery[galleryIndex] = await getImage(galleryItem);
+          inventory[index].gallery[galleryIndex] = await getImage(
+            galleryItem,
+            item.id
+          );
         });
     })
   );

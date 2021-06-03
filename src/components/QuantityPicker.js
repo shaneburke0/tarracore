@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 export default function QuantityPicker({
   increment,
@@ -11,8 +11,8 @@ export default function QuantityPicker({
       {!hideQuantityLabel && <div className="px-2 text-xs">QUANTITY</div>}
       <button
         className="
-        w-10 h-10 text-2xl
-        md:w-8 md:h-8 md:text-sm
+        w-8 h-8 text-sm
+        md:w-10 md:h-10 md:text-2xl
         cursor-pointer text-center border pb-.5
         hover:bg-gray-900 hover:text-white
         focus:outline-none
@@ -23,8 +23,8 @@ export default function QuantityPicker({
       </button>
       <p
         className="
-        w-10 h-10 pt-2 text-base
-        md:w-8 md:h-8 md:pt-1 md:text-xs
+        w-8 h-8 text-sm pt-1
+        md:w-10 md:h-10 md:pt-2 md:text-base
         m-0 border-t border-b text-center"
       >
         {numberOfitems}
@@ -32,8 +32,8 @@ export default function QuantityPicker({
 
       <button
         className="
-        w-10 h-10 text-xl
-        md:w-8 md:h-8 md:text-sm 
+        w-8 h-8 text-sm
+        md:w-10 md:h-10 md:text-xl
         cursor-pointer text-center border pb-.5
         hover:bg-gray-900 hover:text-white
         focus:outline-none
@@ -43,5 +43,5 @@ export default function QuantityPicker({
         +
       </button>
     </div>
-  )
+  );
 }

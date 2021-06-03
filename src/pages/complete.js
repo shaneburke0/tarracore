@@ -7,8 +7,9 @@ import NavActions from "../components/NavActions";
 const CheckoutCompletePage = ({ context }) => {
   const { cart, clearCart } = context;
   const [isLoading, setLoading] = useState(true);
-  const [title, setTitle] = useState("Payment Failure");
-  const [isSuccess, setSuccess] = useState(false);
+  const [title, setTitle] = useState("Checkout Complete");
+  const [isSuccess, setSuccess] = useState(true);
+  const [paymentRef, setPaymentRef] = useState(null);
 
   const initGA = (purchasedCart, ref) => {
     if (window.gtag) {
@@ -37,12 +38,18 @@ const CheckoutCompletePage = ({ context }) => {
 
   useEffect(() => {
     const { code, ref } = queryString.parse(window.location.search);
+
+    setPaymentRef(ref);
+
     if (code === "0") {
       setTitle("Checkout Complete");
       setSuccess(true);
 
       initGA(cart, ref);
       clearCart();
+    } else {
+      setTitle("Payment Failure");
+      setSuccess(false);
     }
     setLoading(false);
   }, []);
@@ -85,6 +92,7 @@ const CheckoutCompletePage = ({ context }) => {
                     </p>
                   </>
                 )}
+                {paymentRef && <p>Payment Reference: {paymentRef}</p>}
               </div>
             </div>
           )}

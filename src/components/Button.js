@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 export default function Button({
   title,
@@ -7,19 +7,19 @@ export default function Button({
   customClasses,
 }) {
   let classNames =
-    "text-sm font-bold tracking-wider bg-transparent hover:bg-black text-black font-semibold hover:text-white py-4 px-12 border-2 border-black hover:border-transparent"
+    "bg-secondary hover:bg-black text-white font-bold py-4 px-4 mt-4 rounded focus:outline-none focus:shadow-outline w-full";
 
   if (full) {
-    classNames = `${classNames} w-full`
+    classNames = `${classNames} w-full`;
   }
 
   if (customClasses) {
-    classNames = `${classNames} ${customClasses}`
+    classNames = `${classNames} ${customClasses}`;
   }
 
   return (
     <button onClick={onClick} className={classNames}>
       <div>{title}</div>
     </button>
-  )
+  );
 }

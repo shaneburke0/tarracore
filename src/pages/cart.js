@@ -44,8 +44,6 @@ const Cart = ({ context }) => {
       return;
     }
 
-    console.log("cart", cart);
-
     if (window.gtag) {
       let total = 0;
       const items = [];
@@ -186,7 +184,7 @@ const Cart = ({ context }) => {
                             <button
                               onClick={() => removeFromCart(item)}
                               className="
-                            m-0 ml-10 text-gray-900 text-s cursor-pointer mr-2
+                            m-0 ml-4 text-gray-900 text-s cursor-pointer mr-2
                             "
                             >
                               <FaTimes />
@@ -209,7 +207,7 @@ const Cart = ({ context }) => {
                   <Button
                     title="Checkout"
                     onClick={() => checkout()}
-                    customClasses="w-full md:w-6/12"
+                    customClasses="w-full md:w-2/6"
                   />
                 </div>
               )}

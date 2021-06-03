@@ -3,10 +3,11 @@ import { isMobile } from "react-device-detect";
 import { slide as Menu } from "react-burger-menu";
 import { SiteContext } from "../context/mainContext";
 import { FaShoppingCart, FaCircle, FaUserAlt } from "react-icons/fa";
-import { Link } from "gatsby";
+import { Link, navigate } from "gatsby";
 import { colors } from "../theme";
 import LoginModal from "./LoginModal/LoginModal";
-import { useAuthState } from "../context/authContext";
+import { useAuthDispatch, useAuthState } from "../context/authContext";
+import { signOut } from "../services/authService";
 const { secondary } = colors;
 
 const styles = {
@@ -81,9 +82,24 @@ const NavActions = (props) => {
     links = [],
   } = props;
 
+  const dispatch = useAuthDispatch();
   const { userToken } = useAuthState();
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const ctx = useContext(MyContext);
+
+  const handleSignOut = () => {
+    ctx.toggleMenu();
+    signOut();
+    dispatch({
+      type: "SIGN_OUT",
+    });
+    navigate("/");
+  };
+
+  const handleSignupModelClick = (state) => {
+    ctx.toggleMenu();
+    setLoginModalOpen(state);
+  };
 
   useEffect(() => {
     if (userToken) setLoginModalOpen(false);
@@ -93,15 +109,6 @@ const NavActions = (props) => {
     <>
       <div className="flex flex-row z-10 items-center mobile:px-10 desktop:px-0 px-4 pt-6 pb-6">
         {userToken ? (
-          // <div
-          //   role="button"
-          //   tabIndex="0"
-          //   className="text-white hover:text-gold pr-4 text-base mr-4 sm:mr-8 font-semibold nav-link"
-          //   onClick={handleSignOut}
-          //   onKeyDown={handleSignOut}
-          // >
-          //   Sign Out
-          // </div>
           <Link to="/my-account" className="mr-6 text-2xl text-white">
             <FaUserAlt />
           </Link>
@@ -109,11 +116,11 @@ const NavActions = (props) => {
           <div
             role="button"
             tabIndex="0"
-            className="text-white hover:text-gold pr-4 text-base mr-4 sm:mr-8 font-semibold nav-link"
+            className="text-white hover:text-gold pr-4 text-base mr-4 sm:mr-8 font-semibold nav-link text-2xl"
             onClick={() => setLoginModalOpen(true)}
             onKeyDown={() => setLoginModalOpen(true)}
           >
-            Login / Register
+            <FaUserAlt />
           </div>
         )}
 
@@ -187,6 +194,40 @@ const NavActions = (props) => {
                 Privacy Policy
               </span>
             </Link>
+            {!userToken && (
+              <div
+                role="button"
+                tabIndex="0"
+                className="text-white hover:text-gold pr-4 text-base mr-4 sm:mr-8 font-semibold nav-link mb-3"
+                onClick={() => handleSignupModelClick(true)}
+                onKeyDown={() => handleSignupModelClick(true)}
+              >
+                Login
+              </div>
+            )}
+            {!userToken && (
+              <div
+                role="button"
+                tabIndex="0"
+                className="text-white hover:text-gold pr-4 text-base mr-4 sm:mr-8 font-semibold nav-link mb-3"
+                onClick={() => handleSignupModelClick(true)}
+                onKeyDown={() => handleSignupModelClick(true)}
+              >
+                Sign up
+              </div>
+            )}
+
+            {userToken && (
+              <div
+                role="button"
+                tabIndex="0"
+                className="text-white hover:text-gold pr-4 text-base mr-4 sm:mr-8 font-semibold nav-link"
+                onClick={handleSignOut}
+                onKeyDown={handleSignOut}
+              >
+                Sign Out
+              </div>
+            )}
           </Menu>
         )}
       </div>

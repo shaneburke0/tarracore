@@ -13,7 +13,7 @@ const CategoryView = (props) => {
     },
   } = props;
 
-  const isComingSoon = true;
+  const isComingSoon = false;
 
   return (
     <>

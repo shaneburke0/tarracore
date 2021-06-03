@@ -19,7 +19,7 @@ const Home = ({ data: gqlData }) => {
     return d.categories.includes("Competitions");
   });
 
-  const isComingSoon = true;
+  const isComingSoon = false;
 
   return (
     <>

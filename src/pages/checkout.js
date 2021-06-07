@@ -237,7 +237,7 @@ const Checkout = ({ context, history }) => {
             jwt: data.jwt,
             formId: "st-form",
             buttonId: "paymentSubmitBtn",
-            // livestatus: 1,
+            livestatus: 1,
             panIcon: true,
             translations: {
               "Expiration date": "Expiry Date",
@@ -251,7 +251,6 @@ const Checkout = ({ context, history }) => {
               "font-size-input": "18px", //	Set the input font size.
               "line-height-input": "1.25", //	Set the input line height.
             },
-            // liveStatus: 0,
           });
           st.Components();
 

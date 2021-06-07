@@ -28,7 +28,7 @@ const FaqPage = (props) => {
           <p className="text-gray-700 text-sm">
             Easy, we'll contact you. All our draws are live streamed on Facebook
             so you can watch that to find out first hand. We call or email all
-            winners after the draw to shrae the good news and arrange delivery.
+            winners after the draw to share the good news and arrange delivery.
           </p>
         ),
       },

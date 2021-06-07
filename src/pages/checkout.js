@@ -237,7 +237,7 @@ const Checkout = ({ context, history }) => {
             jwt: data.jwt,
             formId: "st-form",
             buttonId: "paymentSubmitBtn",
-            livestatus: 1,
+            // livestatus: 1,
             panIcon: true,
             translations: {
               "Expiration date": "Expiry Date",

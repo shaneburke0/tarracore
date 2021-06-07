@@ -65,7 +65,7 @@ const CheckoutCompletePage = ({ context }) => {
             </div>
           ) : (
             <div className="">
-              <h1 className="text-5xl font-light mt-4">{title}</h1>
+              <h1 className="text-5xl font-light mt-8">{title}</h1>
               <div className="max-w-fw">
                 {isSuccess && (
                   <p>

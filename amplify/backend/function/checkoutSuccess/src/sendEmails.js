@@ -80,7 +80,45 @@ const emailTickets = async (to, data) => {
   }
 };
 
+const emailSupport = async (to, data) => {
+  const body = fs.readFileSync("./support.html").toString();
+  const template = Handlebars.compile(body);
+  const compiled = template(data);
+
+  const params = {
+    Destination: {
+      ToAddresses: [to],
+    },
+    Message: {
+      Body: {
+        Html: { Data: compiled },
+      },
+      Subject: {
+        Data: `Order Error - ${data.orderRef}`,
+      },
+    },
+    Source: "no-reply@tarracore.ie",
+  };
+
+  try {
+    await SES.sendEmail(params).promise();
+    console.log("*** Email: Support Error SUCCESS ***");
+    return {
+      statusCode: 200,
+      body: "Email sent!",
+    };
+  } catch (e) {
+    console.log("*** Email: Support Errir FAILED ***");
+    console.error(JSON.stringify(e));
+    return {
+      statusCode: 400,
+      body: "Sending failed",
+    };
+  }
+};
+
 module.exports = {
   emailReceipt: emailReceipt,
   emailTickets: emailTickets,
+  emailSupport: emailSupport,
 };

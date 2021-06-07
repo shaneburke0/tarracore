@@ -31,7 +31,7 @@
         },
         "checkoutSuccess": {
           "deploymentBucketName": "amplify-tarracore-prod-81255-deployment",
-          "s3Key": "amplify-builds/checkoutSuccess-69567678426e78755452-build.zip"
+          "s3Key": "amplify-builds/checkoutSuccess-744f49652f55547a6a47-build.zip"
         }
       }
     }

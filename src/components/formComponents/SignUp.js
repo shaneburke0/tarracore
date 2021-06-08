@@ -192,6 +192,17 @@ const SignUp = ({ closeModal }) => {
             {requiresConfirmation && (
               <form className="bg-white px-8 pt-6 pb-8 mb-4">
                 <div className="mb-6">
+                  <span className="block text-gray-700 text-sm">
+                    Please check your emails and paste the verification code
+                    below. Your account will be created and verified once you
+                    Confirm.
+                  </span>
+                  <br />
+                  <span className="block text-gray-700 text-xs font-bold">
+                    The email may be in your spam or junk folder!
+                  </span>
+                </div>
+                <div className="mb-6">
                   <label
                     className="block text-gray-700 text-sm font-bold mb-2"
                     htmlFor="email"
@@ -208,7 +219,7 @@ const SignUp = ({ closeModal }) => {
                   />
                 </div>
                 {error && <div className="text-red-700 mb-4">{error}</div>}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-end">
                   <button
                     onClick={handleConfirmation}
                     className="bg-secondary hover:bg-black text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

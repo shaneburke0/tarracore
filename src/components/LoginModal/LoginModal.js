@@ -35,12 +35,12 @@ const LoginModal = ({ open, closeModal }) => {
       modal={true}
       {...{ contentStyle }}
       open={open}
-      closeOnDocumentClick
+      closeOnDocumentClick={false}
       onClose={closeModal}
       lockScroll={false}
     >
       <>
-        <a className="close" onClick={closeModal}>
+        <a className="close cursor-pointer" onClick={closeModal}>
           &times;
         </a>
         <Tabs defaultTab={selectedTab}>

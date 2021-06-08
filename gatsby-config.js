@@ -93,7 +93,7 @@ module.exports = {
         gtagConfig: {
           //   optimize_id: "OPT_CONTAINER_ID",
           //   anonymize_ip: true,
-          cookie_expires: 100,
+          cookie_expires: 63072000,
           send_page_view: true,
         },
         // This object is used for configuration specific to this plugin

@@ -1,9 +1,10 @@
 module.exports = {
   siteMetadata: {
     title: `Tarracore`,
-    description: `Tractors & plant machinery competitions.`,
+    description: `Ireland's newest Tractor & Plant machinery competitions website.`,
     author: `@tarracore`,
     siteUrl: process.env.siteUrl || `https://tarracore.ie`,
+    image: "https://tarracore.ie/images/tarracore-share.png",
   },
   plugins: [
     {

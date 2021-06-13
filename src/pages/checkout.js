@@ -96,11 +96,17 @@ const Checkout = ({ context, history }) => {
   const [isPaymentLoaded, setPaymentLoaded] = useState(false);
   const [hasExistingProfile, setExistingProfile] = useState(false);
   const [existingProfileId, setExistingProfileId] = useState("");
+  const [isGuest, setGuest] = useState(false);
 
   const handleGettingCurrentUser = async () => {
     const currentUser = await Auth.currentUserInfo();
     const userId = currentUser ? currentUser.attributes.email : "";
     setCurrentUserId(userId);
+
+    if (!userId) {
+      setGuest(true);
+      return;
+    }
 
     const profile = await fetchProfileDetails(userId);
 
@@ -237,7 +243,7 @@ const Checkout = ({ context, history }) => {
             jwt: data.jwt,
             formId: "st-form",
             buttonId: "paymentSubmitBtn",
-            livestatus: 1,
+            livestatus: 0,
             panIcon: true,
             translations: {
               "Expiration date": "Expiry Date",
@@ -267,7 +273,9 @@ const Checkout = ({ context, history }) => {
       })
       .finally(() => {
         setPaymentLoading(false);
-        handleUdateProfile();
+        if (!isGuest) {
+          handleUdateProfile();
+        }
       });
   };
 

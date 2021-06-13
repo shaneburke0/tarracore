@@ -1,20 +1,6 @@
 {
     "paths": [
         {
-            "name": "/paymentinit",
-            "lambdaFunction": "tarracorepayments",
-            "privacy": {
-                "private": true,
-                "auth": [
-                    "/GET",
-                    "/PUT",
-                    "/PATCH",
-                    "/POST"
-                ]
-            },
-            "policyResourceName": "/paymentinit"
-        },
-        {
             "name": "/paymentcomplete",
             "lambdaFunction": "tarracorepayments",
             "privacy": {
@@ -28,6 +14,14 @@
                 ]
             },
             "policyResourceName": "/paymentcomplete"
+        },
+        {
+            "name": "/paymentinit",
+            "lambdaFunction": "tarracorepayments",
+            "privacy": {
+                "open": true
+            },
+            "policyResourceName": "/paymentinit"
         }
     ],
     "resourceName": "paymentsapi",
@@ -38,7 +32,7 @@
         }
     ],
     "privacy": {
-        "auth": 2,
+        "auth": 1,
         "unauth": 0,
         "authRoleName": "amplify-my-aws-project-devk-74938-authRole",
         "unAuthRoleName": "amplify-my-aws-project-devk-74938-unauthRole"
@@ -53,5 +47,5 @@
             ]
         }
     ],
-    "uuid": "f2d44d10"
+    "uuid": "13c1c5af"
 }

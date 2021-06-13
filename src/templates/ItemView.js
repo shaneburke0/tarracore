@@ -63,11 +63,11 @@ const ItemView = (props) => {
       return;
     }
 
-    if (!userToken) {
-      setLoginModalTriggered(true);
-      setLoginModalOpen(true);
-      return;
-    }
+    // if (!userToken) {
+    //   setLoginModalTriggered(true);
+    //   setLoginModalOpen(true);
+    //   return;
+    // }
 
     item["quantity"] = numberOfitems;
     item["answer"] = selectedAnswer;
@@ -92,12 +92,12 @@ const ItemView = (props) => {
     navigate("/cart");
   }
 
-  useEffect(() => {
-    if (userToken) setLoginModalOpen(false);
+  // useEffect(() => {
+  //   if (userToken) setLoginModalOpen(false);
 
-    if (userToken && loginModalTriggered) addItemToCart(item);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userToken]);
+  //   if (userToken && loginModalTriggered) addItemToCart(item);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [userToken]);
 
   function increment() {
     if (numberOfitems === currentInventoryState) return;

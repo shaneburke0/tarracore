@@ -39,10 +39,10 @@ const Cart = ({ context }) => {
   }
 
   function checkout() {
-    if (!userToken) {
-      setLoginModalOpen(true);
-      return;
-    }
+    // if (!userToken) {
+    //   setLoginModalOpen(true);
+    //   return;
+    // }
 
     if (window.gtag) {
       let total = 0;

@@ -34,8 +34,8 @@
     "privacy": {
         "auth": 1,
         "unauth": 0,
-        "authRoleName": "amplify-my-aws-project-devk-74938-authRole",
-        "unAuthRoleName": "amplify-my-aws-project-devk-74938-unauthRole"
+        "authRoleName": "amplify-tarracore-prod-81255-authRole",
+        "unAuthRoleName": "amplify-tarracore-prod-81255-unauthRole"
     },
     "dependsOn": [
         {
@@ -47,5 +47,5 @@
             ]
         }
     ],
-    "uuid": "13c1c5af"
+    "uuid": "b0c69384"
 }

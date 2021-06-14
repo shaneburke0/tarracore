@@ -41,15 +41,15 @@ const CheckoutCompletePage = ({ context }) => {
 
     setPaymentRef(ref);
 
-    if (code === "0") {
+    if (code && code !== "0") {
+      setTitle("Payment Failure");
+      setSuccess(false);
+    } else {
       setTitle("Checkout Complete");
       setSuccess(true);
 
       initGA(cart, ref);
       clearCart();
-    } else {
-      setTitle("Payment Failure");
-      setSuccess(false);
     }
     setLoading(false);
   }, []);
@@ -68,10 +68,20 @@ const CheckoutCompletePage = ({ context }) => {
               <h1 className="text-5xl font-light mt-8">{title}</h1>
               <div className="max-w-fw">
                 {isSuccess && (
-                  <p>
-                    Thank you for purchasing your tickets. Please check your
-                    emails for confirmation.
-                  </p>
+                  <div>
+                    <p>
+                      Thank you for purchasing your tickets. Please check your
+                      emails for confirmation.
+                    </p>
+                    <p>
+                      Note: Emails can take a couple of minutes to be delivered.
+                      You may need to check your Spam / Junk folder. <br />
+                      If you have any questions please email us as{" "}
+                      <a href="mailto:hello@tarracore.ie">
+                        hello@tarracore.ie
+                      </a>{" "}
+                    </p>
+                  </div>
                 )}
                 {!isSuccess && (
                   <>

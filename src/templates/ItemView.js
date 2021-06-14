@@ -205,7 +205,7 @@ const ItemView = (props) => {
 
   return (
     <>
-      <SEO {...seo} />
+      <SEO {...seo} image={image} />
       <div className="mobile:px-10 px-4 pb-10 flex justify-center main-content">
         <div className="w-fw">
           <h1 className="text-5xl font-light mb-0 mt-4">{name}</h1>

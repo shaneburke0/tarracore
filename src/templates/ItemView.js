@@ -24,6 +24,7 @@ const { print } = graphql;
 const ItemView = (props) => {
   const item = props.pageContext.content;
   const {
+    oldPrice,
     price,
     image,
     name,
@@ -208,7 +209,11 @@ const ItemView = (props) => {
       <SEO {...seo} image={image} />
       <div className="mobile:px-10 px-4 pb-10 flex justify-center main-content">
         <div className="w-fw">
-          <h1 className="text-5xl font-light mb-0 mt-4">{name}</h1>
+          <div className="relative sale-ribbon-wrapper">
+            <h1 className="text-5xl font-light mb-0 mt-4">{name}</h1>
+            <span class="wdp-ribbon wdp-ribbon-two font-semibold">Sale</span>
+          </div>
+
           <div
             className="py-4 flex flex-1 flex-col
       md:flex-row
@@ -262,7 +267,19 @@ const ItemView = (props) => {
                   </div>
                 )}
                 <h2 className="text-xl tracking-tighter">
-                  {numberFormat(price)}
+                  {oldPrice && (
+                    <span className="font-semibold line-through ml-8 text-red-700">
+                      {numberFormat(oldPrice)}
+                    </span>
+                  )}{" "}
+                  <span
+                    className={`font-semibold ml-8 ${
+                      oldPrice ? "text-2xl" : ""
+                    }`}
+                  >
+                    {numberFormat(price)}
+                  </span>
+                  {/* {numberFormat(price)} */}
                 </h2>
               </div>
               <div>

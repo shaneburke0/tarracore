@@ -7,6 +7,7 @@ export const getProduct = /* GraphQL */ `
       id
       categories
       price
+      oldPrice
       name
       image
       description
@@ -37,6 +38,7 @@ export const listProducts = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description
@@ -66,6 +68,7 @@ export const getOrder = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description
@@ -112,6 +115,7 @@ export const listOrders = /* GraphQL */ `
           id
           categories
           price
+          oldPrice
           name
           image
           description
@@ -155,6 +159,7 @@ export const getTransaction = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description
@@ -201,6 +206,7 @@ export const listTransactions = /* GraphQL */ `
           id
           categories
           price
+          oldPrice
           name
           image
           description

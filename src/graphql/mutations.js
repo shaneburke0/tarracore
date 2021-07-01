@@ -10,6 +10,7 @@ export const createProduct = /* GraphQL */ `
       id
       categories
       price
+      oldPrice
       name
       image
       description
@@ -38,6 +39,7 @@ export const updateProduct = /* GraphQL */ `
       id
       categories
       price
+      oldPrice
       name
       image
       description
@@ -66,6 +68,7 @@ export const deleteProduct = /* GraphQL */ `
       id
       categories
       price
+      oldPrice
       name
       image
       description
@@ -96,6 +99,7 @@ export const createOrder = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description
@@ -140,6 +144,7 @@ export const updateOrder = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description
@@ -184,6 +189,7 @@ export const deleteOrder = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description
@@ -228,6 +234,7 @@ export const createTransaction = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description
@@ -272,6 +279,7 @@ export const updateTransaction = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description
@@ -316,6 +324,7 @@ export const deleteTransaction = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description

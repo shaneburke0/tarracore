@@ -37,7 +37,7 @@ const Home = ({ data: gqlData }) => {
                 >
                   <div className="pt-4 pl-2 sm:pt-12 sm:pl-12 flex ">
                     <Link to={slugify(comp.name)}>
-                      <Showcase imageSrc={comp.image} />
+                      <Showcase imageSrc={comp.image} onSale={comp.oldPrice} />
                     </Link>
                   </div>
                   <div className="flex flex-1 justify-center items-center relative">
@@ -47,6 +47,7 @@ const Home = ({ data: gqlData }) => {
                       link={slugify(comp.name)}
                       date={comp.endDate}
                       tickets={comp.maxInventory}
+                      oldPrice={comp.oldPrice}
                     />
                   </div>
                 </div>
@@ -118,6 +119,7 @@ export const pageQuery = graphql`
         description
         id
         price
+        oldPrice
         endDate
         maxInventory
       }

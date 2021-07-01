@@ -30,6 +30,7 @@ async function fetchInventory() {
         items {
           id
           categories
+          oldPrice
           price
           name
           image

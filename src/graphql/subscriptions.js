@@ -7,6 +7,7 @@ export const onCreateProduct = /* GraphQL */ `
       id
       categories
       price
+      oldPrice
       name
       image
       description
@@ -32,6 +33,7 @@ export const onUpdateProduct = /* GraphQL */ `
       id
       categories
       price
+      oldPrice
       name
       image
       description
@@ -57,6 +59,7 @@ export const onDeleteProduct = /* GraphQL */ `
       id
       categories
       price
+      oldPrice
       name
       image
       description
@@ -84,6 +87,7 @@ export const onCreateOrder = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description
@@ -125,6 +129,7 @@ export const onUpdateOrder = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description
@@ -166,6 +171,7 @@ export const onDeleteOrder = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description
@@ -207,6 +213,7 @@ export const onCreateTransaction = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description
@@ -248,6 +255,7 @@ export const onUpdateTransaction = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description
@@ -289,6 +297,7 @@ export const onDeleteTransaction = /* GraphQL */ `
         id
         categories
         price
+        oldPrice
         name
         image
         description

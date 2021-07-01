@@ -1,12 +1,12 @@
-import React from "react"
-import { Button } from "../"
-import { navigate } from "gatsby"
-import moment from "moment"
-import { numberFormat } from "../../../utils/helpers"
+import React from "react";
+import { Button } from "../";
+import { navigate } from "gatsby";
+import moment from "moment";
+import { numberFormat } from "../../../utils/helpers";
 
-const Center = ({ price, title, link, date, tickets }) => {
+const Center = ({ price, title, link, date, tickets, oldPrice }) => {
   function navigateTo() {
-    navigate(link)
+    navigate(link);
   }
 
   return (
@@ -31,12 +31,20 @@ const Center = ({ price, title, link, date, tickets }) => {
       </p>
       <p>
         <span>
-          Price: <span className="font-semibold">{numberFormat(price)}</span>
+          Price:{" "}
+          {oldPrice && (
+            <span className="font-semibold line-through ml-8 text-red-700">
+              {numberFormat(oldPrice)}
+            </span>
+          )}{" "}
+          <span className={`font-semibold ml-8 ${oldPrice ? "text-xl" : ""}`}>
+            {numberFormat(price)}
+          </span>
         </span>
       </p>
       <Button onClick={navigateTo} title="Get Tickets" />
     </div>
-  )
-}
+  );
+};
 
-export default Center
+export default Center;
